@@ -120,7 +120,15 @@ export const erp: NavLink[] = [
    ------------------------------------------------------------------------- */
 export const businessApplications: NavLink[] = [
   /* WizCRM and TeamKazi lead — they are the two with full, written pages.
-     Omitting `stub` keeps them indexable while the rest stay noindex. */
+     Omitting `stub` keeps them indexable while the rest stay noindex.
+
+     Trimmed to three on 2026-07-22 (client instruction): WizPOS, CloudHR and
+     RestPOS were removed from the menu. Three items also means the dropdown
+     renders as a single column automatically — DesktopNav switches to two
+     columns only above five children, so there is nothing to configure.
+
+     ⚠ Removing an entry here also removes its page: [slug].astro derives
+     getStaticPaths from this array. Re-add the entry to bring the page back. */
   {
     label: 'WizCRM',
     href: '/business-applications/wizcrm',
@@ -131,10 +139,7 @@ export const businessApplications: NavLink[] = [
     href: '/business-applications/teamkazi',
     summary: 'Project management with a live P&L on every project',
   },
-  { label: 'WizPOS', href: '/business-applications/wizpos', stub: true },
   { label: 'WizSales', href: '/business-applications/wizsales', stub: true },
-  { label: 'CloudHR', href: '/business-applications/cloudhr', stub: true },
-  { label: 'RestPOS', href: '/business-applications/restpos', stub: true },
 ];
 
 /* -------------------------------------------------------------------------
