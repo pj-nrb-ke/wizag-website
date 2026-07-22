@@ -1,0 +1,330 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import CapabilityHub from '../../components/diagrams/CapabilityHub.astro';
+import {
+  sage200,
+  editions,
+  modules,
+  chargeNote,
+  benefits,
+  anywhere,
+  services,
+  statutoryNote,
+  wizagRole,
+} from '../../data/sage-200';
+
+/**
+ * Sage 200. Content extracted from the Sage 200 e-book
+ * (Downloads/Documents/Sage200-Product-brochure.pdf, © 2024 Sage Group plc).
+ *
+ * ⚠ THIS IS SAGE 200 (UK & IRELAND), NOT SAGE 200 EVOLUTION. Confirmed with
+ * the client 2026-07-22: WIZAG's Kenya licensing sits under Sage's UK &
+ * Ireland offices, so Standard and Professional are the correct editions.
+ * The nav label and route were renamed from "Sage 200 Evolution" to match.
+ * Evolution is a different product with a different module set — do not
+ * merge material from the client's Evolution partner documents into here.
+ *
+ * ⚠ NO EDITION TICK MATRIX. The brochure marks the Standard/Professional
+ * split with tick graphics rather than text, and no PDF renderer was
+ * available to read them. Guessing which modules land in which edition
+ * would mislead a buyer about what they are paying for, so the modules are
+ * listed once and the editions described qualitatively from p7. See the
+ * header note in src/data/sage-200.ts.
+ *
+ * ⚠ Both brochure testimonials are Sage's own UK customers and are excluded
+ * under brief §8.12, along with Sage plc's corporate figures.
+ *
+ * No scrolling mesh, matching the Sage Business Cloud page — the two Sage
+ * pages should read as a set.
+ */
+---
+
+<BaseLayout title={`${sage200.name} — ${sage200.hook}`} description={sage200.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li><a href="/erp" class="py-1 transition-colors hover:text-paper">ERP</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">{sage200.name}</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
+        <div>
+          <p class="eyebrow text-orange-500">{sage200.name}</p>
+
+          <h1 class="optical-left mt-4 max-w-[15ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {sage200.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {sage200.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Request a Demo</Button>
+            <a
+              href="#editions"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              Standard or Professional?
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{sage200.audience}</p>
+        </div>
+
+        <div>
+          <CapabilityHub />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE TWO EDITIONS -------------------------------------------------- -->
+  <Section tone="paper" id="editions">
+    <SectionHeading
+      eyebrow="Two editions"
+      lead={sage200.fitNote}
+      measure="max-w-[19ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The choice that decides the cost
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2 lg:gap-8">
+      {
+        editions.map((e, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-8"
+            data-reveal
+            data-reveal-delay={i * 80}
+          >
+            <div class="flex items-center gap-3">
+              <Icon name={e.icon} size={22} class="text-orange-500" />
+              <span class="rounded-full bg-warm px-2.5 py-0.5 font-mono text-[length:var(--text-2xs)] font-bold uppercase tracking-[0.1em] text-orange-700">
+                {e.tag}
+              </span>
+            </div>
+            <h3 class="mt-4 text-[length:var(--text-3xl)] leading-snug text-navy-700">{e.name}</h3>
+            <p class="mt-3 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+              {e.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p
+      class="mt-8 max-w-[62ch] border-l-[3px] border-orange-500 bg-warm p-5 text-base leading-relaxed text-ink sm:p-6"
+      data-reveal
+    >
+      {chargeNote}
+    </p>
+  </Section>
+
+  <!-- MODULES ----------------------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="What it covers"
+      lead="Every module in the range. Which of them sit in your edition depends on whether you run Standard or Professional — we confirm that against a quotation, never on a web page."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Fourteen modules, one ledger
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-x-8 gap-y-0 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        modules.map((m, i) => (
+          <li
+            class="border-t border-grey-300 py-6"
+            data-reveal
+            data-reveal-delay={Math.min(i, 5) * 50}
+          >
+            <Icon name={m.icon} size={20} class="text-orange-500" />
+            <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+              {m.name}
+            </h3>
+            <p class="mt-1.5 text-base leading-relaxed text-ink">{m.body}</p>
+            {m.note && (
+              <p class="mt-2 font-mono text-[length:var(--text-2xs)] font-bold uppercase tracking-[0.08em] text-orange-700">
+                {m.note}
+              </p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- BENEFITS ---------------------------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Why it holds up" measure="max-w-[17ch]">
+          A system of record has different rules
+        </SectionHeading>
+        <p class="mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          You can change a CRM in a weekend. You cannot change the system your ledgers live in
+          without a project, so the things that matter most are the unglamorous ones.
+        </p>
+
+        <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+          {
+            benefits.map((b) => (
+              <li class="border-t border-grey-300 pt-4">
+                <Icon name={b.icon} size={20} class="text-orange-500" />
+                <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+                  {b.title}
+                </h3>
+                <p class="mt-1.5 text-base leading-relaxed text-ink">{b.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="120">
+        <ImageSlot
+          ratio="4/3"
+          brief="A finance team of two or three at a shared desk in a Nairobi office, one pointing at a printed ledger report. Seen from behind or side-on, no faces identifiable."
+          purpose="An ERP is bought by a team, not a person. Shows the 'one set of numbers' argument rather than stating it."
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- ANYWHERE + SERVICES ----------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Wherever you are</p>
+        <h2 class="max-w-[15ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Desktop power, cloud reach
+        </h2>
+        <ul class="mt-6">
+          {
+            anywhere.map((a) => (
+              <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+                {a}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div data-reveal data-reveal-delay="100">
+        <p class="eyebrow mb-4 text-orange-500">Sage 200 Services</p>
+        <h2 class="max-w-[15ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Included, and worth using
+        </h2>
+        <ul class="mt-6">
+          {
+            services.map((s) => (
+              <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+                {s}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- KENYAN STATUTORY POSITION ------------------------------------------
+       ⚠ Claims no Kenyan compliance certification. The brochure's compliance
+       language is written for the UK, and Kenya licensing running through
+       Sage UK & Ireland does not make a UK tax feature a Kenyan one. -->
+  <Section tone="warm">
+    <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="On Kenyan compliance" measure="max-w-[17ch]">
+          What it covers, and what sits alongside it
+        </SectionHeading>
+        <p class="mt-5 max-w-[50ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          {statutoryNote}
+        </p>
+        <p class="mt-4 max-w-[50ch] text-base leading-relaxed text-ink-soft">
+          This is the question every finance director asks second, after price. We would rather
+          answer it on the website than in the third meeting.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <ImageSlot
+          ratio="4/3"
+          brief="A desk with a laptop and a neat stack of statutory paperwork in a plain folder, daylight. Hands only or nobody in frame. No letterheads, stamps or authority branding of any kind."
+          purpose="Compliance as ordinary admin, handled. Must carry no KRA or other authority marks."
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- WHERE WIZAG COMES IN ---------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Working with WIZAG"
+      lead="WIZAG is a Sage Business Partner. The licence is the easy part to buy — what decides whether this works is everything around it."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The project, not the purchase
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-3">
+      {
+        wizagRole.map((item, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={i * 70}
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- CTA --------------------------------------------------------------- -->
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-paper">
+          Find out which edition you actually need
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-navy-100">
+          Standard and Professional are priced differently and suit different businesses. An hour
+          with your processes settles it, and costs you nothing.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>

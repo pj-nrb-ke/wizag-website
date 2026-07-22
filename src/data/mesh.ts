@@ -27,7 +27,7 @@ const b = (label: string): Tile => ({ label, kind: 'benefit' });
    ------------------------------------------------------------------------- */
 export const wizagMesh: Tile[] = [
   p('WizERP'), f('General Ledger'), b('Faster month-end close'), f('Accounts Payable'),
-  f('Bank Reconciliation'), p('Sage 200 Evolution'), b('Audit-ready records'),
+  f('Bank Reconciliation'), p('Sage 200'), b('Audit-ready records'),
   f('Multi-currency'), f('Credit Control'), b('Fewer manual entries'), f('Cash Flow'),
 
   f('Inventory'), b('Real-time stock visibility'), p('WizPOS'), f('Stock Counts'),

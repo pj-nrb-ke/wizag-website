@@ -125,7 +125,7 @@ export const coreServices: {
 
 /* --- §8.5 ERP spotlight ------------------------------------------------ */
 export const erpCapabilities = [
-  'Sage 200 Evolution',
+  'Sage 200',
   'Sage Business Cloud',
   'ERP advisory & selection',
   'Implementation & migration',

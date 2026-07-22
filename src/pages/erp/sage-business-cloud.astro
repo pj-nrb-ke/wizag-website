@@ -349,12 +349,15 @@ import {
       Software is the easy half
     </SectionHeading>
 
-    {/* Warm section, so the badge's grey "Business Partner" lettering has the
-        light ground it was drawn for. It must never go on a navy section —
-        see the contrast note in the component. */}
-    <div class="mt-7" data-reveal>
-      <SagePartnerBadge />
-    </div>
+    {/* The Sage Business Partner badge belongs here, in this warm section —
+        its grey "Business Partner" lettering needs the light ground it was
+        drawn for and must never sit on navy. Pending the real artwork from
+        Sage SA; restore with:
+
+            <div class="mt-7" data-reveal><SagePartnerBadge /></div>
+
+        See src/components/ui/SagePartnerBadge.astro, which is ready and
+        carries the check to run against the file before switching it on. */}
 
     <ul class="mt-10 grid gap-5 sm:grid-cols-3">
       {

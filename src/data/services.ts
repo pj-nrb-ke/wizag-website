@@ -68,7 +68,7 @@ export const practices: ServicePractice[] = [
     capabilities: [
       'ERP advisory',
       'ERP selection',
-      'Sage 200 Evolution',
+      'Sage 200',
       'Sage Business Cloud',
       'ERP implementation',
       'ERP migration',

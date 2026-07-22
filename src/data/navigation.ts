@@ -97,11 +97,16 @@ export const erp: NavLink[] = [
     href: '/erp',
     summary: 'Advisory, selection, implementation, migration, integration and support.',
   },
+  /* Renamed from "Sage 200 Evolution" on 2026-07-22. The client confirmed
+     that WIZAG's Kenya licensing runs through Sage UK & Ireland, so the
+     product sold here is Sage 200 (Standard / Professional) — not Sage 200
+     Evolution, which is Sage's separate Africa & Middle East product with a
+     different module set entirely. */
   {
-    label: 'Sage 200 Evolution',
-    href: '/erp/sage-200-evolution',
+    label: 'Sage 200',
+    href: '/erp/sage-200',
     dividerBefore: true,
-    stub: true,
+    summary: 'Business management for companies of roughly 5 to 200 people',
   },
   {
     label: 'Sage Business Cloud',

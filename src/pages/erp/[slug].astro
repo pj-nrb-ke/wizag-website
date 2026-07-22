@@ -18,7 +18,7 @@ export function getStaticPaths() {
      collide. Declared INSIDE the function: Astro hoists getStaticPaths out
      of module scope, so a const alongside it would be undefined at call
      time. Add here whenever a real page lands. */
-  const WRITTEN = ['/erp/sage-business-cloud'];
+  const WRITTEN = ['/erp/sage-business-cloud', '/erp/sage-200'];
 
   return erp
     .filter((item) => item.href !== '/erp' && !WRITTEN.includes(item.href))
@@ -31,22 +31,6 @@ export function getStaticPaths() {
 const { item } = Astro.props;
 
 const covers: Record<string, string[]> = {
-  'Sage 200 Evolution': [
-    'Implementation approach',
-    'Modules and functionality',
-    'Migration from legacy systems',
-    'Integration with existing tools',
-    'Reporting and analytics',
-    'Ongoing support options',
-  ],
-  'Sage Business Cloud': [
-    'Cloud accounting setup',
-    'Migration and data conversion',
-    'Multi-user and multi-company',
-    'Integration with existing tools',
-    'Reporting',
-    'Ongoing support options',
-  ],
   WizERP: [
     'Modules and functionality',
     'Where it fits versus Sage',

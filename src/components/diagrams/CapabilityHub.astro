@@ -1,0 +1,211 @@
+---
+import Icon from '../ui/Icon.astro';
+import { capabilities } from '../../data/sage-200';
+
+/**
+ * The Sage 200 capability hub.
+ *
+ * The brochure draws this as a wheel of capabilities around the product.
+ * Rendered here as a 3×3 grid with the product in the centre cell rather
+ * than as true radial geometry: a real wheel needs trigonometry, breaks
+ * whenever a label runs to two lines, and has to be rebuilt entirely for a
+ * narrow screen. The grid reads as the same idea, survives translation and
+ * long labels, and collapses to two columns on a phone without a second
+ * layout.
+ *
+ * The capabilities light clockwise from the top-left so the eye travels the
+ * ring — which is the only thing the original wheel's shape was doing.
+ *
+ * Static and fully readable under prefers-reduced-motion, with every cell
+ * lit.
+ */
+
+/* Clockwise ring positions for eight cells around a centre. Index order
+   matches `capabilities`, so reordering the data reorders the ring. */
+const CELLS = [
+  { row: 1, col: 1 },
+  { row: 1, col: 2 },
+  { row: 1, col: 3 },
+  { row: 2, col: 3 },
+  { row: 3, col: 3 },
+  { row: 3, col: 2 },
+  { row: 3, col: 1 },
+  { row: 2, col: 1 },
+];
+---
+
+<figure class="hub" aria-labelledby="hub-cap">
+  <figcaption id="hub-cap" class="sr-only">
+    Sage 200 sits at the centre of eight capabilities: {capabilities.map((c) => c.label).join(', ')}.
+  </figcaption>
+
+  <div class="grid">
+    {
+      capabilities.map((cap, i) => (
+        <div
+          class="cell"
+          style={`--i:${i}; grid-row:${CELLS[i].row}; grid-column:${CELLS[i].col}`}
+        >
+          <Icon name={cap.icon} size={19} class="cell-icon" />
+          <span class="cell-label">{cap.label}</span>
+        </div>
+      ))
+    }
+
+    <div class="core" aria-hidden="true">
+      <span class="core-name">Sage 200</span>
+      <span class="core-sub">One system</span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .hub {
+    margin: 0;
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    background: linear-gradient(168deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-height: 5.5rem;
+    padding: 0.75rem 0.7rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .cell-icon {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .cell-label {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* ---- the centre ---- */
+  .core {
+    grid-row: 2;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-orange-500);
+    text-align: center;
+    padding: 0.6rem 0.4rem;
+  }
+
+  .core-name {
+    font-size: var(--text-sm);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-navy-900);
+  }
+
+  .core-sub {
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    color: rgba(18, 32, 74, 0.7);
+  }
+
+  /* ---- motion -------------------------------------------------------
+     One 14s pass. Cells brighten clockwise around the ring, hold for most
+     of the cycle, then reset together. */
+  @media (prefers-reduced-motion: no-preference) {
+    .cell {
+      animation: cell-lit 14s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.42s);
+    }
+
+    .cell-icon {
+      animation: icon-lit 14s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.42s);
+    }
+
+    .core {
+      animation: core-pulse 14s ease-in-out infinite;
+    }
+  }
+
+  @keyframes cell-lit {
+    0%,
+    3% {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+    9%,
+    88% {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(247, 157, 7, 0.45);
+    }
+    96%,
+    100% {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+  }
+
+  @keyframes icon-lit {
+    0%,
+    3% {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    9%,
+    88% {
+      color: var(--color-orange-500);
+    }
+    96%,
+    100% {
+      color: rgba(255, 255, 255, 0.45);
+    }
+  }
+
+  @keyframes core-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(247, 157, 7, 0.35);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(247, 157, 7, 0);
+    }
+  }
+
+  /* Two columns on a phone, with the product first so the diagram still
+     reads as "this system, and what it covers". */
+  @media (max-width: 34rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cell,
+    .core {
+      grid-row: auto !important;
+      grid-column: auto !important;
+    }
+
+    .core {
+      grid-column: 1 / -1 !important;
+      order: -1;
+      flex-direction: row;
+      gap: 0.5rem;
+      padding: 0.7rem;
+    }
+  }
+</style>
