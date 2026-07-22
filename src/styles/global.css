@@ -92,6 +92,16 @@
     outline-color: var(--color-paper);
   }
 
+  /* The back-to-top target. It carries tabindex="-1" purely so that
+     following the link MOVES FOCUS to the top of the page — otherwise a
+     keyboard user is scrolled up but their next Tab resumes from the button
+     at the bottom, which is worse than not having the link at all.
+     It is a scroll destination, not a control, so it takes no ring. */
+  #top:focus,
+  #top:focus-visible {
+    outline: none;
+  }
+
   ::selection {
     background: var(--color-navy-100);
     color: var(--color-navy-900);

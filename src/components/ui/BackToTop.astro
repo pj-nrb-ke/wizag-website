@@ -1,0 +1,140 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Back to top.
+ *
+ * BUILT AS A LINK, NOT A BUTTON
+ * It is `<a href="#top">`, so it works with JavaScript switched off, is
+ * keyboard-operable for free, and appears in the accessibility tree as a
+ * link to a destination rather than a mystery control. The JS below only
+ * decides *when it is visible* — never whether it works.
+ *
+ * WHY A SENTINEL RATHER THAN A SCROLL LISTENER
+ * A scroll handler fires dozens of times a second and reads layout on every
+ * one of them. An IntersectionObserver watching a single invisible element
+ * near the top of the document costs nothing and is the same mechanism the
+ * site already uses for section reveals — one pattern, not two.
+ *
+ * The sentinel is 75vh tall, so the button appears once the reader is about
+ * three-quarters of a screen down. Any earlier and it hovers over content
+ * nobody has scrolled past yet.
+ *
+ * On a page short enough not to scroll, the sentinel never leaves the
+ * viewport and the button never appears. That is deliberate: it costs no
+ * configuration and it is right on every page automatically.
+ *
+ * Scrolling itself is CSS — global.css already sets `scroll-behavior:
+ * smooth` and already reverts it to `auto` under prefers-reduced-motion, so
+ * there is nothing to handle here.
+ */
+---
+
+{/* Absolutely positioned at the document origin and out of flow, so it
+    neither affects layout nor cares where it sits in the DOM. */}
+<div id="to-top-sentinel" aria-hidden="true"></div>
+
+<a href="#top" class="to-top" data-to-top>
+  <Icon name="arrow-right" size={20} class="-rotate-90" />
+  <span class="sr-only">Back to top</span>
+</a>
+
+<style>
+  #to-top-sentinel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 75vh;
+    pointer-events: none;
+  }
+
+  .to-top {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    /* Below the header (z-40) and the mobile drawer (z-50): this must never
+       sit on top of open navigation. */
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    width: 2.75rem; /* 44px — the minimum comfortable touch target */
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--color-navy-700);
+    color: #fff;
+    box-shadow: var(--shadow-panel);
+    transition:
+      opacity var(--duration-base) ease,
+      transform var(--duration-base) ease,
+      background-color var(--duration-fast) ease;
+  }
+
+  /* Hover changes colour rather than position. The transform is reserved
+     for the appear/disappear transition, so the two never fight over it. */
+  .to-top:hover {
+    background: var(--color-navy-800);
+  }
+
+  .to-top:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @media (min-width: 640px) {
+    .to-top {
+      right: 2rem;
+      bottom: 2rem;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  /* Hidden until scrolled — but ONLY where JS can be relied on to reveal it
+     again. Without the `js` class the button simply stays visible, which is
+     a working page rather than a broken one. */
+  html.js .to-top {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.5rem);
+    pointer-events: none;
+  }
+
+  html.js .to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .to-top {
+      transition: opacity var(--duration-fast) ease;
+    }
+
+    html.js .to-top {
+      transform: none;
+    }
+  }
+
+  @media print {
+    .to-top {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Reveal the button once the top of the document has scrolled away.
+  const link = document.querySelector<HTMLElement>('[data-to-top]');
+  const sentinel = document.getElementById('to-top-sentinel');
+
+  if (link && sentinel && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      link.classList.toggle('is-visible', !entry.isIntersecting);
+    }).observe(sentinel);
+  } else {
+    // No observer available: show it permanently rather than never.
+    link?.classList.add('is-visible');
+  }
+</script>
