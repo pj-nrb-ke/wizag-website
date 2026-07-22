@@ -5,7 +5,6 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import ImageSlot from '../../components/ui/ImageSlot.astro';
 import SystemsMesh from '../../components/diagrams/SystemsMesh.astro';
 import ProjectMarginDemo from '../../components/diagrams/ProjectMarginDemo.astro';
 import CriticalPathDiagram from '../../components/diagrams/CriticalPathDiagram.astro';
@@ -205,28 +204,40 @@ import { teamkaziMesh } from '../../data/mesh';
               </ul>
             </div>
 
-            {/* One photograph per pillar, each briefed to the specific moment
-                that pillar serves. Prompts in docs/teamkazi-image-prompts.md. */}
+            {/* One photograph per pillar, each shot for the specific moment
+                that pillar serves. Briefs in docs/teamkazi-image-prompts.md. */}
             <div class="lg:sticky lg:top-28">
               {idx === 0 && (
-                <ImageSlot
-                  ratio="4/3"
-                  brief="A principal at a desk reviewing project figures on a laptop, seen from behind — rolled drawings and a scale rule beside them."
-                  purpose="Margin is a judgement someone makes on a Tuesday afternoon, not a dashboard."
+                <img
+                  src="/images/teamkazi/teamkazi-margin.jpg"
+                  alt="A principal seen from behind at a desk by a window, reviewing figures on a laptop with rolled drawings and a marked-up schedule beside them."
+                  width="760"
+                  height="504"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full rounded-[var(--radius-md)] object-cover"
                 />
               )}
               {idx === 1 && (
-                <ImageSlot
-                  ratio="4/3"
-                  brief="Hands flattening a printed scope document beside an open laptop, pen resting on the page. No face in frame."
-                  purpose="The document is the input. Shows where the plan comes from."
+                <img
+                  src="/images/teamkazi/teamkazi-scope-document.jpg"
+                  alt="Hands resting on a thick printed scope document on a desk, a pen across the page and an open notebook alongside."
+                  width="760"
+                  height="504"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full rounded-[var(--radius-md)] object-cover"
                 />
               )}
               {idx === 2 && (
-                <ImageSlot
-                  ratio="4/3"
-                  brief="Two people across a meeting table with a printed report between them, shot from the side at table height. Faces out of frame."
-                  purpose="The moment the numbers have to hold up in front of someone else."
+                <img
+                  src="/images/teamkazi/teamkazi-client-meeting.jpg"
+                  alt="Two people across a meeting table with a printed report open between them, one hand resting on the page mid-discussion."
+                  width="760"
+                  height="504"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full rounded-[var(--radius-md)] object-cover"
                 />
               )}
             </div>
@@ -318,11 +329,15 @@ import { teamkaziMesh } from '../../data/mesh';
         </p>
       </div>
 
-      <ImageSlot
-        ratio="3/2"
-        brief="A desk at the end of a working week in late afternoon light — laptop open on a week view, a notebook and a cooling cup of coffee. Nobody in frame, or hands only."
-        purpose="The weekly ritual this replaces. Quiet, ordinary, and instantly recognisable to the buyer."
-        class="w-full"
+      <img
+        src="/images/teamkazi/teamkazi-timesheets.jpg"
+        alt="A desk at the end of the working week in low evening light: an open notebook of handwritten entries, a pen, a cooling mug and a closed laptop."
+        width="760"
+        height="504"
+        loading="lazy"
+        decoding="async"
+        class="w-full rounded-[var(--radius-md)] object-cover"
+        data-reveal
       />
     </div>
   </Section>
