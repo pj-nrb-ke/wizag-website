@@ -10,10 +10,14 @@ import { businessApplications } from '../../data/navigation';
  * be listed as WIZAG products.
  */
 export function getStaticPaths() {
+  /* Products with their own written page, excluded from this shell route so
+     the two cannot collide — add here whenever a real page lands.
+     Declared INSIDE the function: Astro hoists getStaticPaths out of module
+     scope, so a const alongside it would be undefined at call time. */
+  const WRITTEN = ['/wizcrm', '/teamkazi'];
+
   return businessApplications
-    // WizCRM has its own written page at ./wizcrm.astro — excluded here so
-    // the two routes cannot collide.
-    .filter((item) => !item.href.endsWith('/wizcrm'))
+    .filter((item) => !WRITTEN.some((slug) => item.href.endsWith(slug)))
     .map((item) => ({
       params: { slug: item.href.replace('/business-applications/', '') },
       props: { item },

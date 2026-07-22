@@ -86,3 +86,52 @@ export const wizcrmMesh: Tile[] = [
   f('KDPA compliant'), b('Auditable AI actions'), f('Role-based access'),
   f('White-label branding'), b('Human-in-the-loop'),
 ];
+
+/* -------------------------------------------------------------------------
+   TEAMKAZI — drawn from TeamKazi-Brochure-Content.md.
+
+   ⚠ Nothing from that document's exclusion list may appear here: no ERP
+   integration, no email/SMS/WhatsApp notifications, no mobile app, no
+   offline mode, no client portal, no budget alert thresholds, no finance
+   exports. Every tile below maps to a shipped feature.
+   ------------------------------------------------------------------------- */
+export const teamkaziMesh: Tile[] = [
+  p('Live project P&L'), b('Margin, not milestones'), f('Cost variance'),
+  f('Schedule variance'), b('Know in week three'), f('Expense tracking'),
+
+  p('Earned Value · CPI/SPI'), f('Contract vs cost budget'), f('Fixed-price billing'),
+  b('Numbers you can defend'), f('Time & materials'),
+
+  p('Critical path'), b('Five tasks decide the date'), f('Gantt with float bars'),
+  f('Dependency arrows'), f('Blocked by · Blocks'), f('Circular deps blocked'),
+  f('Weekends excluded'),
+
+  p('Baselines'), b('The goalposts stop moving'), f('Slip detection'),
+  f('Downstream impact'), b('Plans you can sign off'),
+
+  p('AI work breakdown'), b('Start from a document'), f('Requirements to plan'),
+  f('Meeting notes to tasks'), f('Daily brief'), f('Project analysis'),
+  f('Portfolio insight'), f('AI assignee suggestions'),
+
+  p('Control Centre'), b('Everything on one screen'), f('Seven project views'),
+  f('Risk register'), f('Phases & milestones'), f('Health with reasoning'),
+  b('One place, not five tools'),
+
+  f('WBS numbering'), f('Nested subtasks'), f('Two-way roll-up'),
+  f('Board & list views'), f('Group by anything'), f('Task detail drawer'),
+
+  p('Timesheet approvals'), b('Approve time, see the cost'), f('Week calendar entry'),
+  f('Drag-to-fill hours'), f('Auto-suggested entries'), f('Rolling week submit'),
+  f('File evidence on entries'),
+
+  p('Workload view'), b('See who’s drowning'), f('Team roster & cost'),
+
+  p('Executive dashboard'), f('Portfolio KPIs'), f('Burn & health'),
+  f('Drill-down navigation'), b('No “coming soon” tabs'),
+
+  f('Recurring obligations'), f('Delegated to-dos'), f('Document library'),
+  f('Milestone invoicing'), f('Rich text notes'),
+
+  f('Row-level data isolation'), f('Role-based access'), f('Idle session timeout'),
+  b('Agrees to the shilling'), b('No flattering defaults'),
+];

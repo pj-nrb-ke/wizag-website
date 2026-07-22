@@ -119,14 +119,18 @@ export const erp: NavLink[] = [
    from any blanket 301 to wizag.biz.
    ------------------------------------------------------------------------- */
 export const businessApplications: NavLink[] = [
-  /* WizCRM leads — it is the only one of these with a full, written page.
-     `stub: false` keeps it indexable while the rest stay noindex. */
+  /* WizCRM and TeamKazi lead — they are the two with full, written pages.
+     Omitting `stub` keeps them indexable while the rest stay noindex. */
   {
     label: 'WizCRM',
     href: '/business-applications/wizcrm',
     summary: 'The AI-first CRM for field-sales teams',
   },
-  { label: 'TeamKazi', href: '/business-applications/teamkazi', stub: true },
+  {
+    label: 'TeamKazi',
+    href: '/business-applications/teamkazi',
+    summary: 'Project management with a live P&L on every project',
+  },
   { label: 'WizPOS', href: '/business-applications/wizpos', stub: true },
   { label: 'WizSales', href: '/business-applications/wizsales', stub: true },
   { label: 'CloudHR', href: '/business-applications/cloudhr', stub: true },

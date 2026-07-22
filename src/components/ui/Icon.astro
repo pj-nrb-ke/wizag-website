@@ -63,6 +63,36 @@ const STROKE_ICONS = {
     'M12 3.5 4.5 6.5v5.2c0 4.3 3 7.4 7.5 8.8 4.5-1.4 7.5-4.5 7.5-8.8V6.5z',
     'm9 12 2.2 2.2L15.5 10',
   ],
+
+  /* --- project delivery (TeamKazi) ------------------------------------ */
+  // Schedule — staggered Gantt bars against a time axis.
+  schedule: [
+    'M3.5 4.5v15',
+    'M6.5 8.5h6.5',
+    'M10 12.5h7.5',
+    'M8 16.5h5.5',
+  ],
+  // Timesheets — hours, and what they cost.
+  timesheet: ['M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z', 'M12 7.5V12l3 2'],
+  // Team and workload — who is loaded, who has room.
+  team: [
+    'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
+    'M3.5 19.5a5.5 5.5 0 0 1 11 0',
+    'M16 5.6a3 3 0 0 1 0 5.8',
+    'M17 14.6a5.5 5.5 0 0 1 3.5 4.9',
+  ],
+  // Margin — a balance: contract value on one side, cost on the other.
+  balance: [
+    'M12 5v14.5',
+    'M8.5 19.5h7',
+    'M5.5 8.5h13',
+    'M5.5 8.5 2.5 14h6z',
+    'M18.5 8.5 15.5 14h6z',
+  ],
+  // Documents and evidence.
+  document: ['M6 3.5h7L18 8.5v12H6z', 'M13 3.5V9h5', 'M9 13h6M9 16.5h4'],
+  // Baselines and slip detection — the marker the plan is measured against.
+  flag: ['M5.5 20.5V4', 'M5.5 5h11l-2.2 3.5L16.5 12h-11z'],
 } as const;
 
 const FILL_ICONS = {

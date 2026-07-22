@@ -1,0 +1,453 @@
+---
+import { marginDemo as d } from '../../data/teamkazi';
+
+/**
+ * The margin demo — TeamKazi's equivalent of WizCRM's VisitCaptureDemo.
+ *
+ * WHY THIS PARTICULAR PANEL
+ * The product's whole positioning is a question: "is this project still
+ * making money?" A feature grid cannot answer that; a panel that shows the
+ * margin visibly eroding week by week, and flags the variance in week three,
+ * answers it in about six seconds without a word of copy.
+ *
+ * The last row is the one that matters most. Rather than showing a forecast
+ * of zero it states that the figure is not calculable and says why. That is
+ * the brochure's "no flattering defaults" claim demonstrated rather than
+ * asserted, and it is the hardest thing on this page for a competitor to
+ * copy — not technically, but temperamentally.
+ *
+ * ⚠ Worded as a VARIANCE READOUT, never an alert. Earned Value variance and
+ * baseline comparison are shipped features; configurable budget alert
+ * thresholds are on the source document's exclusion list, so nothing here
+ * may read as a notification having fired.
+ *
+ * The project is deliberately unnamed — no client, real or invented, appears
+ * anywhere on this site. The chrome bar says "Demonstration" so the figures
+ * cannot be mistaken for a case study.
+ *
+ * Motion is the message, not decoration. Fully static under
+ * prefers-reduced-motion, resolving to the final week — the state that
+ * carries the point.
+ */
+---
+
+<figure class="demo" aria-labelledby="margin-cap">
+  <figcaption id="margin-cap" class="sr-only">
+    A demonstration of TeamKazi's project financials: across four weeks the project margin
+    falls from {d.margins[0]} to {d.margins[d.margins.length - 1]}, with a cost variance of
+    {d.varianceValue} against baseline attributed to a labour overrun. The forecast at
+    completion is withheld, because two timesheets are still awaiting approval. Figures are
+    illustrative.
+  </figcaption>
+
+  <!-- App chrome -->
+  <div class="bar" aria-hidden="true">
+    <span class="bar-dot"></span>
+    <span class="bar-title">TeamKazi · Financials</span>
+    <span class="bar-right">Demonstration</span>
+  </div>
+
+  <div class="body" aria-hidden="true">
+    <p class="project">{d.project}</p>
+
+    <!-- Contract value and cost to date -->
+    <dl class="topline">
+      <div>
+        <dt>Contract value</dt>
+        <dd>{d.contractValue}</dd>
+      </div>
+      <div>
+        <dt>Cost to date</dt>
+        <dd>{d.costToDate}</dd>
+      </div>
+    </dl>
+
+    <!-- The margin, eroding -->
+    <div class="margin">
+      <div class="margin-head">
+        <span class="margin-label">Margin</span>
+        <span class="margin-val">
+          {d.margins.map((m) => <span>{m}</span>)}
+        </span>
+      </div>
+
+      <div class="chart">
+        {
+          d.bars.map((h, i) => (
+            <span class="col">
+              <span class="track">
+                <span class="bar-fill" style={`height:${h}%`}></span>
+              </span>
+              <span class="wk">W{i + 1}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Earned value -->
+    <div class="evm">
+      <span class="chip">CPI <b>{d.cpi}</b></span>
+      <span class="chip">SPI <b>{d.spi}</b></span>
+    </div>
+
+    <!-- Variance against the locked baseline -->
+    <div class="variance">
+      <span class="variance-top">
+        <span class="variance-label">{d.varianceLabel}</span>
+        <span class="variance-val">{d.varianceValue}</span>
+      </span>
+      <span class="variance-reason">{d.varianceReason}</span>
+    </div>
+
+    <!-- The honest-by-design moment -->
+    <div class="withheld">
+      <span class="withheld-label">{d.withheldLabel}</span>
+      <span class="withheld-reason">{d.withheldReason}</span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .demo {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(168deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+    box-shadow: var(--shadow-panel);
+    color: #fff;
+  }
+
+  /* ---- chrome ---- */
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .bar-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-orange-500);
+    flex: none;
+  }
+
+  .bar-title {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .bar-right {
+    margin-left: auto;
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  .body {
+    padding: 1.15rem 1.25rem 1.3rem;
+  }
+
+  .project {
+    margin: 0 0 0.9rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* ---- contract value / cost ---- */
+  .topline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0 0 1.1rem;
+  }
+
+  .topline > div {
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .topline dt {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .topline dd {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* ---- the margin ---- */
+  .margin-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  .margin-label {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-orange-500);
+  }
+
+  /* All four values occupy the SAME grid cell, so the box is sized by the
+     widest of them and nothing reflows as they cross-fade. */
+  .margin-val {
+    display: grid;
+    font-family: var(--font-mono);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .margin-val > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+  }
+
+  /* Static fallback: the final week, which is the state that carries the
+     point. Overridden by the animation when motion is allowed. */
+  .margin-val > span:last-child {
+    opacity: 1;
+  }
+
+  /* ---- weekly bars ---- */
+  .chart {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.7rem;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .track {
+    display: flex;
+    align-items: flex-end;
+    height: 54px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .bar-fill {
+    width: 100%;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    transform-origin: bottom;
+  }
+
+  /* The two weeks where the margin has gone materially off plan. */
+  .col:nth-child(3) .bar-fill,
+  .col:nth-child(4) .bar-fill {
+    background: var(--color-orange-500);
+  }
+
+  .wk {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* ---- earned value chips ---- */
+  .evm {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .chip {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .chip b {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* ---- variance ---- */
+  .variance {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(247, 157, 7, 0.1);
+    border: 1px solid rgba(247, 157, 7, 0.28);
+    border-left-width: 3px;
+  }
+
+  .variance-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .variance-label {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-orange-300);
+  }
+
+  .variance-val {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-orange-300);
+  }
+
+  .variance-reason {
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* ---- the withheld figure ---- */
+  .withheld {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+  }
+
+  .withheld-label {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .withheld-reason {
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  @media (max-width: 420px) {
+    .topline {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---- motion -------------------------------------------------------
+     One shared 18-second timeline. Every element is given an explicit
+     window inside it rather than a delay, so all four weeks clear together
+     at 94% instead of resetting out of phase with one another. */
+  @media (prefers-reduced-motion: no-preference) {
+    .margin-val > span,
+    .margin-val > span:last-child {
+      animation: 18s linear infinite;
+    }
+    .margin-val > span:nth-child(1) { animation-name: m1; }
+    .margin-val > span:nth-child(2) { animation-name: m2; }
+    .margin-val > span:nth-child(3) { animation-name: m3; }
+    .margin-val > span:nth-child(4) { animation-name: m4; }
+
+    .bar-fill {
+      animation: 18s ease-out infinite;
+      transform: scaleY(0);
+    }
+    .col:nth-child(1) .bar-fill { animation-name: bar1; }
+    .col:nth-child(2) .bar-fill { animation-name: bar2; }
+    .col:nth-child(3) .bar-fill { animation-name: bar3; }
+    .col:nth-child(4) .bar-fill { animation-name: bar4; }
+
+    .variance {
+      animation: variance-in 18s ease-out infinite;
+      opacity: 0;
+    }
+  }
+
+  /* Margin readings hand over with a short cross-fade. */
+  @keyframes m1 {
+    0%, 3%   { opacity: 0; }
+    8%, 25%  { opacity: 1; }
+    29%, 100% { opacity: 0; }
+  }
+  @keyframes m2 {
+    0%, 28%  { opacity: 0; }
+    33%, 50% { opacity: 1; }
+    54%, 100% { opacity: 0; }
+  }
+  @keyframes m3 {
+    0%, 53%  { opacity: 0; }
+    58%, 75% { opacity: 1; }
+    79%, 100% { opacity: 0; }
+  }
+  @keyframes m4 {
+    0%, 78%  { opacity: 0; }
+    83%, 94% { opacity: 1; }
+    98%, 100% { opacity: 0; }
+  }
+
+  /* Bars grow one per quarter-cycle, then all clear together. */
+  @keyframes bar1 {
+    0%, 2%   { transform: scaleY(0); }
+    8%, 94%  { transform: scaleY(1); }
+    99%, 100% { transform: scaleY(0); }
+  }
+  @keyframes bar2 {
+    0%, 27%  { transform: scaleY(0); }
+    33%, 94% { transform: scaleY(1); }
+    99%, 100% { transform: scaleY(0); }
+  }
+  @keyframes bar3 {
+    0%, 52%  { transform: scaleY(0); }
+    58%, 94% { transform: scaleY(1); }
+    99%, 100% { transform: scaleY(0); }
+  }
+  @keyframes bar4 {
+    0%, 77%  { transform: scaleY(0); }
+    83%, 94% { transform: scaleY(1); }
+    99%, 100% { transform: scaleY(0); }
+  }
+
+  /* The variance surfaces as week three lands — the point of the whole panel. */
+  @keyframes variance-in {
+    0%, 56% { opacity: 0; transform: translateY(4px); }
+    63%, 94% { opacity: 1; transform: translateY(0); }
+    99%, 100% { opacity: 0; transform: translateY(0); }
+  }
+</style>

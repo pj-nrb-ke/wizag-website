@@ -1,0 +1,386 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import SystemsMesh from '../../components/diagrams/SystemsMesh.astro';
+import ProjectMarginDemo from '../../components/diagrams/ProjectMarginDemo.astro';
+import CriticalPathDiagram from '../../components/diagrams/CriticalPathDiagram.astro';
+import { teamkazi, problems, pillars, platform, proof, security } from '../../data/teamkazi';
+import { teamkaziMesh } from '../../data/mesh';
+
+/**
+ * TeamKazi product page. Content extracted from
+ * C:\Users\pj\TeamKazi\TeamKazi-Brochure-Content.md, which is explicitly the
+ * source of truth for marketing copy.
+ *
+ * ⚠ THAT DOCUMENT CARRIES AN EXCLUSION LIST and it is binding. Nothing on
+ * this page may claim ERP integration, email/SMS/WhatsApp notifications, a
+ * native mobile or desktop app, offline mode, a client portal, budget alert
+ * thresholds, or finance exports. Note especially that WizCRM genuinely has
+ * a mobile app and offline sync — do NOT copy phrasing between the two
+ * product pages.
+ *
+ * Structural parity with the WizCRM page is deliberate (same hero, same
+ * scrolling mesh, same alternating capability rows), but the two demos
+ * differ because the two products prove themselves differently:
+ *
+ *  - WizCRM's claim is "the CRM writes itself", so its demo writes a report.
+ *  - TeamKazi's claim is "is this project still making money?", so its demo
+ *    shows margin eroding and then declines to forecast a figure it cannot
+ *    calculate honestly. That refusal is the brand.
+ *
+ * The critical-path diagram exists to make one specific brochure line
+ * literally true on screen — "know which five tasks decide whether you
+ * finish on time" — with the count derived from the schedule data.
+ */
+---
+
+<BaseLayout title="TeamKazi — is this project still making money?" description={teamkazi.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li>
+            <a href="/business-applications" class="py-1 transition-colors hover:text-paper">
+              Business Applications
+            </a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">TeamKazi</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
+        <div>
+          <p class="eyebrow text-orange-500">TeamKazi</p>
+
+          <h1 class="optical-left mt-4 max-w-[16ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {teamkazi.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {teamkazi.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Request a Demo</Button>
+            <a
+              href="#how-it-works"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              See how it works
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{teamkazi.audience}</p>
+        </div>
+
+        {/* Two columns of TeamKazi capability, one scrolling up and one down —
+            the same component and behaviour as the homepage and WizCRM heroes.
+            The parent must be position:relative for the mesh to fill it. */}
+        <div class="relative h-[26rem] overflow-hidden rounded-[var(--radius-lg)] border border-navy-500/40 bg-navy-900/45 sm:h-[30rem] lg:h-[32rem]">
+          <SystemsMesh items={teamkaziMesh} columns={2} variant="panel" />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE DEMO ---------------------------------------------------------
+       Placed immediately after the hero so the headline question is answered
+       before anything else is asked of the reader. -->
+  <Section tone="paper">
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Week three, not handover" measure="max-w-[15ch]">
+          Watch the margin move
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Labour, expenses, contract value and earned value reconcile to the same numbers as the
+          work happens. When the margin drifts from the approved baseline, the variance is on the
+          screen — while there is still time to do something about it.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          Look at the last row. Rather than forecasting a number it cannot stand behind, TeamKazi
+          says which two timesheets it is waiting on. No flattering defaults.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <ProjectMarginDemo />
+      </div>
+    </div>
+  </Section>
+
+  <!-- THE PROBLEM ------------------------------------------------------ -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="The problem"
+      lead="Most project tools tell you what is late. Very few tell you what late has just cost you, and fewer still tell you in time to act on it."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Milestones are not margin
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-3">
+      {
+        problems.map((item, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={i * 70}
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- THE THREE PILLARS ------------------------------------------------ -->
+  <Section tone="paper" id="how-it-works">
+    <SectionHeading
+      eyebrow="How it works"
+      lead="Three things TeamKazi does that a task list cannot: price the plan, build the plan, and defend the numbers afterwards."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Built around the money, not the checklist
+    </SectionHeading>
+
+    <div class="mt-12 grid gap-y-12">
+      {
+        pillars.map((pillar, idx) => (
+          <div
+            class:list={[
+              'grid items-start gap-8 border-t border-grey-300 pt-9 lg:grid-cols-2 lg:gap-14',
+              idx % 2 === 1 && 'lg:[&>*:first-child]:order-2',
+            ]}
+            data-reveal
+          >
+            <div>
+              <div class="flex items-center gap-3">
+                <Icon name={pillar.icon} size={22} class="text-orange-500" />
+                <span class="font-mono text-xs font-bold tracking-[0.14em] text-orange-700">
+                  {pillar.n}
+                </span>
+              </div>
+
+              <h3 class="mt-4 text-[length:var(--text-3xl)] leading-snug text-navy-700">
+                {pillar.name}
+              </h3>
+              <p class="mt-1.5 text-[length:var(--text-lg)] font-medium text-orange-700">
+                {pillar.tagline}
+              </p>
+              <p class="mt-4 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+                {pillar.intro}
+              </p>
+
+              <ul class="mt-6">
+                {pillar.points.map((point) => (
+                  <li class="flex items-start gap-3 border-t border-grey-300 py-3 text-base leading-relaxed text-ink">
+                    <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* One photograph per pillar, each briefed to the specific moment
+                that pillar serves. Prompts in docs/teamkazi-image-prompts.md. */}
+            <div class="lg:sticky lg:top-28">
+              {idx === 0 && (
+                <ImageSlot
+                  ratio="4/3"
+                  brief="A principal at a desk reviewing project figures on a laptop, seen from behind — rolled drawings and a scale rule beside them."
+                  purpose="Margin is a judgement someone makes on a Tuesday afternoon, not a dashboard."
+                />
+              )}
+              {idx === 1 && (
+                <ImageSlot
+                  ratio="4/3"
+                  brief="Hands flattening a printed scope document beside an open laptop, pen resting on the page. No face in frame."
+                  purpose="The document is the input. Shows where the plan comes from."
+                />
+              )}
+              {idx === 2 && (
+                <ImageSlot
+                  ratio="4/3"
+                  brief="Two people across a meeting table with a printed report between them, shot from the side at table height. Faces out of frame."
+                  purpose="The moment the numbers have to hold up in front of someone else."
+                />
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- THE CRITICAL PATH ------------------------------------------------ -->
+  <Section tone="warm">
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
+      <div data-reveal>
+        <SectionHeading eyebrow="Dependencies" measure="max-w-[16ch]">
+          Which tasks actually decide your finish date
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Link the tasks that must happen in order and TeamKazi works out the critical path for
+          you. Everything else has float — room to slip without moving the completion date.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          Circular dependencies are blocked before they can be saved, weekends are excluded from
+          the calculation, and every task shows what it is blocked by and what it blocks.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <CriticalPathDiagram />
+      </div>
+    </div>
+  </Section>
+
+  <!-- THE PLATFORM ----------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Under the hood"
+      lead="A complete project management system in its own right — the part the financials sit on top of."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Everything underneath
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        platform.map((block, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <Icon name={block.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {block.name}
+            </h3>
+            <p class="mt-2 text-base leading-relaxed text-ink-soft">{block.hook}</p>
+
+            <ul class="mt-5">
+              {block.points.map((point) => (
+                <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                  <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- BILLING FOR TIME ------------------------------------------------- -->
+  <Section tone="warm">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="If you bill for time" measure="max-w-[16ch]">
+          Approve the hours with the cost in view
+        </SectionHeading>
+        <p class="mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Most approval screens show a name and a number of hours. TeamKazi shows the person, the
+          hours and what those hours cost — so the approval is a financial decision made with the
+          financial consequence on the same screen.
+        </p>
+        <p class="mt-4 max-w-[48ch] text-base leading-relaxed text-ink-soft">
+          Entries can be dragged into a week calendar, are auto-suggested from task activity so
+          people log time they would otherwise forget, and carry notes and file evidence.
+          It works in any browser, including your phone.
+        </p>
+      </div>
+
+      <ImageSlot
+        ratio="3/2"
+        brief="A desk at the end of a working week in late afternoon light — laptop open on a week view, a notebook and a cooling cup of coffee. Nobody in frame, or hands only."
+        purpose="The weekly ritual this replaces. Quiet, ordinary, and instantly recognisable to the buyer."
+        class="w-full"
+      />
+    </div>
+  </Section>
+
+  <!-- HONEST BY DESIGN ------------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Proof</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Honest by design
+        </h2>
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-navy-100">
+          TeamKazi's credibility rests on being the tool that does not flatter you. That is a
+          design decision with consequences you can check.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="100">
+        <ul class="grid gap-x-10 sm:grid-cols-2">
+          {
+            proof.map((item) => (
+              <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="eyebrow mt-10 mb-4 text-orange-500">Security</p>
+        <ul class="grid gap-x-10">
+          {
+            security.map((item) => (
+              <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+                <Icon name="managed-services" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-navy-700">
+          Bring a project that went wrong
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-ink">
+          We would rather walk through a real job of yours than send a brochure. Bring one that
+          lost money and we will show you the week the numbers would have told you.
+        </p>
+      </div>
+      <Button href="/contact" variant="primary" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>

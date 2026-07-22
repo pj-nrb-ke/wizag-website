@@ -1,0 +1,281 @@
+---
+import { criticalPath, SCHEDULE_DAYS } from '../../data/teamkazi';
+
+/**
+ * The critical path, drawn.
+ *
+ * The brochure line is "know which five tasks decide whether you finish on
+ * time". A claim like that is worth proving on the page rather than
+ * repeating, so the schedule in src/data/teamkazi.ts genuinely has five
+ * tasks on its critical path and two with float — and the count below is
+ * derived from the data, not typed in. Change the schedule and the sentence
+ * corrects itself.
+ *
+ * Built from HTML and CSS rather than SVG so the task names stay real text:
+ * they scale with the reader's font size, reflow on a phone, and are read in
+ * order by a screen reader. An SVG would have baked them in at a fixed size
+ * that becomes illegible at 360px.
+ *
+ * Positions come from day numbers converted to percentages at build time, so
+ * the schedule is defined in exactly one place.
+ */
+const pct = (days: number) => `${((days / SCHEDULE_DAYS) * 100).toFixed(2)}%`;
+const criticalCount = criticalPath.filter((t) => t.critical).length;
+---
+
+<figure class="cp" aria-labelledby="cp-cap">
+  <figcaption id="cp-cap" class="sr-only">
+    A Gantt chart of a {SCHEDULE_DAYS}-day project schedule. {criticalCount} of the{' '}
+    {criticalPath.length} tasks sit on the critical path and decide the finish date:{' '}
+    {criticalPath.filter((t) => t.critical).map((t) => t.name).join(', ')}. The remaining tasks
+    carry float and can slip without moving the completion date.
+  </figcaption>
+
+  <ol class="rows">
+    {
+      criticalPath.map((task, i) => (
+        <li class="row" style={`--i:${i}`}>
+          <span class="wbs">{task.wbs}</span>
+          <span class="name">{task.name}</span>
+
+          <span class="track">
+            <span
+              class:list={['bar', task.critical ? 'bar--critical' : 'bar--slack']}
+              style={`left:${pct(task.start)};width:${pct(task.days)}`}
+            />
+            {task.float && (
+              <span
+                class="float"
+                style={`left:${pct(task.start + task.days)};width:${pct(task.float)}`}
+              >
+                <span class="float-tag">{task.float}d float</span>
+              </span>
+            )}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <!-- The critical path as one continuous run, which is the point: these are
+       the tasks whose slippage moves the finish date. -->
+  <div class="summary">
+    <span class="wbs" aria-hidden="true"></span>
+    <span class="name">Decides the finish date</span>
+    <span class="track">
+      <span class="spine"></span>
+      <span class="spine-label">{criticalCount} tasks · {SCHEDULE_DAYS} days</span>
+    </span>
+  </div>
+
+  <p class="legend">
+    <span class="key key--critical"></span> On the critical path
+    <span class="key key--slack"></span> Has float
+  </p>
+</figure>
+
+<style>
+  .cp {
+    margin: 0;
+    padding: 1.35rem 1.5rem 1.15rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-grey-100);
+    background: var(--color-paper);
+    box-shadow: var(--shadow-card);
+  }
+
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .row,
+  .summary {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 9.5rem) minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3rem 0;
+  }
+
+  .wbs {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    color: var(--color-orange-700);
+  }
+
+  .name {
+    font-size: var(--text-sm);
+    line-height: 1.3;
+    color: var(--color-ink);
+  }
+
+  .track {
+    position: relative;
+    height: 18px;
+    border-radius: 3px;
+    background: var(--color-grey-100);
+  }
+
+  .bar {
+    position: absolute;
+    top: 3px;
+    height: 12px;
+    border-radius: 3px;
+    transform-origin: left center;
+  }
+
+  .bar--critical {
+    background: var(--color-orange-500);
+  }
+
+  .bar--slack {
+    background: var(--color-navy-500);
+  }
+
+  /* Float is drawn as absence, not substance — an outline showing how far the
+     task could slip before it starts costing you the finish date. */
+  .float {
+    position: absolute;
+    top: 3px;
+    height: 12px;
+    border: 1px dashed var(--color-navy-300);
+    border-radius: 3px;
+    transform-origin: left center;
+  }
+
+  .float-tag {
+    position: absolute;
+    left: calc(100% + 0.4rem);
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--color-ink-soft);
+  }
+
+  /* ---- the critical-path spine ---- */
+  .summary {
+    margin-top: 0.5rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--color-grey-300);
+  }
+
+  .summary .name {
+    font-weight: 700;
+    color: var(--color-navy-700);
+  }
+
+  .summary .track {
+    background: transparent;
+  }
+
+  .spine {
+    position: absolute;
+    inset: 6px 0 auto 0;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-orange-500);
+    transform-origin: left center;
+  }
+
+  .spine-label {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.15rem);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--color-ink-soft);
+  }
+
+  /* ---- legend ---- */
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 1.4rem 0 0;
+    font-size: var(--text-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
+  .key {
+    width: 14px;
+    height: 6px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .key--critical {
+    background: var(--color-orange-500);
+  }
+
+  .key--slack {
+    background: var(--color-navy-500);
+    margin-left: 0.9rem;
+  }
+
+  /* On a narrow screen the two label columns move above the track, which
+     keeps the bars wide enough to still mean something. */
+  @media (max-width: 40rem) {
+    .row,
+    .summary {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      gap: 0.15rem 0.6rem;
+      padding: 0.45rem 0;
+    }
+
+    .track {
+      grid-column: 1 / -1;
+      margin-top: 0.2rem;
+    }
+
+    .float-tag {
+      display: none;
+    }
+  }
+
+  /* ---- motion -------------------------------------------------------
+     Bars draw left to right in schedule order, hold, then clear. The
+     stagger is small (0.35s) so the whole schedule assembles in about two
+     and a half seconds rather than dragging.
+
+     Static state is the finished chart, which is the useful one. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bar,
+    .float,
+    .spine {
+      animation: cp-draw 14s ease-out infinite;
+      animation-delay: calc(var(--i, 7) * 0.35s);
+      transform: scaleX(0);
+    }
+
+    /* The spine lands last, after every task bar is in place. */
+    .spine {
+      animation-delay: 2.8s;
+    }
+
+    .float {
+      animation-delay: calc(var(--i, 0) * 0.35s + 0.2s);
+    }
+  }
+
+  @keyframes cp-draw {
+    0% {
+      transform: scaleX(0);
+    }
+    9%,
+    88% {
+      transform: scaleX(1);
+    }
+    97%,
+    100% {
+      transform: scaleX(0);
+    }
+  }
+</style>
