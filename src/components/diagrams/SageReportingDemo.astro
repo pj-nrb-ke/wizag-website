@@ -1,0 +1,332 @@
+---
+import { dashboardDemo as d } from '../../data/sage-business-cloud';
+
+/**
+ * The hero panel for the Sage Business Cloud page.
+ *
+ * The product's real argument is that the numbers are current rather than
+ * reconstructed at month-end, so the panel shows a live-looking dashboard
+ * assembling itself: monthly revenue, what is outstanding, what is overdue,
+ * and how the debt is ageing.
+ *
+ * Deliberately in WIZAG navy and orange rather than Sage green. This is
+ * WIZAG's page about a product it implements, not a Sage-branded page, and
+ * a green panel in the middle of a navy site reads as a pasted screenshot.
+ *
+ * ⚠ Figures are illustrative and the chrome says "Demonstration" so they
+ * cannot be mistaken for a client's numbers. No client, real or invented,
+ * appears anywhere on this site.
+ */
+---
+
+<figure class="demo" aria-labelledby="sage-dash-cap">
+  <figcaption id="sage-dash-cap" class="sr-only">
+    An illustration of a Sage Business Cloud Accounting dashboard: a monthly revenue chart, 24
+    outstanding invoices totalling KSh 3.42 million, three of them overdue, and an ageing
+    breakdown showing 62% current, 24% at 30 days, 9% at 60 days and 5% beyond 90 days.
+  </figcaption>
+
+  <div class="bar" aria-hidden="true">
+    <span class="bar-dot"></span>
+    <span class="bar-title">Sage Business Cloud · Dashboard</span>
+    <span class="bar-right">Demonstration</span>
+  </div>
+
+  <div class="body" aria-hidden="true">
+    <div class="tabs">
+      {d.tabs.map((t, i) => <span class:list={['tab', i === 0 && 'tab--on']}>{t}</span>)}
+    </div>
+
+    <dl class="metrics">
+      {
+        d.metrics.map((m) => (
+          <div class="metric">
+            <dt>{m.label}</dt>
+            <dd>{m.value}</dd>
+            <dd class:list={['sub', m.tone === 'alert' && 'sub--alert']}>{m.sub}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="chart-label">Revenue · last 8 months</p>
+    <div class="chart">
+      {
+        d.bars.map((h, i) => (
+          <span class="col" style={`--i:${i}`}>
+            <span
+              class:list={['bar-fill', d.accentBars.includes(i) && 'bar-fill--accent']}
+              style={`height:${h}%`}
+            />
+          </span>
+        ))
+      }
+    </div>
+
+    <p class="chart-label chart-label--spaced">Debt ageing</p>
+    <div class="ageing">
+      {
+        d.ageing.map((a, i) => (
+          <div class="age-row" style={`--i:${i}`}>
+            <span class="age-label">{a.label}</span>
+            <span class="age-track">
+              <span
+                class:list={['age-fill', i >= 2 && 'age-fill--warn']}
+                style={`width:${a.pct}%`}
+              />
+            </span>
+            <span class="age-pct">{a.pct}%</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</figure>
+
+<style>
+  .demo {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(168deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+    box-shadow: var(--shadow-panel);
+    color: #fff;
+  }
+
+  /* ---- chrome ---- */
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .bar-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-orange-500);
+    flex: none;
+  }
+
+  .bar-title {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .bar-right {
+    margin-left: auto;
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  .body {
+    padding: 1.1rem 1.25rem 1.3rem;
+  }
+
+  /* ---- tabs ---- */
+  .tabs {
+    display: flex;
+    gap: 1.1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .tab {
+    padding-bottom: 0.5rem;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .tab--on {
+    color: var(--color-orange-500);
+    box-shadow: inset 0 -2px 0 var(--color-orange-500);
+  }
+
+  /* ---- metric cards ---- */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0 0 1.1rem;
+  }
+
+  .metric {
+    padding: 0.65rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .metric dt {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .metric dd {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .metric .sub {
+    margin-top: 0.15rem;
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .sub--alert {
+    color: var(--color-orange-300);
+  }
+
+  /* ---- charts ---- */
+  .chart-label {
+    margin: 0 0 0.5rem;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .chart-label--spaced {
+    margin-top: 1.15rem;
+  }
+
+  .chart {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    align-items: end;
+    gap: 5px;
+    height: 62px;
+  }
+
+  .col {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+  }
+
+  .bar-fill {
+    width: 100%;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.22);
+    transform-origin: bottom;
+  }
+
+  .bar-fill--accent {
+    background: var(--color-orange-500);
+  }
+
+  /* ---- ageing ---- */
+  .ageing {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .age-row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) 2.2rem;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .age-label,
+  .age-pct {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .age-pct {
+    text-align: right;
+  }
+
+  .age-track {
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+  }
+
+  .age-fill {
+    display: block;
+    height: 100%;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.35);
+    transform-origin: left;
+  }
+
+  /* The two oldest buckets are the ones that cost money. */
+  .age-fill--warn {
+    background: var(--color-orange-500);
+  }
+
+  @media (max-width: 420px) {
+    .metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---- motion -------------------------------------------------------
+     A single 12-second pass: the revenue bars rise left to right, then the
+     ageing bars fill. Everything holds for most of the cycle, so the panel
+     spends its time readable rather than moving. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bar-fill {
+      animation: bar-rise 12s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.09s);
+      transform: scaleY(0);
+    }
+
+    .age-fill {
+      animation: age-fill 12s ease-out infinite;
+      animation-delay: calc(1s + var(--i) * 0.16s);
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes bar-rise {
+    0% {
+      transform: scaleY(0);
+    }
+    7%,
+    91% {
+      transform: scaleY(1);
+    }
+    98%,
+    100% {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes age-fill {
+    0%,
+    2% {
+      transform: scaleX(0);
+    }
+    12%,
+    91% {
+      transform: scaleX(1);
+    }
+    98%,
+    100% {
+      transform: scaleX(0);
+    }
+  }
+</style>

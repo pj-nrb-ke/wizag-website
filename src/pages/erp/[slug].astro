@@ -11,8 +11,14 @@ import { erp } from '../../data/navigation';
  * the partner badge must come from Sage's own partner pack.
  */
 export function getStaticPaths() {
+  /* Platforms with their own written page, excluded so the routes cannot
+     collide. Declared INSIDE the function: Astro hoists getStaticPaths out
+     of module scope, so a const alongside it would be undefined at call
+     time. Add here whenever a real page lands. */
+  const WRITTEN = ['/erp/sage-business-cloud'];
+
   return erp
-    .filter((item) => item.href !== '/erp')
+    .filter((item) => item.href !== '/erp' && !WRITTEN.includes(item.href))
     .map((item) => ({
       params: { slug: item.href.replace('/erp/', '') },
       props: { item },

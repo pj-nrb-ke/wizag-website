@@ -1,0 +1,338 @@
+---
+interface Step {
+  n: string;
+  title: string;
+  body: string;
+}
+
+interface Props {
+  steps: Step[];
+  /** Vertical suits four steps with real sentences; horizontal suits three
+   *  terse ones. Both run the same animation. */
+  orientation?: 'vertical' | 'horizontal';
+  /** Seconds for one full pass. Longer for more steps. */
+  cycle?: number;
+  /** Panel tone. `deep` sits on navy sections, `light` on paper. */
+  tone?: 'light' | 'deep';
+}
+
+/**
+ * A numbered sequence that lights up in order.
+ *
+ * Built once and used twice on the Sage page — the Debtors Manager
+ * collection cycle and the AutoEntry capture flow are the same shape, and
+ * two near-identical components would have drifted apart within a month.
+ *
+ * The animation carries meaning here rather than decorating: both flows are
+ * about things happening in a fixed order without anyone driving them, and
+ * watching the connector travel between steps says that faster than the
+ * sentences do.
+ *
+ * Static under prefers-reduced-motion, with every step fully lit — the end
+ * state is the readable one.
+ */
+const { steps, orientation = 'vertical', cycle = 14, tone = 'light' } = Astro.props as Props;
+
+/* Stagger so the last step lands around 60% of the cycle, leaving the rest
+   as a hold on the complete diagram. */
+const stagger = ((cycle * 0.6) / Math.max(steps.length, 1)).toFixed(2);
+---
+
+<ol
+  class:list={['flow', `flow--${orientation}`, `flow--${tone}`]}
+  style={`--cycle:${cycle}s; --stagger:${stagger}s`}
+>
+  {
+    steps.map((step, i) => (
+      <li class="step" style={`--i:${i}`}>
+        <div class="marker">
+          <span class="num">{step.n}</span>
+          {i < steps.length - 1 && <span class="connector" aria-hidden="true" />}
+        </div>
+
+        <div class="content">
+          <h3 class="title">{step.title}</h3>
+          <p class="body">{step.body}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .flow--vertical {
+    gap: 0;
+  }
+
+  .flow--horizontal {
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    position: relative;
+  }
+
+  .flow--vertical .step {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0 1rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .flow--vertical .step:last-child {
+    padding-bottom: 0;
+  }
+
+  .flow--horizontal .step {
+    grid-template-rows: 2.5rem auto;
+    gap: 0.9rem 0;
+    padding-right: 1.25rem;
+  }
+
+  /* ---- marker: the number, and the line that reaches the next one ---- */
+  .marker {
+    position: relative;
+    display: grid;
+    justify-items: center;
+  }
+
+  .flow--vertical .marker {
+    grid-row: 1 / span 2;
+    align-content: start;
+  }
+
+  .flow--horizontal .marker {
+    justify-items: start;
+  }
+
+  .num {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    z-index: 1;
+  }
+
+  .flow--light .num {
+    background: var(--color-grey-100);
+    color: var(--color-navy-700);
+  }
+
+  .flow--deep .num {
+    background: rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .connector {
+    position: absolute;
+    border-radius: 2px;
+  }
+
+  .flow--vertical .connector {
+    top: 2.25rem;
+    bottom: -1.6rem;
+    width: 2px;
+    left: calc(50% - 1px);
+    transform-origin: top center;
+  }
+
+  .flow--horizontal .connector {
+    top: calc(1.125rem - 1px);
+    left: 2.6rem;
+    right: 0.5rem;
+    height: 2px;
+    transform-origin: left center;
+  }
+
+  .flow--light .connector {
+    background: var(--color-grey-300);
+  }
+
+  .flow--deep .connector {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  /* ---- content ---- */
+  .title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .body {
+    margin-top: 0.3rem;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .flow--light .title {
+    color: var(--color-navy-700);
+  }
+
+  .flow--light .body {
+    color: var(--color-ink);
+  }
+
+  .flow--deep .title {
+    color: var(--color-paper);
+  }
+
+  .flow--deep .body {
+    color: var(--color-navy-100);
+  }
+
+  .flow--vertical .content {
+    padding-top: 0.3rem;
+  }
+
+  /* ---- motion -------------------------------------------------------
+     Everything above renders complete and readable with no animation. The
+     rules below only stage the order. */
+  @media (prefers-reduced-motion: no-preference) {
+    .num {
+      animation: step-lit var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger));
+    }
+
+    .content {
+      animation: step-in var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger));
+    }
+
+    /* The connector leaves a step slightly after that step lights, so the
+       eye follows it to the next number. */
+    .flow--vertical .connector,
+    .flow--horizontal .connector {
+      animation: connector-draw var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger) + 0.25s);
+    }
+
+    .flow--vertical .connector {
+      animation-name: connector-draw-y;
+    }
+  }
+
+  @keyframes step-lit {
+    0%,
+    4% {
+      background: var(--color-grey-100);
+      color: var(--color-navy-700);
+    }
+    10%,
+    88% {
+      background: var(--color-orange-500);
+      color: var(--color-navy-900);
+    }
+    96%,
+    100% {
+      background: var(--color-grey-100);
+      color: var(--color-navy-700);
+    }
+  }
+
+  /* On navy the unlit state is a white wash rather than a grey chip. */
+  .flow--deep .num {
+    animation-name: step-lit-deep;
+  }
+
+  @keyframes step-lit-deep {
+    0%,
+    4% {
+      background: rgba(255, 255, 255, 0.09);
+      color: rgba(255, 255, 255, 0.75);
+    }
+    10%,
+    88% {
+      background: var(--color-orange-500);
+      color: var(--color-navy-900);
+    }
+    96%,
+    100% {
+      background: rgba(255, 255, 255, 0.09);
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  @keyframes step-in {
+    0%,
+    3% {
+      opacity: 0.35;
+    }
+    10%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes connector-draw {
+    0%,
+    5% {
+      transform: scaleX(0);
+    }
+    16%,
+    90% {
+      transform: scaleX(1);
+    }
+    97%,
+    100% {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes connector-draw-y {
+    0%,
+    5% {
+      transform: scaleY(0);
+    }
+    16%,
+    90% {
+      transform: scaleY(1);
+    }
+    97%,
+    100% {
+      transform: scaleY(0);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .flow--horizontal {
+      grid-template-columns: 1fr;
+    }
+
+    .flow--horizontal .step {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      grid-template-rows: none;
+      gap: 0 1rem;
+      padding: 0 0 1.4rem;
+    }
+
+    .flow--horizontal .marker {
+      grid-row: 1 / span 2;
+      justify-items: center;
+    }
+
+    /* Reuse the vertical connector geometry once the row has wrapped. */
+    .flow--horizontal .connector {
+      top: 2.25rem;
+      bottom: -1.4rem;
+      left: calc(50% - 1px);
+      right: auto;
+      width: 2px;
+      height: auto;
+      transform-origin: top center;
+      animation-name: connector-draw-y;
+    }
+  }
+</style>

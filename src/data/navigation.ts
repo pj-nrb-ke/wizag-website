@@ -103,7 +103,11 @@ export const erp: NavLink[] = [
     dividerBefore: true,
     stub: true,
   },
-  { label: 'Sage Business Cloud', href: '/erp/sage-business-cloud', stub: true },
+  {
+    label: 'Sage Business Cloud',
+    href: '/erp/sage-business-cloud',
+    summary: 'Cloud accounting for businesses that have outgrown spreadsheets',
+  },
   { label: 'WizERP', href: '/erp/wizerp', stub: true },
   { label: 'AscendBooks', href: '/erp/ascendbooks', stub: true },
 ];
