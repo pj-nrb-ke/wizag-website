@@ -1,0 +1,29 @@
+---
+/**
+ * Horizontal rhythm for the whole site. Every section's content sits inside
+ * one of these so left edges align down the page — the single biggest factor
+ * in whether a layout reads as considered or assembled.
+ */
+type Width = 'content' | 'narrow';
+
+export interface Props {
+  /** `content` = 1280px page width. `narrow` = 760px reading measure. */
+  width?: Width;
+  as?: 'div' | 'section' | 'header' | 'footer' | 'nav';
+  class?: string;
+}
+
+const { width = 'content', as: Tag = 'div', class: className = '' } = Astro.props as Props;
+
+const widths: Record<Width, string> = {
+  content: 'max-w-[var(--container-content)]',
+  narrow: 'max-w-[var(--container-narrow)]',
+};
+---
+
+{/* Gutters stay at 32px through the 1024–1279 range: the full nav, logo and
+    CTA only just fit there, and the wider 48px gutter left the bar with 16px
+    of clearance. Opens up again at xl where there is width to spare. */}
+<Tag class:list={['mx-auto w-full px-5 sm:px-8 xl:px-12', widths[width], className]}>
+  <slot />
+</Tag>

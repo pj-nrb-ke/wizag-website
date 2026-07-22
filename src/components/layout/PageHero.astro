@@ -1,0 +1,60 @@
+---
+import Container from './Container.astro';
+import Icon from '../ui/Icon.astro';
+
+/**
+ * Inner-page hero. Gives every page below the homepage the same opening
+ * shape — breadcrumb, title, lead — so the site reads as one system rather
+ * than a set of separately-designed pages.
+ */
+interface Props {
+  title: string;
+  lead?: string;
+  eyebrow?: string;
+  /** Breadcrumb trail, excluding the current page. */
+  crumbs?: { label: string; href: string }[];
+}
+
+const { title, lead, eyebrow, crumbs = [] } = Astro.props as Props;
+---
+
+<section class="border-b border-grey-100 bg-warm">
+  <Container class="py-10 md:py-12 lg:py-14">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-soft">
+            {crumbs.map((crumb) => (
+              <li class="flex items-center gap-2">
+                <a
+                  href={crumb.href}
+                  class="py-1 transition-colors duration-[var(--duration-fast)] hover:text-navy-700"
+                >
+                  {crumb.label}
+                </a>
+                <Icon name="chevron-down" size={13} class="-rotate-90 text-grey-500" />
+              </li>
+            ))}
+            <li aria-current="page" class="py-1 font-semibold text-navy-700">{title}</li>
+          </ol>
+        </nav>
+      )
+    }
+
+    {eyebrow && <p class="eyebrow mb-4 text-orange-700">{eyebrow}</p>}
+
+    <h1
+      class="optical-left max-w-[20ch] text-[length:var(--text-5xl)] leading-[1.1] text-navy-700"
+    >
+      {title}
+    </h1>
+
+    {
+      lead && (
+        <p class="mt-6 max-w-[58ch] text-[length:var(--text-xl)] leading-relaxed text-ink">
+          {lead}
+        </p>
+      )
+    }
+  </Container>
+</section>

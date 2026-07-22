@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * A documented placeholder for photography that does not exist yet.
+ *
+ * WHY A PLACEHOLDER AND NOT STOCK
+ * I cannot source or licence photographs, and dropping in generic
+ * "diverse team at laptops" stock would actively hurt this page: it is the
+ * most templated imagery on the B2B web, and for a product aimed at Kenyan
+ * field-sales teams a visibly imported boardroom reads as inauthentic.
+ *
+ * So each slot states exactly what to shoot, at what aspect ratio, and why
+ * it belongs there. Swap the whole component for an <img> (or Astro's
+ * <Image>) when the asset lands — the layout is already sized for it.
+ *
+ * ⚠ Every one of these must be replaced before launch. They are styled to
+ * look deliberate rather than broken, which makes them easy to miss — run
+ * `grep -r ImageSlot src/` before going live.
+ */
+interface Props {
+  /** What to photograph — the shot brief, shown in the slot. */
+  brief: string;
+  /** Why this image is here, so the shot is directed rather than decorative. */
+  purpose?: string;
+  /** CSS aspect-ratio, e.g. "4/3", "16/9", "1/1". */
+  ratio?: string;
+  class?: string;
+}
+
+const { brief, purpose, ratio = '4/3', class: className = '' } = Astro.props as Props;
+---
+
+<figure
+  class:list={['slot', className]}
+  style={`--ratio:${ratio}`}
+  data-image-slot
+  aria-hidden="true"
+>
+  <div class="slot-inner">
+    <Icon name="check" size={20} class="slot-icon" />
+    <p class="slot-brief">{brief}</p>
+    {purpose && <p class="slot-purpose">{purpose}</p>}
+    <p class="slot-meta">Photography required · {ratio}</p>
+  </div>
+</figure>
+
+<style>
+  .slot {
+    position: relative;
+    aspect-ratio: var(--ratio);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: 0;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent 0 10px,
+        rgba(27, 48, 108, 0.035) 10px 20px
+      ),
+      var(--color-warm);
+    border: 1px dashed var(--color-grey-300);
+    display: grid;
+    place-items: center;
+  }
+
+  .slot-inner {
+    padding: 1.5rem;
+    text-align: center;
+    max-width: 34ch;
+  }
+
+  .slot-icon {
+    color: var(--color-grey-500);
+    margin-bottom: 0.6rem;
+  }
+
+  .slot-brief {
+    font-size: var(--text-sm);
+    font-weight: 650;
+    line-height: 1.45;
+    color: var(--color-navy-700);
+  }
+
+  .slot-purpose {
+    margin-top: 0.4rem;
+    font-size: var(--text-2xs);
+    line-height: 1.45;
+    color: var(--color-ink-soft);
+  }
+
+  .slot-meta {
+    margin-top: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-grey-500);
+  }
+</style>

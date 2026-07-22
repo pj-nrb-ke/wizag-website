@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+import Section from '../components/layout/Section.astro';
+import { company } from '../data/navigation';
+
+/**
+ * Terms of use.
+ *
+ * ⚠ Requires review by a qualified adviser before launch. The clauses below
+ * are standard website terms and make no commercial or service commitment —
+ * contractual terms for actual engagements live in the engagement contracts,
+ * not here.
+ */
+const sections = [
+  {
+    heading: 'About these terms',
+    body: `This website is operated by ${company.legalName}. By using it, you accept these terms. If you do not accept them, please do not use the site.`,
+  },
+  {
+    heading: 'Use of the site',
+    body: 'You may use this site for lawful purposes only. You must not attempt to gain unauthorised access to it, interfere with its operation, or use it in any way that could damage or impair its availability to others.',
+  },
+  {
+    heading: 'Information on this site',
+    body: 'The content is provided for general information about our services. It does not constitute professional, technical, financial or legal advice, and it does not form part of any contract. We take care to keep it accurate but do not warrant that it is complete or current.',
+  },
+  {
+    heading: 'Intellectual property',
+    body: `The content, design, trade marks and branding on this site belong to ${company.legalName} or its licensors. Product names and marks of third-party platforms belong to their respective owners and are used to describe the services we provide.`,
+  },
+  {
+    heading: 'External links',
+    body: 'Where this site links to other websites, those sites are outside our control. We are not responsible for their content, availability or privacy practices.',
+  },
+  {
+    heading: 'Liability',
+    body: 'To the extent permitted by law, we are not liable for any loss arising from reliance on the content of this site. Nothing in these terms excludes liability that cannot lawfully be excluded.',
+  },
+  {
+    heading: 'Governing law',
+    body: 'These terms are governed by the laws of Kenya, and the courts of Kenya have exclusive jurisdiction over any dispute arising from them.',
+  },
+  {
+    heading: 'Contact',
+    body: `Questions about these terms can be sent to ${company.email}.`,
+  },
+];
+---
+
+<BaseLayout
+  title="Terms of Use"
+  description="Terms governing the use of the wizag.biz website."
+>
+  <PageHero
+    title="Terms of Use"
+    lead="The terms that govern your use of this website."
+    crumbs={[{ label: 'Home', href: '/' }]}
+  />
+
+  <Section tone="paper" width="narrow">
+    {
+      sections.map((section) => (
+        <div class="border-t border-grey-300 py-8 first:border-t-0 first:pt-0">
+          <h2 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+            {section.heading}
+          </h2>
+          <p class="mt-3 text-[length:var(--text-lg)] leading-relaxed text-ink">{section.body}</p>
+        </div>
+      ))
+    }
+  </Section>
+</BaseLayout>

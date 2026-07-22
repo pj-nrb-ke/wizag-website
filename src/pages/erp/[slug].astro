@@ -1,0 +1,70 @@
+---
+import ShellPage from '../../components/layout/ShellPage.astro';
+import { erp } from '../../data/navigation';
+
+/**
+ * ERP platform pages.
+ *
+ * Shells for now — kept out of the index until each carries real content.
+ * No capability, certification or partnership claim appears here: WIZAG is
+ * an authorised partner for the Sage products, but the permitted wording and
+ * the partner badge must come from Sage's own partner pack.
+ */
+export function getStaticPaths() {
+  return erp
+    .filter((item) => item.href !== '/erp')
+    .map((item) => ({
+      params: { slug: item.href.replace('/erp/', '') },
+      props: { item },
+    }));
+}
+
+const { item } = Astro.props;
+
+const covers: Record<string, string[]> = {
+  'Sage 200 Evolution': [
+    'Implementation approach',
+    'Modules and functionality',
+    'Migration from legacy systems',
+    'Integration with existing tools',
+    'Reporting and analytics',
+    'Ongoing support options',
+  ],
+  'Sage Business Cloud': [
+    'Cloud accounting setup',
+    'Migration and data conversion',
+    'Multi-user and multi-company',
+    'Integration with existing tools',
+    'Reporting',
+    'Ongoing support options',
+  ],
+  WizERP: [
+    'Modules and functionality',
+    'Where it fits versus Sage',
+    'Implementation approach',
+    'Customisation and extension',
+    'Integration',
+    'Support and roadmap',
+  ],
+  AscendBooks: [
+    'Overview and positioning',
+    'Core functionality',
+    'Who it suits',
+    'Implementation approach',
+    'Integration',
+    'Support options',
+  ],
+};
+---
+
+<ShellPage
+  title={item.label}
+  description={`${item.label} — implementation, migration, integration and support from WIZAG.`}
+  lead={`Implementation, migration, integration and ongoing support for ${item.label}.`}
+  eyebrow="ERP"
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'ERP', href: '/erp' },
+  ]}
+  covers={covers[item.label] ?? []}
+/>

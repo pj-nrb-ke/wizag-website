@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import Section from '../../components/layout/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { businessApplications } from '../../data/navigation';
+---
+
+<BaseLayout
+  title="Business Applications"
+  description="WIZAG's own business applications — TeamKazi, WizPOS, WizSales, CloudHR and RestPOS."
+  noindex={true}
+>
+  <PageHero
+    title="Applications we build and maintain"
+    lead="Alongside the platforms we implement, WIZAG develops and supports its own business applications. Where an off-the-shelf system does not fit, we have something that does."
+    eyebrow="Business Applications"
+    crumbs={[{ label: 'Home', href: '/' }]}
+  />
+
+  <Section tone="paper">
+    <ul class="grid gap-x-12 gap-y-0 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        businessApplications.map((app) => (
+          <li class="group border-t border-grey-300 py-7" data-reveal>
+            <a href={app.href} class="block">
+              <h2 class="text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                {app.label}
+              </h2>
+              <span class="mt-4 inline-flex items-center gap-1.5 text-base font-semibold text-navy-700 group-hover:text-orange-700">
+                Learn more
+                <Icon
+                  name="arrow-right"
+                  size={16}
+                  class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-[length:var(--text-3xl)] text-paper">
+          Want a walkthrough of any of these?
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base text-navy-100">
+          We would rather show you the software against your own scenario than send a
+          brochure.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>

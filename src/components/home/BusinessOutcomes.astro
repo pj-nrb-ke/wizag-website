@@ -1,0 +1,34 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import { businessOutcomes } from '../../data/home';
+
+/**
+ * Business outcomes (brief §8.11).
+ *
+ * Deliberately no numbers. §8.11 forbids percentages or numeric claims
+ * unless they are backed by documented WIZAG case studies, and none exist
+ * yet. When real case studies land, this section is the natural place to
+ * introduce figures — each outcome can then carry a linked proof point.
+ */
+---
+
+<Section tone="paper" id="outcomes">
+  <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+    <SectionHeading eyebrow="What changes" measure="max-w-[14ch]" data-reveal>
+      Focused on business outcomes
+    </SectionHeading>
+
+    <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+      {
+        businessOutcomes.map((outcome) => (
+          <li class="flex items-center gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] font-medium text-navy-700">
+            <Icon name="check" size={16} class="shrink-0 text-orange-700" />
+            {outcome}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Section>

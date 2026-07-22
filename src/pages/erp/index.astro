@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { getPractice } from '../../data/services';
+import { erp } from '../../data/navigation';
+
+const practice = getPractice('erp-business-systems')!;
+const platforms = erp.filter((item) => item.href !== '/erp');
+---
+
+<BaseLayout
+  title="ERP Services"
+  description="ERP advisory, selection, implementation, migration, integration, support and managed services across Sage 200 Evolution, Sage Business Cloud, WizERP and AscendBooks."
+>
+  <PageHero
+    title="ERP that works around your business"
+    lead={practice.positioning}
+    eyebrow="ERP"
+    crumbs={[{ label: 'Home', href: '/' }]}
+  />
+
+  <Section tone="paper">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <SectionHeading eyebrow="Services" measure="max-w-[14ch]" data-reveal>
+        Across the full ERP lifecycle
+      </SectionHeading>
+
+      <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          practice.capabilities.map((capability) => (
+            <li class="flex items-start gap-3 border-t border-grey-300 py-3.5 text-base text-ink">
+              <Icon name="check" size={16} class="mt-1 shrink-0 text-orange-700" />
+              {capability}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Platforms"
+      lead="We implement on the platform that fits the business, not the one that suits us. Where none fits, we have our own."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The platforms we work on
+    </SectionHeading>
+
+    <ul class="mt-8 grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal>
+      {
+        platforms.map((platform) => (
+          <li class="group border-t border-grey-300 py-6">
+            <a href={platform.href} class="flex items-center justify-between gap-4">
+              <span class="text-[length:var(--text-2xl)] font-semibold text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                {platform.label}
+              </span>
+              <Icon
+                name="arrow-right"
+                size={16}
+                class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)] group-hover:text-orange-700 motion-safe:group-hover:translate-x-0.5"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="paper">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <SectionHeading eyebrow="What changes" measure="max-w-[14ch]" data-reveal>
+        The outcomes this delivers
+      </SectionHeading>
+
+      <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          practice.outcomes.map((outcome) => (
+            <li class="flex items-center gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] font-medium text-navy-700">
+              <Icon name="check" size={16} class="shrink-0 text-orange-700" />
+              {outcome}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-[length:var(--text-3xl)] text-paper">Discuss your ERP requirements</h2>
+        <p class="mt-3 max-w-[52ch] text-base text-navy-100">
+          Whether it is a first implementation, a migration, or getting more out of what you
+          already run.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Book an Assessment</Button>
+    </div>
+  </Section>
+</BaseLayout>

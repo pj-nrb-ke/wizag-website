@@ -1,0 +1,77 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import { industries } from '../../data/navigation';
+
+/**
+ * Industries (brief §8.8).
+ *
+ * Text-led and compact — the brief asks for icons used sparingly and
+ * explicitly not for every industry rendered as an oversized card (§8.8).
+ * Nine cards would also be nine near-empty boxes until the industry pages
+ * carry real content.
+ *
+ * Manufacturing leads and is marked, per §8.8's priority note: ERP,
+ * inventory, procurement, analytics and automation are most relevant there.
+ */
+const [lead, ...rest] = industries;
+---
+
+<Section tone="warm" id="industries">
+  <div class="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+    <SectionHeading
+      eyebrow="Where we work"
+      measure="max-w-[18ch]"
+      data-reveal
+    >
+      Industry experience that connects technology to operations
+    </SectionHeading>
+
+    <div data-reveal data-reveal-delay="100">
+      {/* Manufacturing is given the lead position and the only icon in the
+          section — the priority is real, so it is shown rather than stated. */}
+      <a
+        href={lead!.href}
+        class="group flex items-start gap-4 border-t-2 border-navy-700 py-5
+               transition-colors duration-[var(--duration-fast)]"
+      >
+        <Icon name="erp-systems" size={20} class="mt-0.5 shrink-0 text-orange-500" />
+        <span>
+          <span
+            class="block text-[length:var(--text-2xl)] font-semibold leading-snug text-navy-700
+                   transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700"
+          >
+            {lead!.label}
+          </span>
+          <span class="mt-1 block text-base text-ink">
+            Our deepest sector experience — inventory, procurement, production and costing.
+          </span>
+        </span>
+      </a>
+
+      <ul class="grid sm:grid-cols-2 sm:gap-x-10">
+        {
+          rest.map((industry) => (
+            <li>
+              <a
+                href={industry.href}
+                class="group flex items-center justify-between gap-3 border-t border-grey-300 py-3.5
+                       text-base font-medium text-navy-700 transition-colors
+                       duration-[var(--duration-fast)] hover:text-orange-700"
+              >
+                {industry.label}
+                <Icon
+                  name="arrow-right"
+                  size={16}
+                  class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)]
+                         group-hover:text-orange-700 motion-safe:group-hover:translate-x-0.5"
+                />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Section>

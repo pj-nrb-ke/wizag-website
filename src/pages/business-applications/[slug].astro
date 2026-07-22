@@ -1,0 +1,43 @@
+---
+import ShellPage from '../../components/layout/ShellPage.astro';
+import { businessApplications } from '../../data/navigation';
+
+/**
+ * WIZAG business application pages — shells pending real product content.
+ *
+ * Only WIZAG's own products appear here. TimeTrax, MobiSales and CrownEHR
+ * run on wizag.co.ke subdomains but belong to another company and must never
+ * be listed as WIZAG products.
+ */
+export function getStaticPaths() {
+  return businessApplications
+    // WizCRM has its own written page at ./wizcrm.astro — excluded here so
+    // the two routes cannot collide.
+    .filter((item) => !item.href.endsWith('/wizcrm'))
+    .map((item) => ({
+      params: { slug: item.href.replace('/business-applications/', '') },
+      props: { item },
+    }));
+}
+
+const { item } = Astro.props;
+---
+
+<ShellPage
+  title={item.label}
+  description={`${item.label} — a WIZAG business application.`}
+  lead={`Product detail for ${item.label} is being prepared.`}
+  eyebrow="Business Applications"
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Business Applications', href: '/business-applications' },
+  ]}
+  covers={[
+    'What it does',
+    'Who it is for',
+    'Core functionality',
+    'Implementation and setup',
+    'Integration with your other systems',
+    'Support and roadmap',
+  ]}
+/>

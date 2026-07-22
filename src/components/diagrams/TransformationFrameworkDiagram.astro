@@ -1,0 +1,214 @@
+---
+import Icon from '../ui/Icon.astro';
+import { frameworkStages } from '../../data/home';
+
+/**
+ * The WIZAG Transformation Framework (brief §8.7, reworked per audit §2.6).
+ *
+ * The earlier version was a row of numbered text columns, which read as
+ * ordinary service copy rather than something WIZAG owns. Three changes fix
+ * that: each stage now carries a distinct icon, each names the OUTPUT it
+ * produces, and the model closes as a loop — measurement feeds back into
+ * discovery rather than the process simply ending.
+ *
+ * Horizontal rail on desktop, vertical timeline on mobile. Stage numbers
+ * stay small supporting markers, never the large numbered boxes §8.7 rules
+ * out as childish — the rail carries the sequence, the numbers confirm it.
+ *
+ * This is the one place on the site where a left-to-right sequence is
+ * correct: it is a process over time. The hero's ecosystem diagram is a
+ * system, and is drawn differently on purpose.
+ */
+---
+
+<div class="framework-wrap">
+  <ol class="framework">
+    {
+      frameworkStages.map((stage, i) => (
+        <li class="stage">
+          <div class="marker" aria-hidden="true" />
+
+          <div class="head">
+            <Icon name={stage.icon} size={18} class="text-orange-500" />
+            <p class="num">{String(i + 1).padStart(2, '0')}</p>
+          </div>
+
+          <h3 class="name">{stage.name}</h3>
+          <p class="body">{stage.description}</p>
+
+          <p class="output">
+            <span class="output-label">Output</span>
+            {stage.output}
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <!-- The loop back. Continuous improvement is the claim; showing the return
+       path is what makes it read as one. -->
+  <p class="loop">
+    <Icon name="arrow-right" size={17} class="loop-icon" />
+    Outcomes feed back into discovery — the framework runs continuously
+  </p>
+</div>
+
+<style>
+  .framework {
+    display: grid;
+    gap: 0;
+  }
+
+  .stage {
+    position: relative;
+    padding: 0 0 2.25rem 2.25rem;
+  }
+
+  .stage:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Mobile: vertical spine with a node per stage. */
+  .stage::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 1.5rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-navy-100);
+  }
+
+  .stage:last-child::before {
+    display: none;
+  }
+
+  .marker {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    border: 2px solid var(--color-navy-500);
+  }
+
+  /* The final stage is the one that never ends — it earns the accent. */
+  .stage:last-child .marker {
+    border-color: var(--color-orange-500);
+    background: var(--color-orange-500);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    color: var(--color-orange-700);
+    font-weight: 700;
+  }
+
+  .name {
+    font-size: var(--text-2xl);
+    color: var(--color-navy-700);
+    margin-top: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .body {
+    margin-top: 0.5rem;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-ink);
+    max-width: 34ch;
+  }
+
+  /* The named deliverable — what turns a stage into something you receive. */
+  .output {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-grey-300);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-navy-700);
+    max-width: 34ch;
+  }
+
+  .output-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    margin-bottom: 0.2rem;
+  }
+
+  .loop {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2.5rem;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-orange-700);
+  }
+
+  .loop-icon {
+    transform: rotate(90deg);
+    flex: none;
+  }
+
+  /* Desktop: the spine rotates to a horizontal rail across the top. */
+  @media (min-width: 1024px) {
+    .framework {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0 1.75rem;
+    }
+
+    .stage {
+      padding: 2.5rem 0 0 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage::before {
+      left: 6px;
+      right: -1.75rem;
+      top: 6px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+    }
+
+    .marker {
+      top: 0;
+      left: 0;
+    }
+
+    .body {
+      max-width: none;
+      flex: 1;
+    }
+
+    .output {
+      max-width: none;
+    }
+
+    .loop {
+      margin-top: 2.75rem;
+      justify-content: flex-end;
+    }
+
+    .loop-icon {
+      transform: rotate(180deg);
+    }
+  }
+</style>

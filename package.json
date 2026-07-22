@@ -1,0 +1,25 @@
+{
+  "name": "wizag-website",
+  "version": "0.1.0",
+  "description": "Wise & Agile Solutions Ltd (WIZAG) corporate website — enterprise transformation & technology services.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.13.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@fontsource-variable/ibm-plex-sans": "^5.1.0",
+    "@fontsource-variable/source-serif-4": "^5.1.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0"
+  }
+}

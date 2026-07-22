@@ -1,0 +1,61 @@
+---
+import ShellPage from '../../components/layout/ShellPage.astro';
+import { about } from '../../data/navigation';
+
+/**
+ * About sub-pages — Leadership, Partners, Careers.
+ *
+ * Shells. Leadership needs real names, roles and photographs; Partners needs
+ * the official Sage partner assets and permitted wording. Neither may be
+ * approximated.
+ */
+export function getStaticPaths() {
+  return about
+    .filter((item) => item.href !== '/about')
+    .map((item) => ({
+      params: { slug: item.href.replace('/about/', '') },
+      props: { item },
+    }));
+}
+
+const { item } = Astro.props;
+
+const covers: Record<string, string[]> = {
+  Leadership: [
+    'Who leads each practice',
+    'Background and experience',
+    'How engagements are staffed',
+    'Who you actually work with',
+  ],
+  Partners: [
+    'Technology partnerships',
+    'Platform authorisations',
+    'What each partnership means for clients',
+    'How we select platforms',
+  ],
+  Careers: [
+    'Current openings',
+    'How we work',
+    'What we look for',
+    'Application process',
+  ],
+};
+
+const leads: Record<string, string> = {
+  Leadership: 'The people who lead WIZAG engagements.',
+  Partners: 'The technology partnerships behind our delivery.',
+  Careers: 'Working at WIZAG.',
+};
+---
+
+<ShellPage
+  title={item.label}
+  description={`${item.label} — Wise & Agile Solutions Ltd.`}
+  lead={leads[item.label]}
+  eyebrow="About WIZAG"
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'About WIZAG', href: '/about' },
+  ]}
+  covers={covers[item.label] ?? []}
+/>

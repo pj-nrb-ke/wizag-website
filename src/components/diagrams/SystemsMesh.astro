@@ -1,0 +1,379 @@
+---
+import { wizagMesh, type Tile } from '../../data/mesh';
+
+/**
+ * Scrolling systems mesh — columns of tiles cycling continuously, with cells
+ * lighting up one at a time across the wall.
+ *
+ * Used twice: as full-bleed texture behind the homepage hero, and as a
+ * contained panel in the WizCRM hero. Same component, same behaviour.
+ *
+ * ── The four things that make this work, all of them hard-won ────────────
+ *
+ * 1. FOUR COPIES, NOT TWO. The track must still cover the column after it
+ *    has travelled a full copy: (REPEATS − 1) × copyHeight ≥ columnHeight.
+ *    With two copies the track ran out and the scroll visibly emptied and
+ *    restarted.
+ *
+ * 2. THE SEAM IS NOT −100%/R. The track is R·n tiles with (R·n − 1) gaps, so
+ *    one copy including its trailing gap is (height + gap) / R. Using a
+ *    plain fraction lands short and the loop ticks on every cycle.
+ *
+ * 3. TILES MUST BE `position: relative`. The highlight is an absolutely
+ *    positioned ::before; `will-change: transform` on .track establishes a
+ *    containing block, so without this the overlay sized to the whole column
+ *    and every "cell flash" lit an entire column.
+ *
+ * 4. DELAYS ARE STRATIFIED, NOT HASHED. A hash only makes clustering
+ *    unlikely. Delays are handed out at exactly even intervals, in an order
+ *    that refuses to reuse a column within AVOID picks — so simultaneous
+ *    cells land in different columns by construction.
+ */
+interface Props {
+  /** Tile content. Defaults to the corporate set. */
+  items?: Tile[];
+  /** Column count — the density dial. */
+  columns?: number;
+  /**
+   * `bleed` runs wider than its container and fades on all sides, for use as
+   * hero texture. `panel` fits its container exactly and fades only top and
+   * bottom, for a bounded box. Both fill their parent, which must be
+   * `position: relative`.
+   */
+  variant?: 'bleed' | 'panel';
+}
+
+const { items = wizagMesh, columns = 8, variant = 'bleed' } = Astro.props as Props;
+
+/* Rebuild the flat list into N columns by interleaving rather than slicing,
+   so the item kinds stay scattered instead of clustering by theme. */
+const wall: Tile[][] = Array.from({ length: columns }, (_, c) =>
+  items.filter((_, i) => i % columns === c)
+);
+
+/* Unequal, non-harmonic durations so columns never resync into a visible
+   pulse. Direction alternates, so with two columns one runs up and one down. */
+const SPEEDS = [33, 27, 39, 30, 25, 35, 29, 41];
+const motion = wall.map((_, c) => ({
+  up: c % 2 === 1,
+  s: SPEEDS[c % SPEEDS.length]!,
+}));
+
+const REPEATS = 4;
+const FLASH_CYCLE = 30;
+
+const hash = (n: number) => {
+  let x = n | 0;
+  x = Math.imul(x ^ (x >>> 16), 0x45d9f3b);
+  x = Math.imul(x ^ (x >>> 16), 0x45d9f3b);
+  return ((x ^ (x >>> 16)) >>> 0) / 4294967296;
+};
+
+const key = (c: number, i: number, r: number) => `${c}-${r}-${i}`;
+const seedOf = (c: number, i: number, r: number) => (c * 31 + i) * 7 + r * 1013;
+
+/* ---------------------------------------------------------------------
+   How many tiles may pulse — and why it MUST scale with column count.
+
+   Delays are evenly spaced, so the gap between consecutive flashes is
+   CYCLE / N. A cell stays lit for BRIGHT_FRACTION of the cycle, so the lit
+   window spans (BRIGHT_FRACTION × N) slots. Since consecutive slots are
+   dealt round-robin across columns, two lit cells share a column as soon as
+   that span reaches the column count.
+
+   At 8 columns this never binds — 67 tiles spans 3 slots of 8. At 2 columns
+   it bit immediately: 53 tiles spanned 2.38 slots, and a column showed two
+   lit cells 41% of the time. Hence the cap.
+   --------------------------------------------------------------------- */
+const BRIGHT_FRACTION = 0.045; // must match the tile-flash keyframes below
+
+/* Roughly how many cells should be lit at any instant. Three reads as a
+   living wall; one reads as a fault. */
+const DESIRED_LIT = 3;
+
+/* Safety ceiling. 0.6, not 0.8: at 0.8 the window spanned 1.98 slots against
+   a hard limit of `columns`, and the boundary cases still overlapped. */
+const maxPulse = Math.floor((columns / BRIGHT_FRACTION) * 0.6);
+
+/* Exactly this many pulsing tiles per column — never "whatever the hash
+   happened to pick". Equal buckets matter as much as the total: the deal
+   below can only alternate columns while every column still has tiles left,
+   so an over-full column runs on alone at the end and its last few flashes
+   land back to back in the same column. */
+const targetTotal = Math.min(Math.round(DESIRED_LIT / BRIGHT_FRACTION), maxPulse);
+const quota = Math.max(1, Math.floor(targetTotal / columns));
+
+/* Rank every tile in a column by hash and take the top `quota`. Ranking
+   rather than thresholding is what guarantees the count, whatever the hash
+   distribution happens to look like for this particular tile set. */
+const buckets: { k: string; sort: number }[][] = wall.map((column, c) => {
+  const candidates: { k: string; rank: number; sort: number }[] = [];
+  for (let r = 0; r < REPEATS; r++) {
+    column.forEach((_, i) => {
+      const seed = seedOf(c, i, r);
+      candidates.push({ k: key(c, i, r), rank: hash(seed), sort: hash(seed + 7919) });
+    });
+  }
+  return candidates
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, quota)
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ k, sort }) => ({ k, sort }));
+});
+
+/* How many recent columns to refuse. The lit window spans roughly three
+   slots, so three is ideal — but it cannot exceed columns − 1 or there would
+   be nothing left to pick. With two columns this becomes 1, which still
+   guarantees consecutive flashes alternate sides. */
+const AVOID = Math.max(1, Math.min(3, columns - 1));
+
+const order: string[] = [];
+const recent: number[] = [];
+while (buckets.some((b) => b.length)) {
+  const pick = (allowRecent: boolean) => {
+    let best = -1;
+    let bestLen = -1;
+    buckets.forEach((b, c) => {
+      if (!b.length) return;
+      if (!allowRecent && recent.includes(c)) return;
+      if (b.length > bestLen) {
+        bestLen = b.length;
+        best = c;
+      }
+    });
+    return best;
+  };
+  const c = pick(false) === -1 ? pick(true) : pick(false);
+  order.push(buckets[c]!.shift()!.k);
+  recent.push(c);
+  if (recent.length > AVOID) recent.shift();
+}
+
+const delayFor = new Map(
+  order.map((k, n) => [k, ((n / order.length) * FLASH_CYCLE).toFixed(2)])
+);
+---
+
+<div class:list={['mesh', `mesh--${variant}`]} aria-hidden="true">
+  <div class="mesh-inner">
+    {
+      wall.map((column, c) => (
+        <div class="col">
+          <div
+            class:list={['track', motion[c]!.up && 'track--up']}
+            style={`--dur:${motion[c]!.s}s`}
+          >
+            {Array.from({ length: REPEATS }).map((_, r) =>
+              column.map((tile, i) => {
+                const delay = delayFor.get(key(c, i, r));
+                return (
+                  <div
+                    class:list={['tile', `tile--${tile.kind}`, delay && 'tile--flash']}
+                    style={delay ? `--fd:${delay}s` : undefined}
+                  >
+                    <span class="dot" />
+                    <span class="label">{tile.label}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .mesh {
+    --gap: 0.55rem;
+    --repeats: 4;
+    /* Must match FLASH_CYCLE above — delays are fractions of it. */
+    --flash-cycle: 30s;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /* Hero texture: runs wider than the viewport and dissolves on every side. */
+  .mesh--bleed {
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, #000 26%, #000 88%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    mask-image:
+      linear-gradient(90deg, transparent 0%, #000 26%, #000 88%, transparent 100%),
+      linear-gradient(180deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  /* Contained panel: full width of its box, feathered only top and bottom so
+     tiles enter and leave rather than appearing at a hard edge. */
+  .mesh--panel {
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      #000 11%,
+      #000 89%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(180deg, transparent 0%, #000 11%, #000 89%, transparent 100%);
+  }
+
+  .mesh-inner {
+    display: flex;
+    gap: var(--gap);
+    height: 100%;
+  }
+
+  .mesh--bleed .mesh-inner {
+    width: 138%;
+    padding-left: 1%;
+  }
+
+  .mesh--panel .mesh-inner {
+    width: 100%;
+    padding: 0 0.55rem;
+  }
+
+  .col {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    will-change: transform;
+  }
+
+  .tile {
+    /* REQUIRED — see note 3 above. Without this the highlight overlay sizes
+       to .track and every flash lights the whole column. */
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+    overflow: hidden;
+    flex: none;
+  }
+
+  .tile::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: rgba(247, 157, 7, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(247, 157, 7, 0.69);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .dot {
+    position: relative;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.26);
+    flex: none;
+  }
+
+  .label {
+    position: relative;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.48);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Brightness ladder only — no colour. Orange is reserved for the flash. */
+  .tile--product {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.17);
+  }
+
+  .tile--product .dot {
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .tile--product .label {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 650;
+  }
+
+  .tile--benefit {
+    background: rgba(255, 255, 255, 0.075);
+    border-color: rgba(255, 255, 255, 0.13);
+  }
+
+  .tile--benefit .label {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .tile--benefit .dot {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: mesh-scroll var(--dur) linear infinite;
+    }
+
+    .track--up {
+      animation-direction: reverse;
+    }
+
+    .tile--flash::before {
+      animation: tile-flash var(--flash-cycle) ease-in-out var(--fd) infinite;
+    }
+  }
+
+  @keyframes mesh-scroll {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc((-100% - var(--gap)) / var(--repeats)));
+    }
+  }
+
+  @keyframes tile-flash {
+    0%,
+    95.5%,
+    100% {
+      opacity: 0;
+    }
+    97% {
+      opacity: 1;
+    }
+    98.5% {
+      opacity: 0.28;
+    }
+  }
+
+  /* Below lg the bleed variant drops to faint background texture — a wall of
+     moving tiles under a headline at phone width competes and wins. The
+     panel variant keeps full opacity: it is a deliberate object there, not a
+     backdrop. */
+  @media (max-width: 1023px) {
+    .mesh--bleed {
+      opacity: 0.3;
+      -webkit-mask-image: radial-gradient(125% 80% at 76% 32%, #000 10%, transparent 66%);
+      mask-image: radial-gradient(125% 80% at 76% 32%, #000 10%, transparent 66%);
+    }
+
+    .mesh--bleed .mesh-inner {
+      width: 180%;
+    }
+  }
+</style>

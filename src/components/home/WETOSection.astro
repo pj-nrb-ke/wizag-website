@@ -1,0 +1,49 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { wetoBenefits } from '../../data/home';
+
+/**
+ * WETO — WIZAG Executive Technology Office (brief §8.6).
+ *
+ * The single dark band on the page. WETO is the premium, most differentiated
+ * offering, so it gets the one tonal shift rather than competing with the
+ * other sections on a white ground.
+ *
+ * `tone="deep"` sets `.on-deep`, which switches focus rings to white and is
+ * the one context where brand orange may carry text — on navy it measures
+ * 5.8:1, against 2.15:1 on white.
+ */
+---
+
+<Section tone="deep" id="weto" space="loose">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-20">
+    <div data-reveal>
+      <SectionHeading
+        eyebrow="WETO"
+        tone="deep"
+        lead="Senior technology leadership, AI capability, process improvement, governance and continuous value delivery — without the cost of building a full internal executive team."
+        measure="max-w-[16ch]"
+      >
+        Your executive technology office — on demand
+      </SectionHeading>
+
+      <Button href="/weto" variant="inverse" size="large" arrow class="mt-6">
+        Explore WETO
+      </Button>
+    </div>
+
+    <ul class="grid gap-x-8 gap-y-0 sm:grid-cols-2 lg:grid-cols-1" data-reveal data-reveal-delay="120">
+      {
+        wetoBenefits.map((benefit) => (
+          <li class="flex items-center gap-3 border-b border-navy-500/40 py-3.5 text-base font-medium text-paper">
+            <Icon name="check" size={16} class="shrink-0 text-orange-500" />
+            {benefit}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Section>

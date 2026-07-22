@@ -1,0 +1,329 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/layout/Container.astro';
+import Section from '../components/layout/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import type { IconName } from '../components/ui/Icon.astro';
+
+/**
+ * WETO — WIZAG Executive Technology Office. The flagship offering.
+ *
+ * Structure follows the design audit §3.6: what it is, who it is for, what
+ * you receive, how the operating model works, what it produces, and the
+ * outcomes. Core promise, supporting statement, components and outcomes are
+ * the brief's §7 wording.
+ *
+ * The operating model (Assess → Prioritise → Govern → Deliver → Measure) and
+ * the monthly deliverables are drafted from that positioning and need client
+ * sign-off — they describe a service shape, and no figure or claim is made.
+ */
+
+const domains: { name: string; icon: IconName; body: string }[] = [
+  { name: 'Strategy', icon: 'exec-technology', body: 'Roadmap, investment priorities and the case for each.' },
+  { name: 'Technology', icon: 'erp-systems', body: 'Architecture, platforms, integration and technical debt.' },
+  { name: 'Operations', icon: 'process-excellence', body: 'How work flows, and where systems get in its way.' },
+  { name: 'Data', icon: 'data-analytics', body: 'Reporting, insight and the decisions they support.' },
+  { name: 'Innovation', icon: 'ai-automation', body: 'AI and automation, assessed before they are adopted.' },
+];
+
+const operatingModel = [
+  { stage: 'Assess', body: 'Establish the current state of systems, processes, spend and risk.' },
+  { stage: 'Prioritise', body: 'Rank opportunities by business value, cost and readiness.' },
+  { stage: 'Govern', body: 'Put decision rights, standards and vendor accountability in place.' },
+  { stage: 'Deliver', body: 'Execute the agreed roadmap through WIZAG or your own teams.' },
+  { stage: 'Measure', body: 'Report outcomes against the case, then re-prioritise.' },
+];
+
+const monthly = [
+  'A standing session with your executive team',
+  'A maintained technology roadmap and decision log',
+  'Vendor and licence review',
+  'Risk, governance and compliance oversight',
+  'Progress reported against agreed business outcomes',
+  'Access to WIZAG specialists as needs arise',
+];
+
+const forWho = [
+  'Organisations with no CTO, and no case for a full-time one',
+  'Boards that need technology decisions they can defend',
+  'Companies carrying several vendors and no single owner',
+  'Businesses that have invested in systems without the returns',
+];
+
+const outcomes = [
+  'Increased productivity',
+  'Reduced cost',
+  'Better decisions',
+  'Improved governance',
+  'Better technology ROI',
+  'Stronger innovation capability',
+  'Reduced operational risk',
+  'Better strategic alignment',
+];
+---
+
+<BaseLayout
+  title="WETO — Your Executive Technology Office, On Demand"
+  description="WETO gives organisations senior technology leadership, AI capability, process improvement, governance and continuous strategic guidance without building a full internal executive technology function."
+>
+  <!-- Flagship hero: the one page that opens on navy, because WETO is the
+       flagship and should not look like every other inner page. -->
+  <section class="on-deep border-b border-navy-500/30 bg-navy-700">
+    <Container class="py-11 md:py-12 lg:py-14">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex items-center gap-2 text-sm text-navy-100">
+          <li>
+            <a href="/" class="py-1 transition-colors hover:text-paper">Home</a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">WETO</li>
+        </ol>
+      </nav>
+
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+        <div>
+          <p class="eyebrow mb-4 text-orange-500">WIZAG Executive Technology Office</p>
+          <h1
+            class="optical-left max-w-[16ch] text-[length:var(--text-6xl)] leading-[1.05] text-paper"
+          >
+            Your executive technology office, on demand
+          </h1>
+          <p class="mt-7 max-w-[54ch] text-[length:var(--text-xl)] leading-relaxed text-navy-100">
+            Senior technology leadership, AI capability, process improvement, governance, data
+            insight and continuous strategic guidance — without the cost of building a full
+            internal executive technology function.
+          </p>
+          <div class="mt-7 flex flex-col gap-4 sm:flex-row">
+            <Button href="/contact" variant="inverse" size="large" arrow>
+              Book an Assessment
+            </Button>
+          </div>
+        </div>
+
+        <!-- The five domains WETO covers, as a hub. -->
+        <div class="rounded-[var(--radius-lg)] border border-navy-500/40 bg-navy-800 p-6 sm:p-8">
+          <p class="eyebrow mb-4 text-orange-500">What WETO covers</p>
+          <ul class="grid gap-x-8 sm:grid-cols-2">
+            {
+              domains.map((domain) => (
+                <li class="flex items-start gap-3 border-t border-navy-500/40 py-4">
+                  <Icon name={domain.icon} size={20} class="mt-0.5 shrink-0 text-orange-500" />
+                  <span>
+                    <span class="block font-semibold text-paper">{domain.name}</span>
+                    <span class="mt-0.5 block text-sm leading-snug text-navy-100">
+                      {domain.body}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Who it is for -->
+  <Section tone="paper">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <SectionHeading eyebrow="Who it is for" measure="max-w-[14ch]" data-reveal>
+        Built for a specific gap
+      </SectionHeading>
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          forWho.map((item) => (
+            <li class="flex items-start gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] text-ink">
+              <Icon name="check" size={16} class="mt-1 shrink-0 text-orange-700" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- Operating model -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="How it works"
+      lead="A continuous cycle, not a one-off engagement. Each pass through the model re-prioritises based on what the last one actually produced."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The WETO operating model
+    </SectionHeading>
+
+    <ol class="model @@mt-6@@" data-reveal>
+      {
+        operatingModel.map((step, i) => (
+          <li class="step">
+            <div class="dot" aria-hidden="true" />
+            <p class="step-num">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="step-name">{step.stage}</h3>
+            <p class="step-body">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="mt-7 flex items-center gap-2.5 text-base font-semibold text-orange-700">
+      <Icon name="arrow-right" size={16} class="rotate-90 lg:rotate-180" />
+      Measure feeds back into Assess — the cycle repeats
+    </p>
+  </Section>
+
+  <!-- What you receive -->
+  <Section tone="paper">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <SectionHeading eyebrow="What you receive" measure="max-w-[14ch]" data-reveal>
+        Every month, not every project
+      </SectionHeading>
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          monthly.map((item) => (
+            <li class="flex items-start gap-3 border-t border-grey-300 py-4 text-base text-ink">
+              <Icon name="check" size={16} class="mt-1 shrink-0 text-orange-700" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- Outcomes -->
+  <Section tone="warm">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <SectionHeading eyebrow="What changes" measure="max-w-[14ch]" data-reveal>
+        The outcomes WETO drives
+      </SectionHeading>
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          outcomes.map((item) => (
+            <li class="flex items-center gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] font-medium text-navy-700">
+              <Icon name="check" size={16} class="shrink-0 text-orange-700" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-[length:var(--text-3xl)] text-paper">
+          See what WETO would cover in your business
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base text-navy-100">
+          The assessment maps your current systems, spend and governance — and shows exactly
+          where an executive technology office would earn its place.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Book an Assessment</Button>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* Operating model: vertical on mobile, horizontal rail from lg. */
+  .model {
+    display: grid;
+    gap: 0;
+  }
+
+  .step {
+    position: relative;
+    padding: 0 0 2rem 2.25rem;
+  }
+
+  .step:last-child {
+    padding-bottom: 0;
+  }
+
+  .step::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 1.5rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-navy-100);
+  }
+
+  .step:last-child::before {
+    display: none;
+  }
+
+  .dot {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-paper);
+    border: 2px solid var(--color-navy-500);
+  }
+
+  .step:last-child .dot {
+    border-color: var(--color-orange-500);
+    background: var(--color-orange-500);
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: var(--color-orange-700);
+  }
+
+  .step-name {
+    font-size: var(--text-2xl);
+    color: var(--color-navy-700);
+    margin-top: 0.15rem;
+    line-height: 1.2;
+  }
+
+  .step-body {
+    margin-top: 0.5rem;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-ink);
+    max-width: 34ch;
+  }
+
+  @media (min-width: 1024px) {
+    .model {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0 1.75rem;
+    }
+
+    .step {
+      padding: 2.25rem 0 0 0;
+    }
+
+    .step::before {
+      left: 6px;
+      right: -1.75rem;
+      top: 6px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+    }
+
+    .dot {
+      top: 0;
+      left: 0;
+    }
+
+    .step-body {
+      max-width: none;
+    }
+  }
+</style>

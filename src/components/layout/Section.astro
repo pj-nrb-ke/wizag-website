@@ -1,0 +1,65 @@
+---
+import Container from './Container.astro';
+
+/**
+ * A page band. Owns vertical rhythm and ground colour so no section has to
+ * invent its own padding — that consistency is what stops a long page
+ * feeling like separate templates stitched together.
+ */
+type Tone = 'paper' | 'warm' | 'deep';
+type Space = 'tight' | 'base' | 'loose';
+
+export interface Props {
+  /** Ground colour. `deep` is the navy band — it sets `.on-deep`, which
+   *  switches focus rings to white and unlocks orange for text. */
+  tone?: Tone;
+  /** Vertical padding. `tight` for adjacent related bands. */
+  space?: Space;
+  width?: 'content' | 'narrow';
+  id?: string;
+  class?: string;
+  /** Set false to manage the inner container yourself (full-bleed content). */
+  contained?: boolean;
+}
+
+const {
+  tone = 'paper',
+  space = 'base',
+  width = 'content',
+  id,
+  class: className = '',
+  contained = true,
+} = Astro.props as Props;
+
+const tones: Record<Tone, string> = {
+  paper: 'bg-paper text-ink',
+  warm: 'bg-warm text-ink',
+  deep: 'on-deep bg-navy-700 text-navy-100',
+};
+
+/* Vertical rhythm.
+   History worth keeping, because it explains the values: this started at
+   112px, was cut to 80px, then to 48px, chasing a "too big" report that
+   turned out to be a browser at 150% zoom. Every measurement was landing
+   1.5× larger than intended on the client's screen, so 112px read as 168px.
+   At 100% zoom, 48px is too tight — sections run into each other. 64px at
+   desktop puts the gap between one section's last line and the next
+   section's first at roughly 140px, which is the corporate norm. */
+const spaces: Record<Space, string> = {
+  tight: 'py-10 md:py-12',
+  base: 'py-12 md:py-14 lg:py-16',
+  loose: 'py-14 md:py-16 lg:py-20',
+};
+---
+
+<section id={id} class:list={[tones[tone], spaces[space], className]}>
+  {
+    contained ? (
+      <Container width={width}>
+        <slot />
+      </Container>
+    ) : (
+      <slot />
+    )
+  }
+</section>

@@ -1,0 +1,66 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import { problems } from '../../data/home';
+
+/**
+ * Customer problems (brief §8.3, reworked per design audit §3.3).
+ *
+ * Six diagnostic cards rather than eight ruled rows. The earlier version
+ * paired problem and response across two columns, which read as a dense
+ * table and gave no immediate visual recognition.
+ *
+ * Each card keeps the pairing — the problem in the heading, what WIZAG does
+ * about it underneath — but the icon now carries the practice that answers
+ * it, and the whole card links there. So the section is a diagnostic that
+ * routes, not just a list of complaints.
+ */
+---
+
+<Section tone="warm" id="problems">
+  <SectionHeading
+    eyebrow="The starting point"
+    lead="Many organisations invest steadily in software and technology and still struggle with disconnected systems, manual processes, poor visibility and limited internal leadership."
+    measure="max-w-[20ch]"
+    class="max-w-3xl"
+    data-reveal
+  >
+    Is technology helping your business — or holding it back?
+  </SectionHeading>
+
+  <ul class="@@mt-6@@ grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      problems.map((item, i) => (
+        <li data-reveal data-reveal-delay={Math.min(i, 3) * 60}>
+          <a
+            href={item.practice}
+            class="group flex h-full flex-col rounded-[var(--radius-md)] border border-grey-100
+                   bg-paper p-6 transition-colors duration-[var(--duration-base)]
+                   hover:border-navy-300 sm:p-7"
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+
+            <h3 class="mt-5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.problem}
+            </h3>
+
+            <p class="mt-3 flex-1 text-base leading-relaxed text-ink">{item.response}</p>
+
+            <span
+              class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-navy-700
+                     transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700"
+            >
+              How we fix it
+              <Icon
+                name="arrow-right"
+                size={16}
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+              />
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

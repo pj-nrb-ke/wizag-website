@@ -1,0 +1,144 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { erpCapabilities } from '../../data/home';
+
+/**
+ * ERP spotlight (brief §8.5).
+ *
+ * Split band: capability copy on the left, a layered systems-architecture
+ * diagram on the right. No product screenshots — the brief permits them only
+ * where approved captures exist (§8.5), and none do.
+ *
+ * SAGE PARTNER BADGE — intentionally absent.
+ * WIZAG is an authorised partner for Sage 200 Evolution and Sage Business
+ * Cloud, but the official partner badge must come from Sage's partner portal
+ * with its accompanying brand guidelines and permitted wording. A logo taken
+ * from anywhere else risks being the wrong mark and breaching the partner
+ * agreement. Drop the approved asset into a `<figure>` directly beneath the
+ * capability list when it arrives; the layout leaves room for it.
+ */
+
+const modules = [
+  'Finance',
+  'Inventory',
+  'Procurement',
+  'Sales',
+  'Manufacturing',
+  'HR & Payroll',
+];
+---
+
+<Section tone="warm" id="erp">
+  <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal>
+      <SectionHeading
+        eyebrow="ERP & business systems"
+        lead="WIZAG helps organisations select, implement, integrate, support and continuously improve ERP across finance, inventory, procurement, sales, manufacturing, HR, payroll and reporting."
+        measure="max-w-[18ch]"
+      >
+        ERP that works around your business
+      </SectionHeading>
+
+      <ul class="mt-8 grid grid-cols-1 gap-x-8 gap-y-2.5 sm:grid-cols-2">
+        {
+          erpCapabilities.map((capability) => (
+            <li class="flex items-start gap-2.5 text-base text-ink">
+              <Icon name="check" size={17} class="mt-1 shrink-0 text-orange-700" />
+              {capability}
+            </li>
+          ))
+        }
+      </ul>
+
+      <Button href="/erp" variant="primary" size="large" arrow class="mt-6">
+        Discuss Your ERP Requirements
+      </Button>
+    </div>
+
+    <!-- Layered architecture: what sits on top of the platform, and what the
+         platform runs. Real text, so it reflows rather than scaling. -->
+    <figure
+      class="arch rounded-[var(--radius-lg)] border border-grey-100 bg-paper p-5 sm:p-7"
+      aria-label="ERP architecture: a Sage platform underneath finance, inventory, procurement, sales, manufacturing and HR and payroll modules, with reporting and analytics on top."
+      data-reveal
+      data-reveal-delay="120"
+    >
+      <div class="layer layer--top">
+        <Icon name="data-analytics" size={18} class="text-orange-500" />
+        <span>Reporting & analytics</span>
+      </div>
+
+      <div class="rule" aria-hidden="true"></div>
+
+      <ul class="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+        {modules.map((module) => <li class="module">{module}</li>)}
+      </ul>
+
+      <div class="rule" aria-hidden="true"></div>
+
+      <div class="layer layer--base">
+        <Icon name="erp-systems" size={18} class="text-orange-500" />
+        <span>Sage ERP platform</span>
+      </div>
+
+      <figcaption class="mt-4 text-center text-sm text-ink-soft">
+        Integrated with the systems you already run.
+      </figcaption>
+    </figure>
+  </div>
+</Section>
+
+<style>
+  .layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .layer--top {
+    background: var(--color-navy-50);
+    color: var(--color-navy-700);
+    border: 1px solid var(--color-navy-100);
+  }
+
+  .layer--base {
+    background: var(--color-navy-700);
+    color: var(--color-paper);
+  }
+
+  .module {
+    border: 1px solid var(--color-grey-100);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-navy-700);
+    background: var(--color-paper);
+  }
+
+  .rule {
+    height: 1.1rem;
+    position: relative;
+  }
+
+  .rule::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    border-radius: 1px;
+    background: var(--color-navy-100);
+  }
+</style>

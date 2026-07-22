@@ -1,0 +1,139 @@
+/* ==========================================================================
+   WIZAG DESIGN TOKENS
+   --------------------------------------------------------------------------
+   Single source of truth. Every colour, size and shadow on the site resolves
+   here. Tailwind v4 emits each of these as a CSS custom property AND as a
+   utility class, so `var(--color-navy-700)` and `text-navy-700` are the same
+   value.
+
+   Brand colours are read from the official logo file (WIZAG Blue Logo),
+   NOT from the values suggested in the design brief. Per brief §11.1, the
+   official identity wins where it exists.
+   ========================================================================== */
+
+@theme {
+  /* ---------------------------------------------------------------------
+     COLOUR — NAVY
+     navy-700 (#1b306c) is the brand navy, taken from the logo.
+     Everything else is a tint/shade of it for depth and hierarchy.
+     --------------------------------------------------------------------- */
+  --color-navy-950: #0c1533;
+  --color-navy-900: #12204a;
+  --color-navy-800: #16275a;
+  --color-navy-700: #1b306c; /* ← BRAND NAVY */
+  --color-navy-500: #33488c;
+  --color-navy-300: #8a96c0;
+  --color-navy-100: #d5dae9;
+  --color-navy-50: #eef1f7;
+
+  /* ---------------------------------------------------------------------
+     COLOUR — ORANGE  ⚠ READ THIS BEFORE USING
+     orange-500 (#f79d07) is the brand orange, taken from the logo.
+
+     CONTRAST RULE — non-negotiable, this is why buttons are navy:
+       white text ON orange-500 ... 2.15:1  ✗ FAILS — this is why buttons
+                                             are navy, not orange.
+       orange-500 ON navy-700 .... 5.80:1  ✓ passes. Safe for text.
+       orange-700 ON white ....... 4.60:1  ✓ passes. The only orange that
+                                             may carry text on light ground.
+       white text ON navy-700 .... 12.5:1  ✓ the primary button.
+
+     So on LIGHT backgrounds brand orange is for graphics only — rules,
+     icons, diagram strokes, the logo. On the NAVY bands it may carry text.
+     --------------------------------------------------------------------- */
+  --color-orange-700: #b85c00; /* text-safe on white (4.60:1) */
+  --color-orange-600: #d98800; /* hover/active for orange graphics */
+  --color-orange-500: #f79d07; /* ← BRAND ORANGE — graphics on light, text on navy */
+  --color-orange-300: #fbc66b;
+  --color-orange-100: #fdf0d6;
+
+  /* ---------------------------------------------------------------------
+     COLOUR — NEUTRAL
+     --------------------------------------------------------------------- */
+  --color-paper: #ffffff;
+  --color-warm: #f7f6f3; /* warm light section ground */
+  --color-grey-100: #e7e9ed;
+  --color-grey-300: #cad0d9;
+  --color-grey-500: #8a93a3;
+  --color-ink-soft: #5a6472;
+  --color-ink: #364152; /* body text — 10.3:1 on white */
+
+  /* Semantic aliases — prefer these in components. */
+  --color-surface: var(--color-paper);
+  --color-surface-warm: var(--color-warm);
+  --color-surface-deep: var(--color-navy-700);
+  --color-border: var(--color-grey-100);
+  --color-border-strong: var(--color-grey-300);
+  --color-heading: var(--color-navy-700);
+  --color-body: var(--color-ink);
+  --color-focus: var(--color-orange-600);
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHY
+     Two variable faces, self-hosted, subset at build. No CDN request.
+     Serif carries headings (editorial, senior). Sans carries everything else.
+     --------------------------------------------------------------------- */
+  --font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', Consolas, 'SF Mono', monospace;
+
+  /* Fluid type scale — 1.200 minor third, clamped between 375px and 1440px.
+     Corporate-enterprise calibration, not editorial.
+
+     Two separate complaints drove this scale, and they were about DIFFERENT
+     elements. The design audit (§2.3) said supporting text, labels and
+     footer copy read as fine print — true, they were 14px and 11px. The
+     client then said the page felt daunting — also true, but that was the
+     DISPLAY end: h2 at 38px and h3 at 30px is magazine scale, and it made
+     every section shout.
+
+     So the floor is held where the audit put it (nothing below 13px,
+     supporting text at 15px) while the top of the scale comes down hard —
+     h1 48→40, h2 38→30, h3 30→24, card headings 24→20. Body sits at 16px,
+     which is what the major consultancies use and what the web expects.
+
+     The ratio drops from 1.250 to 1.200 as well: a tighter ratio keeps the
+     hierarchy legible without each step doubling in visual weight. */
+  --text-2xs: 0.8125rem; /* 13 — hard floor, legal/footnote only */
+  --text-xs: 0.8125rem; /* 13 — eyebrows, labels */
+  --text-sm: 0.9375rem; /* 15 — supporting text minimum (audit §2.3 floor) */
+  --text-base: 1rem; /* 16 — body */
+  --text-lg: 1.09375rem; /* 17.5 — emphasis body */
+  --text-xl: clamp(1.0625rem, 1.02rem + 0.19vw, 1.1875rem); /* 17→19 lead */
+  --text-2xl: clamp(1.125rem, 1.08rem + 0.19vw, 1.25rem); /* 18→20 h4/card */
+  --text-3xl: clamp(1.25rem, 1.16rem + 0.37vw, 1.5rem); /* 20→24 h3 */
+  --text-4xl: clamp(1.5rem, 1.28rem + 0.93vw, 1.875rem); /* 24→30 h2 */
+  --text-5xl: clamp(1.75rem, 1.4rem + 1.49vw, 2.5rem); /* 28→40 h1 */
+  --text-6xl: clamp(2rem, 1.63rem + 1.58vw, 3rem); /* 32→48 display */
+
+  /* ---------------------------------------------------------------------
+     RADIUS — three only (brief §11.4)
+     --------------------------------------------------------------------- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* ---------------------------------------------------------------------
+     SHADOW — three only, all soft (brief §11.5)
+     --------------------------------------------------------------------- */
+  --shadow-card: 0 1px 2px rgba(12, 21, 51, 0.04), 0 2px 8px -2px rgba(12, 21, 51, 0.06);
+  --shadow-panel: 0 2px 4px rgba(12, 21, 51, 0.04), 0 12px 32px -12px rgba(12, 21, 51, 0.14);
+  --shadow-header: 0 1px 3px rgba(12, 21, 51, 0.07), 0 4px 16px -8px rgba(12, 21, 51, 0.1);
+
+  /* ---------------------------------------------------------------------
+     LAYOUT
+     --------------------------------------------------------------------- */
+  --container-content: 1280px; /* max content width (brief §12.1) */
+  --container-narrow: 760px; /* long-form reading measure */
+
+  /* ---------------------------------------------------------------------
+     MOTION — restrained (brief §14). Every use sits behind a
+     prefers-reduced-motion guard in global.css.
+     --------------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 350ms;
+}

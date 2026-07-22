@@ -1,0 +1,102 @@
+---
+import NavDropdown from './NavDropdown.astro';
+import { primaryNav } from '../../data/navigation';
+
+/**
+ * Desktop navigation bar, shown from 1024px.
+ *
+ * Fitting seven items alongside the logo and CTA is a labelling problem, not
+ * a type-size one: the bar uses the terse `short` forms ("Applications",
+ * "About") which brings the row to ~560px and leaves comfortable clearance
+ * at 1024px. Full service names live in the dropdowns and page titles.
+ */
+const slugify = (label: string) => label.toLowerCase().replace(/[^a-z]+/g, '-');
+---
+
+<nav aria-label="Primary" class="hidden lg:block">
+  <ul class="flex items-center gap-0.5 text-sm xl:gap-1.5 2xl:text-base">
+    {
+      primaryNav.map((item) =>
+        item.children ? (
+          <NavDropdown
+            label={item.short ?? item.label}
+            fullLabel={item.label}
+            href={item.href}
+            id={`nav-${slugify(item.label)}`}
+            items={item.children}
+            columns={item.children.length > 5 ? 2 : 1}
+            align={item.label === 'About WIZAG' ? 'right' : 'left'}
+          />
+        ) : item.feature ? (
+          /* Flagship item. The pull is a warm tint plus a hairline rule
+             under the label — enough to catch the eye on a scan, quiet
+             enough that it does not compete with the CTA. Deliberately not
+             a filled pill: a second button in the bar would fight the
+             primary action and both would lose. */
+          <li>
+            <a href={item.href} class="feature-link">
+              {item.short ?? item.label}
+            </a>
+          </li>
+        ) : (
+          <li>
+            <a
+              href={item.href}
+              class="block rounded-[var(--radius-sm)] px-2 py-2 font-medium text-navy-700 xl:px-2.5
+                     transition-colors duration-[var(--duration-fast)] hover:text-orange-700"
+            >
+              {item.short ?? item.label}
+            </a>
+          </li>
+        )
+      )
+    }
+  </ul>
+</nav>
+
+<style>
+  .feature-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 650;
+    color: var(--color-navy-700);
+    background: rgba(247, 157, 7, 0.1);
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  @media (min-width: 1280px) {
+    .feature-link {
+      padding-inline: 0.7rem;
+    }
+  }
+
+  /* Hairline underscore in the brand orange — the "attention" half of the
+     treatment. Sits inside the tint rather than under the whole item so it
+     reads as part of the label, not as an active-page indicator. */
+  .feature-link::after {
+    content: '';
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.34rem;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-orange-500);
+  }
+
+  @media (min-width: 1280px) {
+    .feature-link::after {
+      left: 0.7rem;
+      right: 0.7rem;
+    }
+  }
+
+  .feature-link:hover {
+    background: rgba(247, 157, 7, 0.18);
+    color: var(--color-orange-700);
+  }
+</style>

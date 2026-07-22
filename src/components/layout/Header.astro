@@ -1,0 +1,236 @@
+---
+import Container from './Container.astro';
+import Logo from '../ui/Logo.astro';
+import Button from '../ui/Button.astro';
+import DesktopNav from '../navigation/DesktopNav.astro';
+import MobileNav from '../navigation/MobileNav.astro';
+import { primaryCta, company } from '../../data/navigation';
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-grey-100 bg-paper/95 backdrop-blur-sm
+         transition-shadow duration-[var(--duration-base)] data-[scrolled]:shadow-[var(--shadow-header)]"
+  data-site-header
+>
+  {/* Taller bar and a larger mark: the audit found the header understated
+      and the logo too small (§3.1). Logo up ~27% (30→38px), height up 12%. */}
+  <Container class="flex h-[4.5rem] items-center justify-between gap-3 lg:h-[5.5rem] xl:gap-6 2xl:gap-8">
+    <a
+      href="/"
+      class="shrink-0 text-navy-700 transition-opacity duration-[var(--duration-fast)] hover:opacity-80"
+      aria-label={`${company.brand} — ${company.legalName}, home`}
+    >
+      <Logo height={34} decorative class="lg:h-[38px] lg:w-auto" />
+    </a>
+
+    <DesktopNav />
+
+    <div class="flex shrink-0 items-center gap-2">
+      {/* Wrapped rather than passing `hidden` to Button: Button applies
+          `inline-flex` internally, and both are display utilities in the same
+          cascade layer — stylesheet order would decide the winner, not the
+          class attribute, leaving the CTA visible on mobile. */}
+      {/* Compact by design. The full "Book a Business Technology Assessment"
+          made a slab that dominated the bar and pulled attention off the
+          navigation — including off WETO, which is the item that most needs
+          to be found. The header CTA is a persistent convenience; the hero
+          and every section CTA carry the real weight. */}
+      <div class="hidden lg:block">
+        <Button href={primaryCta.href} variant="primary" size="compact">
+          Book an Assessment
+        </Button>
+      </div>
+
+      <MobileNav />
+    </div>
+  </Container>
+</header>
+
+<script>
+  /* ====================================================================
+     HEADER BEHAVIOUR
+     Dropdowns, mobile drawer and the scroll shadow. One listener set for
+     all of them.
+     ==================================================================== */
+
+  /* --- scroll shadow: flat at rest, lifts once the page moves --------- */
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  if (header) {
+    const setShadow = () => {
+      if (window.scrollY > 4) header.setAttribute('data-scrolled', '');
+      else header.removeAttribute('data-scrolled');
+    };
+    setShadow();
+    window.addEventListener('scroll', setShadow, { passive: true });
+  }
+
+  /* --- desktop dropdowns --------------------------------------------- */
+  const navItems = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-item]'));
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  interface Dropdown {
+    item: HTMLElement;
+    trigger: HTMLButtonElement;
+    panel: HTMLElement;
+  }
+
+  const dropdowns: Dropdown[] = navItems.flatMap((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>('[data-nav-trigger]');
+    const panel = item.querySelector<HTMLElement>('[data-nav-panel]');
+    return trigger && panel ? [{ item, trigger, panel }] : [];
+  });
+
+  let hoverTimer: number | undefined;
+
+  const close = (d: Dropdown) => {
+    d.trigger.setAttribute('aria-expanded', 'false');
+    d.panel.hidden = true;
+  };
+
+  const closeAll = (except?: Dropdown) => {
+    dropdowns.forEach((d) => d !== except && close(d));
+  };
+
+  const open = (d: Dropdown) => {
+    closeAll(d);
+    d.trigger.setAttribute('aria-expanded', 'true');
+    d.panel.hidden = false;
+  };
+
+  dropdowns.forEach((d) => {
+    // Click works everywhere — including touch, where hover never fires.
+    d.trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const isOpen = d.trigger.getAttribute('aria-expanded') === 'true';
+      isOpen ? close(d) : open(d);
+    });
+
+    // Hover is an enhancement on precise pointers only, never the sole route.
+    d.item.addEventListener('pointerenter', () => {
+      if (!canHover.matches) return;
+      window.clearTimeout(hoverTimer);
+      open(d);
+    });
+
+    d.item.addEventListener('pointerleave', () => {
+      if (!canHover.matches) return;
+      hoverTimer = window.setTimeout(() => close(d), 120);
+    });
+
+    // Tabbing out of the item closes it — no orphaned open panels.
+    d.item.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget as Node | null;
+      if (next && d.item.contains(next)) return;
+      close(d);
+    });
+  });
+
+  /* --- mobile drawer -------------------------------------------------- */
+  const toggle = document.querySelector<HTMLButtonElement>('[data-drawer-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-drawer-panel]');
+  const backdrop = document.querySelector<HTMLElement>('[data-drawer-backdrop]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-drawer-close]');
+
+  const FOCUSABLE =
+    'a[href], button:not([disabled]), summary, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  let drawerOpen = false;
+
+  const openDrawer = () => {
+    if (!panel || !backdrop || !toggle) return;
+    drawerOpen = true;
+    panel.hidden = false;
+    backdrop.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    // Lock the page behind the drawer, compensating for the scrollbar so
+    // the layout doesn't jump.
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if (gap > 0) document.body.style.paddingRight = `${gap}px`;
+
+    requestAnimationFrame(() => {
+      panel.classList.remove('translate-x-full');
+      backdrop.classList.remove('opacity-0');
+    });
+
+    panel.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+  };
+
+  const closeDrawer = (returnFocus = true) => {
+    if (!panel || !backdrop || !toggle || !drawerOpen) return;
+    drawerOpen = false;
+    panel.classList.add('translate-x-full');
+    backdrop.classList.add('opacity-0');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+
+    const finish = () => {
+      panel.hidden = true;
+      backdrop.hidden = true;
+    };
+    // Wait out the slide, but never hang if the transition never fires.
+    const done = window.setTimeout(finish, 400);
+    panel.addEventListener(
+      'transitionend',
+      () => {
+        window.clearTimeout(done);
+        finish();
+      },
+      { once: true }
+    );
+
+    if (returnFocus) toggle.focus();
+  };
+
+  toggle?.addEventListener('click', () => (drawerOpen ? closeDrawer() : openDrawer()));
+  closeBtn?.addEventListener('click', () => closeDrawer());
+  backdrop?.addEventListener('click', () => closeDrawer());
+
+  /* --- shared keyboard + outside-click -------------------------------- */
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (drawerOpen) {
+      closeDrawer();
+      return;
+    }
+    const openDd = dropdowns.find((d) => d.trigger.getAttribute('aria-expanded') === 'true');
+    if (openDd) {
+      close(openDd);
+      openDd.trigger.focus();
+    }
+  });
+
+  // Keep focus inside the drawer while it is open.
+  document.addEventListener('keydown', (event) => {
+    if (!drawerOpen || event.key !== 'Tab' || !panel) return;
+    const focusables = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+      (el) => el.offsetParent !== null
+    );
+    if (focusables.length === 0) return;
+    const first = focusables[0]!;
+    const last = focusables[focusables.length - 1]!;
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node;
+    if (navItems.some((item) => item.contains(target))) return;
+    closeAll();
+  });
+
+  // Leaving the mobile breakpoint with the drawer open would strand it.
+  // Must match the `lg:hidden` breakpoint on the drawer markup.
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+    if (event.matches && drawerOpen) closeDrawer(false);
+  });
+</script>

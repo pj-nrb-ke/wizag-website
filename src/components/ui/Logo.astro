@@ -1,0 +1,36 @@
+---
+/**
+ * WIZAG wordmark.
+ *
+ * References the <symbol> emitted once per page by LogoSprite.astro (rendered
+ * by BaseLayout), so the path data is not repeated at every placement.
+ *
+ * The wordmark uses currentColor and so takes its colour from context — navy
+ * on light grounds, white inside `.on-deep` bands. Only the accent is fixed
+ * to brand orange.
+ */
+interface Props {
+  /** Rendered height in px; width follows the 2.738:1 aspect ratio. */
+  height?: number;
+  class?: string;
+  /** True when the logo sits inside an already-labelled link, so the mark
+   *  itself should not announce a second, duplicate name. */
+  decorative?: boolean;
+}
+
+const { height = 34, class: className = '', decorative = false } = Astro.props as Props;
+const width = Math.round(height * 2.738);
+---
+
+<svg
+  width={width}
+  height={height}
+  viewBox="77.3 79.5 2248.4 821.2"
+  class:list={['block', className]}
+  role={decorative ? 'presentation' : 'img'}
+  aria-hidden={decorative ? 'true' : undefined}
+  aria-label={decorative ? undefined : 'WIZAG'}
+  focusable="false"
+>
+  <use href="#wizag-wordmark"></use>
+</svg>

@@ -1,0 +1,40 @@
+---
+import ShellPage from '../../components/layout/ShellPage.astro';
+import { industries } from '../../data/navigation';
+
+/**
+ * Industry pages.
+ *
+ * Shells: the "covers" list describes what each page will address, drawn
+ * from the six service practices. No client names, sector statistics or
+ * case studies appear — none have been supplied, and inventing them is
+ * exactly what the brief §3.2 rules out.
+ */
+export function getStaticPaths() {
+  return industries.map((item) => ({
+    params: { slug: item.href.replace('/industries/', '') },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+---
+
+<ShellPage
+  title={item.label}
+  description={`Technology, ERP and operational improvement services for ${item.label.toLowerCase()} organisations in Kenya and the wider region.`}
+  lead={`How WIZAG's practices apply to ${item.label.toLowerCase()} — the systems, the processes and the reporting behind them.`}
+  eyebrow="Industries"
+  crumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Industries', href: '/industries' },
+  ]}
+  covers={[
+    'Common operating challenges in the sector',
+    'Relevant ERP and business systems',
+    'Process and workflow improvement',
+    'Reporting and management visibility',
+    'Automation opportunities',
+    'Typical engagement shape',
+  ]}
+/>

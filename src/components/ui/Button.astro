@@ -1,0 +1,81 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+
+/**
+ * Buttons and CTAs.
+ *
+ * The primary button is NAVY, not orange — white text on brand orange is
+ * only 2.15:1 and fails WCAG AA. Navy gives 12.5:1 and reads more senior
+ * for this audience. Orange stays as the accent (see tokens.css).
+ *
+ * Hover is a background shift only — no transform, no lift (brief §11.6
+ * "minimal hover motion").
+ */
+type Variant = 'primary' | 'secondary' | 'text' | 'inverse';
+/** `compact` is for the persistent header CTA — small enough not to compete
+ *  with the navigation it sits beside. */
+type Size = 'compact' | 'base' | 'large';
+
+/** Renders an <a> when `href` is given, otherwise a <button>. `size` is
+ *  omitted from the anchor attributes so our own prop wins. */
+export interface Props extends Omit<HTMLAttributes<'a'>, 'size' | 'type'> {
+  href?: string;
+  variant?: Variant;
+  size?: Size;
+  /** Trailing arrow — signals forward movement on CTAs. */
+  arrow?: boolean;
+  type?: 'button' | 'submit';
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'base',
+  arrow = false,
+  class: className = '',
+  type = 'button',
+  ...rest
+} = Astro.props as Props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 font-sans font-semibold ' +
+  'rounded-[var(--radius-sm)] transition-colors duration-[var(--duration-fast)] ' +
+  'ease-[var(--ease-standard)] text-center';
+
+const variants: Record<Variant, string> = {
+  primary: 'bg-navy-700 text-paper hover:bg-navy-800 active:bg-navy-900',
+  secondary:
+    'bg-paper text-navy-700 border border-navy-100 hover:border-navy-500 hover:bg-navy-50',
+  // On the navy bands: white fill reads as the strongest action available.
+  inverse: 'bg-paper text-navy-700 hover:bg-navy-50',
+  // Text link — navy, with the arrow doing the directional work.
+  text: 'text-navy-700 hover:text-orange-700 underline-offset-4 hover:underline px-0 py-0',
+};
+
+const sizes: Record<Size, string> = {
+  compact: variant === 'text' ? 'text-sm' : 'text-sm px-3.5 py-2',
+  base: variant === 'text' ? 'text-base' : 'text-base px-5 py-3',
+  large: variant === 'text' ? 'text-base' : 'text-base px-7 py-3.5',
+};
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  class:list={[base, variants[variant], sizes[size], className]}
+  {...rest}
+>
+  <slot />
+  {
+    arrow && (
+      <Icon
+        name="arrow-right"
+        size={16}
+        class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+      />
+    )
+  }
+</Tag>

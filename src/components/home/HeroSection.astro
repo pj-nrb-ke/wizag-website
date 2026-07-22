@@ -1,0 +1,105 @@
+---
+import Container from '../layout/Container.astro';
+import Button from '../ui/Button.astro';
+import SystemsMesh from '../diagrams/SystemsMesh.astro';
+import { primaryCta, secondaryCta, company } from '../../data/navigation';
+
+/**
+ * Homepage hero (brief §8.2).
+ *
+ * REBUILT against the Workpay reference the client supplied. Four structural
+ * differences separated that hero from this one, and all four are fixed here:
+ *
+ *  1. DARK, FULL-BLEED GROUND. Theirs is navy edge to edge. Mine was white
+ *     with a rounded panel floating in it. A contained box inside a white
+ *     page is the amateur tell — the eye sees a component, not a scene.
+ *
+ *  2. THE VISUAL BLEEDS. Their country tiles run off the right edge of the
+ *     screen. Mine stopped politely at the container. Bleeding is what makes
+ *     a composition feel like a page rather than a slide.
+ *
+ *  3. THE COPY COLUMN IS NARROW. Theirs occupies ~40% of the width; the
+ *     rest is image. Mine ran to 7/12 and the text dominated, which is the
+ *     real reason everything read as oversized — the type was fine, the
+ *     column was too wide for it.
+ *
+ *  4. THE CTA IS MODEST. Theirs is a compact button plus a plain text link.
+ *     Scale signals confidence in inverse proportion: the biggest button on
+ *     a page usually belongs to the company least sure anyone will click it.
+ *
+ * The brief keeps its white page (§3.1) — every section below this one is
+ * still light. One dark band at the top is what gives the white that follows
+ * somewhere to start.
+ */
+---
+
+<section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+  <!-- Dense systems texture, bleeding off the right edge -->
+  <SystemsMesh />
+
+  <!-- Keeps the headline legible over the mesh without dimming the whole
+       panel: opaque at the left, transparent by the middle. -->
+  <div
+    class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r
+           from-navy-800 via-navy-800/92 to-transparent lg:via-navy-800/80"
+    aria-hidden="true"
+  >
+  </div>
+
+  <Container class="relative z-[2] py-12 md:py-14 lg:py-16">
+    <div class="max-w-[34rem] lg:max-w-[30rem] xl:max-w-[33rem]">
+      <p class="eyebrow text-orange-500">{company.tagline}</p>
+
+      <h1
+        class="optical-left mt-5 text-[length:var(--text-5xl)] leading-[1.08] text-paper"
+      >
+        Technology services that move your business forward
+      </h1>
+
+      <p class="mt-6 text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+        WIZAG helps organisations improve operations, modernise ERP and business systems,
+        adopt AI, and manage technology more effectively — through one experienced
+        transformation partner.
+      </p>
+
+      <!-- Compact primary + plain text secondary, per the reference. -->
+      <div class="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+        {/* Short label here: the full "Book a Business Technology Assessment"
+            wrapped to two lines and made a 324×72px slab of a button. The
+            reference hero uses four words. */}
+        <Button href={primaryCta.href} variant="primary" arrow>
+          {primaryCta.shortLabel}
+        </Button>
+        <a
+          href={secondaryCta.href}
+          class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                 underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                 hover:text-orange-500 hover:underline"
+        >
+          {secondaryCta.label}
+          <span
+            class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+            aria-hidden="true">→</span
+          >
+        </a>
+      </div>
+
+      <p class="mt-7 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm font-medium text-navy-100/75">
+        {
+          ['ERP', 'AI & Automation', 'Technology Strategy', 'Managed Services'].map(
+            (item, i) => (
+              <span class="flex items-center gap-2.5">
+                {i > 0 && (
+                  <span class="text-orange-500" aria-hidden="true">
+                    •
+                  </span>
+                )}
+                {item}
+              </span>
+            )
+          )
+        }
+      </p>
+    </div>
+  </Container>
+</section>

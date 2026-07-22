@@ -1,0 +1,31 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# generated logo/asset intermediates
+*.tmp
+
+# environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# cloudflare
+.wrangler/
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vscode/*
+!.vscode/extensions.json
+
+# claude code local settings (per-machine)
+.claude/settings.local.json

@@ -1,0 +1,136 @@
+---
+import Container from './Container.astro';
+import Logo from '../ui/Logo.astro';
+import Icon from '../ui/Icon.astro';
+import { footerColumns, company } from '../../data/navigation';
+
+/**
+ * Site footer (brief §8.14).
+ *
+ * Columns use the terse `short` labels and the sitemap takes ~3/4 of the
+ * width — at full service names in narrow columns, "Data, Analytics &
+ * Business Intelligence" wrapped to four lines and the footer ended up
+ * taller than the hero.
+ *
+ * No CTA strip here: the Final CTA section sits directly above, and two
+ * consecutive calls to action would read as nagging rather than confident.
+ */
+const year = new Date().getFullYear();
+const { address } = company;
+---
+
+<footer class="on-deep bg-navy-900 text-navy-100">
+  <Container class="py-14 md:py-16">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,3fr)] lg:gap-14">
+      <!-- Identity + address -->
+      <div>
+        <a href="/" class="inline-block text-paper" aria-label={`${company.brand} home`}>
+          <Logo height={40} decorative />
+        </a>
+
+        <p class="mt-5 max-w-[34ch] text-base leading-relaxed text-navy-100">
+          An enterprise transformation and technology services partner for organisations
+          improving how they operate.
+        </p>
+
+        <address class="mt-7 space-y-0.5 text-base not-italic leading-relaxed text-navy-100/85">
+          <div class="font-semibold text-paper">{address.building}</div>
+          <div>{address.unit}</div>
+          <div>{address.street}</div>
+          <div>{address.area}, {address.city}</div>
+          <div>{address.country}</div>
+        </address>
+
+        <a
+          href={`mailto:${company.email}`}
+          class="mt-5 inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                 transition-colors duration-[var(--duration-fast)] hover:text-orange-500"
+        >
+          <Icon name="mail" size={16} />
+          {company.email}
+        </a>
+
+        <div class="mt-6">
+          <a
+            href={company.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2.5 rounded-[var(--radius-sm)] border
+                   border-navy-500/50 px-4 py-2.5 text-sm font-semibold text-navy-100
+                   transition-colors duration-[var(--duration-fast)]
+                   hover:border-paper hover:text-paper"
+          >
+            <Icon name="linkedin" size={17} />
+            Follow on LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <!-- Sitemap -->
+      <div class="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-5">
+        {
+          footerColumns.map((column) => (
+            <div>
+              <h2 class="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-orange-500">
+                {column.title}
+              </h2>
+              <ul class="mt-3.5 space-y-0.5">
+                {column.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class="block py-1 text-sm leading-snug text-navy-100/80 transition-colors
+                             duration-[var(--duration-fast)] hover:text-paper"
+                    >
+                      {link.short ?? link.label}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href={column.allHref}
+                    class="group mt-1 inline-flex items-center gap-1 py-1 text-sm font-semibold
+                           text-navy-100 transition-colors duration-[var(--duration-fast)]
+                           hover:text-orange-500"
+                  >
+                    View all
+                    <Icon
+                      name="arrow-right"
+                      size={14}
+                      class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                    />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+
+  <!-- Legal bar -->
+  <div class="border-t border-navy-500/30">
+    <Container
+      class="flex flex-col gap-2 py-5 text-sm text-navy-100/70 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} {company.legalName}. All rights reserved.</p>
+      <ul class="flex flex-wrap items-center gap-x-6">
+        <li>
+          <a
+            href="/privacy-policy"
+            class="block py-1 transition-colors duration-[var(--duration-fast)] hover:text-paper"
+            >Privacy Policy</a
+          >
+        </li>
+        <li>
+          <a
+            href="/terms-of-use"
+            class="block py-1 transition-colors duration-[var(--duration-fast)] hover:text-paper"
+            >Terms of Use</a
+          >
+        </li>
+      </ul>
+    </Container>
+  </div>
+</footer>

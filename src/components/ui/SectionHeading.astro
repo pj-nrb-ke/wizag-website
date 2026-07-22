@@ -1,0 +1,79 @@
+---
+/**
+ * The standard section opener: optional eyebrow, heading, optional lead.
+ * Keeping this in one component is what holds the editorial hierarchy
+ * consistent down a fourteen-section homepage.
+ */
+type Level = 'h1' | 'h2' | 'h3';
+
+export interface Props {
+  eyebrow?: string;
+  /** Heading level — the homepage uses h2 throughout; h1 belongs to the hero. */
+  as?: Level;
+  lead?: string;
+  align?: 'left' | 'center';
+  tone?: 'light' | 'deep';
+  /** Constrains the heading measure so long headings break sensibly. */
+  measure?: string;
+  class?: string;
+  /** Anything else (data-reveal, id, …) lands on the wrapper. */
+  [key: `data-${string}`]: string | number | boolean | undefined;
+}
+
+const {
+  eyebrow,
+  as: Tag = 'h2',
+  lead,
+  align = 'left',
+  tone = 'light',
+  measure = 'max-w-[22ch]',
+  class: className = '',
+  ...rest
+} = Astro.props as Props;
+
+const sizes: Record<Level, string> = {
+  h1: 'text-[length:var(--text-5xl)]',
+  h2: 'text-[length:var(--text-4xl)]',
+  h3: 'text-[length:var(--text-3xl)]',
+};
+
+const headingTone = tone === 'deep' ? 'text-paper' : 'text-navy-700';
+const eyebrowTone = tone === 'deep' ? 'text-orange-500' : 'text-ink-soft';
+const leadTone = tone === 'deep' ? 'text-navy-100' : 'text-ink';
+---
+
+<div class:list={[align === 'center' && 'text-center', className]} {...rest}>
+  {
+    eyebrow && (
+      <p class:list={['eyebrow mb-4', eyebrowTone]}>
+        {eyebrow}
+      </p>
+    )
+  }
+
+  <Tag
+    class:list={[
+      sizes[Tag],
+      headingTone,
+      'optical-left',
+      measure,
+      align === 'center' && 'mx-auto',
+    ]}
+  >
+    <slot />
+  </Tag>
+
+  {
+    lead && (
+      <p
+        class:list={[
+          'mt-5 text-[length:var(--text-xl)] leading-relaxed max-w-[52ch]',
+          leadTone,
+          align === 'center' && 'mx-auto',
+        ]}
+      >
+        {lead}
+      </p>
+    )
+  }
+</div>

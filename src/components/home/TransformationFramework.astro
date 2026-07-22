@@ -1,0 +1,23 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import TransformationFrameworkDiagram from '../diagrams/TransformationFrameworkDiagram.astro';
+
+/** The WIZAG Transformation Framework (brief §8.7). */
+---
+
+<Section tone="paper" id="framework">
+  <SectionHeading
+    eyebrow="How we work"
+    lead="A structured, business-first approach to identifying opportunities, implementing the right solutions and delivering measurable improvement."
+    measure="max-w-[22ch]"
+    class="max-w-3xl"
+    data-reveal
+  >
+    The WIZAG Transformation Framework
+  </SectionHeading>
+
+  <div class="@@mt-6@@" data-reveal>
+    <TransformationFrameworkDiagram />
+  </div>
+</Section>

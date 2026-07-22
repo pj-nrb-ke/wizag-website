@@ -1,0 +1,641 @@
+<title>WIZAG — three design directions</title>
+
+<style>
+/* ============================================================
+   SHELL — the gallery chrome. Theme-aware.
+   Namespaced with .sh- so it can never collide with the samples.
+   ============================================================ */
+:root{
+  --sh-bg:#F4F5F7; --sh-panel:#FFFFFF; --sh-ink:#151A21; --sh-mut:#606A78;
+  --sh-line:#DCE0E6; --sh-accent:#1F5FA9; --sh-accent-ink:#FFFFFF;
+  --sh-sans:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --sh-mono:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --sh-bg:#0E1116; --sh-panel:#161B22; --sh-ink:#E6EAF0; --sh-mut:#98A2B0;
+         --sh-line:#282F39; --sh-accent:#5AA0E8; --sh-accent-ink:#0E1116; }
+}
+:root[data-theme="dark"]{ --sh-bg:#0E1116; --sh-panel:#161B22; --sh-ink:#E6EAF0; --sh-mut:#98A2B0;
+  --sh-line:#282F39; --sh-accent:#5AA0E8; --sh-accent-ink:#0E1116; }
+:root[data-theme="light"]{ --sh-bg:#F4F5F7; --sh-panel:#FFFFFF; --sh-ink:#151A21; --sh-mut:#606A78;
+  --sh-line:#DCE0E6; --sh-accent:#1F5FA9; --sh-accent-ink:#FFFFFF; }
+
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--sh-bg); color:var(--sh-ink); font-family:var(--sh-sans); }
+
+.sh-bar{
+  position:sticky; top:0; z-index:50; background:var(--sh-panel);
+  border-bottom:1px solid var(--sh-line); padding:.7rem clamp(.8rem,3vw,1.6rem);
+  display:flex; flex-wrap:wrap; gap:.8rem 1.2rem; align-items:center;
+}
+.sh-brand{ font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--sh-mut); margin-right:auto; }
+.sh-brand b{ color:var(--sh-ink); }
+.sh-group{ display:flex; gap:.3rem; background:var(--sh-bg); padding:.25rem; border-radius:.5rem; border:1px solid var(--sh-line); }
+.sh-group button{
+  font:inherit; font-size:.82rem; font-weight:600; color:var(--sh-mut); background:none;
+  border:0; padding:.42rem .8rem; border-radius:.35rem; cursor:pointer; white-space:nowrap;
+}
+.sh-group button:hover{ color:var(--sh-ink); }
+.sh-group button[aria-pressed="true"]{ background:var(--sh-accent); color:var(--sh-accent-ink); }
+.sh-group button:focus-visible{ outline:2px solid var(--sh-accent); outline-offset:2px; }
+.sh-lab{ font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--sh-mut); font-weight:700; }
+
+.sh-stage{ padding:clamp(1rem,3vw,2rem) clamp(.6rem,3vw,2rem) 4rem; }
+.sh-frame{
+  container-type:inline-size;
+  width:100%; max-width:var(--w,100%); margin:0 auto;
+  border:1px solid var(--sh-line); border-radius:.75rem; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -12px rgba(0,0,0,.18);
+  transition:max-width .28s cubic-bezier(.4,0,.2,1);
+}
+.sh-note{
+  max-width:62ch; margin:1.6rem auto 0; font-size:.9rem; line-height:1.6; color:var(--sh-mut);
+}
+.sh-note h2{ font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--sh-ink); margin:0 0 .5rem; }
+.sh-note p{ margin:0 0 .7rem; }
+.sh-note strong{ color:var(--sh-ink); }
+[hidden]{ display:none !important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+
+/* ============================================================
+   SAMPLE RESET — everything inside a frame starts neutral.
+   ============================================================ */
+.smp{ font-size:16px; line-height:1.5; }
+.smp h1,.smp h2,.smp h3,.smp p,.smp ul,.smp figure{ margin:0; }
+.smp ul{ list-style:none; padding:0; }
+.smp a{ color:inherit; text-decoration:none; }
+.smp button{ font:inherit; cursor:pointer; border:0; background:none; color:inherit; }
+.smp :focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
+
+/* ============================================================
+   DIRECTION A — "LEDGER"
+   Ground: pale ledger green-grey. Ink with a green bias.
+   Serif body + grotesque headings (inverted from the usual pairing).
+   Signature: a hero that reconciles in two ruled columns.
+   ============================================================ */
+.d-ledger{
+  --pg:#EDF1EC; --pg2:#E3E9E2; --ink:#141D18; --mut:#5C6A61;
+  --rule:#BECABF; --brass:#9A6B1F; --cr:#1F6146; --dr:#A6402C;
+  --sans:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --mono:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  background:var(--pg); color:var(--ink); font-family:var(--serif);
+}
+.d-ledger .nav{
+  display:flex; align-items:center; gap:1.4rem; padding:1.1rem 1.5rem;
+  border-bottom:1px solid var(--rule); font-family:var(--sans);
+}
+.d-ledger .mark{ font-weight:700; letter-spacing:-.02em; font-size:1.05rem; }
+.d-ledger .mark span{ color:var(--brass); }
+.d-ledger .nav ul{ display:none; gap:1.3rem; font-size:.85rem; color:var(--mut); margin-left:auto; }
+.d-ledger .nav .cta{
+  margin-left:auto; font-size:.8rem; font-weight:650; padding:.5rem .95rem;
+  border:1px solid var(--ink); border-radius:2px;
+}
+.d-ledger .nav .cta:hover{ background:var(--ink); color:var(--pg); }
+@container (min-width:700px){
+  .d-ledger .nav ul{ display:flex; }
+  .d-ledger .nav .cta{ margin-left:0; }
+}
+
+.d-ledger .hero{ padding:clamp(2rem,6cqi,4rem) 1.5rem clamp(1.5rem,4cqi,2.5rem); }
+.d-ledger .eyebrow{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--brass); margin-bottom:1.1rem;
+}
+.d-ledger h1{
+  font-family:var(--sans); font-weight:700; letter-spacing:-.035em; text-wrap:balance;
+  font-size:clamp(2rem,7.2cqi,3.6rem); line-height:1.02; max-width:15ch;
+}
+.d-ledger .sub{
+  margin-top:1.1rem; max-width:52ch; font-size:clamp(1rem,1.9cqi,1.13rem);
+  line-height:1.62; color:var(--mut);
+}
+
+/* the reconciliation — the signature element */
+.d-ledger .recon{ margin:clamp(2rem,5cqi,3.2rem) 1.5rem 0; border-top:2px solid var(--ink); }
+.d-ledger .recon-head{
+  display:grid; grid-template-columns:1fr; font-family:var(--mono);
+  font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--mut);
+}
+.d-ledger .recon-head span{ padding:.7rem 0; }
+.d-ledger .recon-head span:last-child{ display:none; }
+.d-ledger .row{
+  display:grid; grid-template-columns:1fr; gap:.15rem;
+  border-top:1px solid var(--rule); padding:.85rem 0;
+  font-size:clamp(.92rem,1.7cqi,1rem);
+}
+.d-ledger .row .was{ color:var(--mut); }
+.d-ledger .row .was::before{
+  content:"was"; font-family:var(--mono); font-size:.6rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--dr); display:block; margin-bottom:.2rem;
+}
+.d-ledger .row .now::before{
+  content:"now"; font-family:var(--mono); font-size:.6rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--cr); display:block; margin-bottom:.2rem;
+}
+.d-ledger .total{
+  display:grid; grid-template-columns:1fr; gap:.3rem; align-items:baseline;
+  border-top:2px solid var(--ink); border-bottom:2px solid var(--ink);
+  padding:1rem 0; margin-top:.2rem;
+  font-family:var(--sans); font-weight:700;
+}
+.d-ledger .total .fig{
+  font-family:var(--mono); font-variant-numeric:tabular-nums;
+  font-size:clamp(1.5rem,4.4cqi,2.1rem); color:var(--cr); letter-spacing:-.02em;
+}
+.d-ledger .total .cap{ font-size:.85rem; font-weight:500; color:var(--mut); font-family:var(--serif); }
+@container (min-width:640px){
+  .d-ledger .recon-head{ grid-template-columns:1fr 1fr; gap:2.5rem; }
+  .d-ledger .recon-head span:last-child{ display:block; }
+  .d-ledger .row{ grid-template-columns:1fr 1fr; gap:2.5rem; }
+  .d-ledger .row .was::before,.d-ledger .row .now::before{ display:none; }
+  .d-ledger .total{ grid-template-columns:1fr 1fr; gap:2.5rem; }
+}
+
+.d-ledger .prods{ padding:clamp(2.2rem,5cqi,3.4rem) 1.5rem clamp(2.5rem,6cqi,4rem); }
+.d-ledger .prods h2{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--mut); padding-bottom:.8rem; border-bottom:1px solid var(--rule);
+}
+.d-ledger .plist{ display:grid; grid-template-columns:1fr; }
+.d-ledger .plist li{ border-bottom:1px solid var(--rule); padding:1rem 0; display:grid; gap:.25rem; }
+.d-ledger .plist .nm{ font-family:var(--sans); font-weight:700; font-size:1.02rem; letter-spacing:-.01em; }
+.d-ledger .plist .ds{ color:var(--mut); font-size:.92rem; }
+@container (min-width:640px){
+  .d-ledger .plist{ grid-template-columns:1fr 1fr; column-gap:2.5rem; }
+}
+.d-ledger .foot{
+  background:var(--ink); color:var(--pg); padding:1.6rem 1.5rem;
+  font-family:var(--sans); font-size:.82rem; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center;
+}
+.d-ledger .foot .ph{ color:var(--brass); font-family:var(--mono); }
+
+/* ============================================================
+   DIRECTION B — "ROUTES"
+   Ground: warm sand. Hero band in deep teal. Signal orange.
+   Signature: a route spine with nodes for each stage of the operation.
+   ============================================================ */
+.d-routes{
+  --sand:#EFE7DA; --sand2:#E4D9C7; --teal:#0D4A43; --teal2:#0A3A34;
+  --ink:#1A1712; --mut:#6B6255; --orange:#DA6A33; --cream:#F8F3EA;
+  --sans:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  background:var(--sand); color:var(--ink); font-family:var(--sans);
+}
+.d-routes .nav{
+  background:var(--teal); color:var(--cream);
+  display:flex; align-items:center; gap:1.3rem; padding:1rem 1.5rem;
+}
+.d-routes .mark{ font-weight:800; letter-spacing:-.03em; font-size:1.1rem; }
+.d-routes .mark i{ font-style:normal; color:var(--orange); }
+.d-routes .nav ul{ display:none; gap:1.2rem; font-size:.85rem; opacity:.82; margin-left:auto; }
+.d-routes .nav .cta{
+  margin-left:auto; background:var(--orange); color:#fff; font-size:.8rem; font-weight:700;
+  padding:.55rem 1rem; border-radius:999px;
+}
+@container (min-width:700px){
+  .d-routes .nav ul{ display:flex; }
+  .d-routes .nav .cta{ margin-left:0; }
+}
+.d-routes .hero{ background:var(--teal); color:var(--cream); padding:clamp(2rem,6cqi,4.2rem) 1.5rem clamp(2.6rem,7cqi,4.6rem); }
+.d-routes .eyebrow{
+  font-family:var(--mono); font-size:.67rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--orange); margin-bottom:1rem;
+}
+.d-routes h1{
+  font-weight:800; letter-spacing:-.04em; line-height:1.0; text-wrap:balance;
+  font-size:clamp(2.1rem,8cqi,4.1rem); max-width:14ch;
+}
+.d-routes h1 em{ font-style:normal; color:var(--orange); }
+.d-routes .sub{ margin-top:1.2rem; max-width:50ch; font-size:clamp(1rem,1.9cqi,1.15rem); line-height:1.6; opacity:.85; }
+
+/* the route spine — the signature element */
+.d-routes .spine{ padding:clamp(2.2rem,6cqi,3.6rem) 1.5rem; }
+.d-routes .spine h2{
+  font-family:var(--mono); font-size:.67rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--mut); margin-bottom:1.8rem;
+}
+.d-routes .track{ position:relative; display:grid; gap:0; }
+.d-routes .track::before{
+  content:""; position:absolute; left:9px; top:14px; bottom:14px; width:2px;
+  background:linear-gradient(var(--orange),var(--teal)); border-radius:2px;
+  transform-origin:top; animation:rt-draw .9s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes rt-draw{ from{ transform:scaleY(0); } to{ transform:scaleY(1); } }
+.d-routes .stop{ position:relative; padding:0 0 1.5rem 2.4rem; }
+.d-routes .stop:last-child{ padding-bottom:0; }
+.d-routes .stop::before{
+  content:""; position:absolute; left:3px; top:5px; width:14px; height:14px;
+  border-radius:50%; background:var(--sand); border:3px solid var(--teal);
+}
+.d-routes .stop.hot::before{ border-color:var(--orange); background:var(--orange); }
+.d-routes .stop .st{ font-weight:750; font-size:1.02rem; letter-spacing:-.015em; }
+.d-routes .stop .sd{ color:var(--mut); font-size:.92rem; margin-top:.2rem; max-width:46ch; }
+.d-routes .stop .tag{
+  display:inline-block; margin-top:.5rem; font-family:var(--mono); font-size:.64rem;
+  letter-spacing:.12em; text-transform:uppercase; background:var(--sand2);
+  padding:.24rem .55rem; border-radius:3px; color:var(--teal2); font-weight:700;
+}
+@container (min-width:760px){
+  .d-routes .track{ grid-template-columns:repeat(3,1fr); column-gap:2rem; row-gap:2.2rem; }
+  .d-routes .track::before{ left:0; right:0; top:9px; bottom:auto; width:auto; height:2px;
+    background:linear-gradient(90deg,var(--orange),var(--teal)); animation-name:rt-drawx; }
+  @keyframes rt-drawx{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  .d-routes .stop{ padding:2.1rem 0 0 0; }
+  .d-routes .stop::before{ left:0; top:2px; }
+}
+.d-routes .claim{
+  background:var(--sand2); padding:clamp(2rem,5cqi,3rem) 1.5rem;
+  border-top:1px solid rgba(0,0,0,.07);
+}
+.d-routes .claim p{
+  font-size:clamp(1.25rem,3.4cqi,1.9rem); font-weight:700; letter-spacing:-.03em;
+  line-height:1.24; max-width:24ch; text-wrap:balance;
+}
+.d-routes .claim p b{ color:var(--orange); font-weight:700; }
+.d-routes .claim .by{ margin-top:1rem; font-size:.88rem; color:var(--mut); max-width:46ch; }
+.d-routes .foot{
+  background:var(--teal2); color:var(--cream); padding:1.6rem 1.5rem; font-size:.83rem;
+  display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center;
+}
+.d-routes .foot .ph{ color:var(--orange); font-family:var(--mono); }
+
+/* ============================================================
+   DIRECTION C — "CONTROL ROOM"
+   Ground: near-black slate. Cyan accent, amber warn, green positive.
+   Signature: the hero IS a working WizERP panel.
+   ============================================================ */
+.d-control{
+  --bg:#0A0E13; --pnl:#121922; --pnl2:#182231; --line:#243040;
+  --ink:#DCE4EE; --mut:#8695A8; --cy:#38BDF0; --am:#F0A93B; --gn:#4FB783; --rd:#E0776B;
+  --sans:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  background:var(--bg); color:var(--ink); font-family:var(--sans);
+}
+.d-control .nav{
+  display:flex; align-items:center; gap:1.3rem; padding:.9rem 1.4rem;
+  border-bottom:1px solid var(--line); background:var(--pnl);
+}
+.d-control .mark{ font-weight:750; letter-spacing:-.03em; font-size:1.05rem; }
+.d-control .mark i{ font-style:normal; color:var(--cy); }
+.d-control .nav ul{ display:none; gap:1.2rem; font-size:.84rem; color:var(--mut); margin-left:auto; }
+.d-control .nav .cta{
+  margin-left:auto; background:var(--cy); color:#04121A; font-weight:700; font-size:.79rem;
+  padding:.5rem .95rem; border-radius:5px;
+}
+@container (min-width:700px){
+  .d-control .nav ul{ display:flex; }
+  .d-control .nav .cta{ margin-left:0; }
+}
+.d-control .hero{ padding:clamp(1.8rem,5cqi,3.2rem) 1.4rem clamp(1.4rem,3cqi,2rem); }
+.d-control .eyebrow{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.19em; text-transform:uppercase;
+  color:var(--cy); margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem;
+}
+.d-control .eyebrow::before{
+  content:""; width:7px; height:7px; border-radius:50%; background:var(--gn);
+  box-shadow:0 0 0 3px rgba(79,183,131,.18); animation:cr-pulse 2.4s ease-in-out infinite;
+}
+@keyframes cr-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+.d-control h1{
+  font-weight:750; letter-spacing:-.04em; line-height:1.03; text-wrap:balance;
+  font-size:clamp(1.9rem,6.6cqi,3.4rem); max-width:16ch;
+}
+.d-control .sub{ margin-top:1rem; max-width:52ch; color:var(--mut); font-size:clamp(.97rem,1.8cqi,1.1rem); line-height:1.6; }
+
+/* the live panel — the signature element */
+.d-control .panel{
+  margin:clamp(1.4rem,4cqi,2.2rem) 1.4rem 0; background:var(--pnl);
+  border:1px solid var(--line); border-radius:9px; overflow:hidden;
+}
+.d-control .pbar{
+  display:flex; align-items:center; gap:.6rem; padding:.6rem .9rem;
+  border-bottom:1px solid var(--line); background:var(--pnl2);
+  font-family:var(--mono); font-size:.67rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mut);
+}
+.d-control .pbar .dot{ width:8px; height:8px; border-radius:50%; background:var(--gn); }
+.d-control .pbar .rt{ margin-left:auto; color:var(--gn); }
+.d-control .kpis{ display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line); }
+.d-control .kpi{ padding:.9rem; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+.d-control .kpi:nth-child(2n){ border-right:0; }
+.d-control .kpi .k{
+  font-family:var(--mono); font-size:.6rem; letter-spacing:.13em; text-transform:uppercase; color:var(--mut);
+}
+.d-control .kpi .v{
+  font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:700;
+  font-size:clamp(1.05rem,3.2cqi,1.5rem); margin-top:.3rem; letter-spacing:-.02em;
+}
+.d-control .kpi .d{ font-size:.7rem; margin-top:.15rem; font-family:var(--mono); }
+.d-control .up{ color:var(--gn); } .d-control .warn{ color:var(--am); } .d-control .dn{ color:var(--rd); }
+@container (min-width:640px){
+  .d-control .kpis{ grid-template-columns:repeat(4,1fr); }
+  .d-control .kpi{ border-bottom:0; }
+  .d-control .kpi:nth-child(2n){ border-right:1px solid var(--line); }
+  .d-control .kpi:last-child{ border-right:0; }
+}
+.d-control .rows{ padding:.3rem 0; }
+.d-control .r{
+  display:grid; grid-template-columns:1fr auto auto; gap:.8rem; align-items:center;
+  padding:.6rem .9rem; font-size:.86rem; border-bottom:1px solid rgba(36,48,64,.5);
+}
+.d-control .r:last-child{ border-bottom:0; }
+.d-control .r .br{ font-weight:600; }
+.d-control .r .nu{ font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--mut); font-size:.82rem; }
+.d-control .pill{
+  font-family:var(--mono); font-size:.61rem; letter-spacing:.09em; text-transform:uppercase;
+  padding:.2rem .5rem; border-radius:3px; font-weight:700; white-space:nowrap;
+}
+.d-control .pill.ok{ background:rgba(79,183,131,.14); color:var(--gn); }
+.d-control .pill.lo{ background:rgba(240,169,59,.14); color:var(--am); }
+.d-control .pill.no{ background:rgba(224,119,107,.14); color:var(--rd); }
+.d-control .prods{ padding:clamp(2rem,5cqi,3.2rem) 1.4rem; }
+.d-control .prods h2{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.19em; text-transform:uppercase;
+  color:var(--mut); margin-bottom:1.2rem;
+}
+.d-control .grid{ display:grid; grid-template-columns:1fr; gap:.7rem; }
+.d-control .card{
+  background:var(--pnl); border:1px solid var(--line); border-radius:7px; padding:1rem;
+  transition:border-color .18s,transform .18s;
+}
+.d-control .card:hover{ border-color:var(--cy); transform:translateY(-2px); }
+.d-control .card .nm{ font-weight:700; letter-spacing:-.01em; display:flex; align-items:center; gap:.5rem; }
+.d-control .card .nm::before{ content:""; width:3px; height:14px; border-radius:2px; background:var(--cy); }
+.d-control .card .ds{ color:var(--mut); font-size:.87rem; margin-top:.4rem; line-height:1.5; }
+@container (min-width:640px){ .d-control .grid{ grid-template-columns:1fr 1fr; } }
+@container (min-width:980px){ .d-control .grid{ grid-template-columns:repeat(3,1fr); } }
+.d-control .claim{
+  margin:0 1.4rem clamp(2rem,5cqi,3rem); padding:clamp(1.3rem,3.5cqi,2rem);
+  border:1px solid var(--line); border-left:3px solid var(--cy); border-radius:7px; background:var(--pnl);
+}
+.d-control .claim p{ font-size:clamp(1.05rem,2.6cqi,1.4rem); font-weight:650; letter-spacing:-.025em; line-height:1.35; text-wrap:balance; }
+.d-control .claim .by{ color:var(--mut); font-size:.88rem; margin-top:.7rem; max-width:52ch; line-height:1.55; }
+.d-control .foot{
+  border-top:1px solid var(--line); background:var(--pnl); padding:1.5rem 1.4rem;
+  font-size:.82rem; color:var(--mut); display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:center;
+}
+.d-control .foot .ph{ color:var(--cy); font-family:var(--mono); }
+</style>
+
+<header class="sh-bar">
+  <div class="sh-brand"><b>WIZAG</b> · design directions</div>
+
+  <span class="sh-lab">Direction</span>
+  <div class="sh-group" role="group" aria-label="Choose a design direction">
+    <button type="button" data-dir="ledger"  aria-pressed="true">Ledger</button>
+    <button type="button" data-dir="routes"  aria-pressed="false">Routes</button>
+    <button type="button" data-dir="control" aria-pressed="false">Control Room</button>
+  </div>
+
+  <span class="sh-lab">Width</span>
+  <div class="sh-group" role="group" aria-label="Preview width">
+    <button type="button" data-w="390px" aria-pressed="false">Phone</button>
+    <button type="button" data-w="820px" aria-pressed="false">Tablet</button>
+    <button type="button" data-w="100%"  aria-pressed="true">Full</button>
+  </div>
+</header>
+
+<main class="sh-stage">
+
+  <!-- ===================== A · LEDGER ===================== -->
+  <section id="p-ledger">
+    <div class="sh-frame" id="f-ledger">
+      <div class="smp d-ledger">
+        <nav class="nav">
+          <div class="mark">WIZAG<span>.</span></div>
+          <ul><li>Products</li><li>Industries</li><li>Implementation</li><li>About</li></ul>
+          <a href="#" class="cta">Book a walkthrough</a>
+        </nav>
+
+        <div class="hero">
+          <div class="eyebrow">Wise &amp; Agile Solutions · Nairobi</div>
+          <h1>Close the month in three days.</h1>
+          <p class="sub">WizERP puts stock, purchasing and the ledger in one place — so your accounts show what actually happened, on the day it happened.</p>
+        </div>
+
+        <div class="recon">
+          <div class="recon-head"><span>How it runs today</span><span>How it runs on WizERP</span></div>
+          <div class="row"><div class="was">Stock counted on paper, keyed in on Friday</div><div class="now">Stock moves the moment goods are received</div></div>
+          <div class="row"><div class="was">Three branches, three spreadsheets</div><div class="now">One stock position across every branch</div></div>
+          <div class="row"><div class="was">Invoices retyped to file with KRA</div><div class="now">eTIMS filed straight from the invoice</div></div>
+          <div class="row"><div class="was">Reps phone orders in, someone types them up</div><div class="now">Orders land from the rep's phone, priced</div></div>
+          <div class="total">
+            <div><div class="fig">3 days</div><div class="cap">to close, down from eighteen</div></div>
+            <div><div class="fig">1 ledger</div><div class="cap">that reconciles without a night shift</div></div>
+          </div>
+        </div>
+
+        <div class="prods">
+          <h2>What we build</h2>
+          <ul class="plist">
+            <li><div class="nm">WizERP</div><div class="ds">Stock, purchasing and the general ledger, in one place.</div></li>
+            <li><div class="nm">WizPOS</div><div class="ds">Checkout and back office that stay in step across branches.</div></li>
+            <li><div class="nm">WizSales</div><div class="ds">Routes, orders and collections from a rep's phone.</div></li>
+            <li><div class="nm">TeamKazi</div><div class="ds">Targets and follow-through for the people doing the work.</div></li>
+          </ul>
+        </div>
+
+        <div class="foot">
+          <strong>Wise &amp; Agile Solutions Ltd</strong>
+          <span>Unga House, Muthithi Road, Westlands</span>
+          <span class="ph">+254 711 408 108</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh-note">
+      <h2>Direction A · Ledger</h2>
+      <p>Borrowed from the instrument your buyer already trusts — the ruled ledger. Columns, hairline rules and tabular figures. The hero <strong>reconciles</strong>: what it costs you now on the left, what it becomes on the right, ruled off with a total.</p>
+      <p>Type inverts the usual pairing — <strong>grotesque headlines over a serif body</strong>, which reads considered rather than startup-generic. The only warm colour is a single brass note, and debit-red / credit-green appear exactly where an accountant expects them.</p>
+      <p><strong>Says:</strong> we are precise, and we understand your month-end. <strong>Risk:</strong> the quietest of the three — it needs disciplined photography and real numbers to stay from feeling austere.</p>
+    </div>
+  </section>
+
+  <!-- ===================== B · ROUTES ===================== -->
+  <section id="p-routes" hidden>
+    <div class="sh-frame" id="f-routes">
+      <div class="smp d-routes">
+        <nav class="nav">
+          <div class="mark">WIZ<i>A</i>G</div>
+          <ul><li>Products</li><li>Industries</li><li>Implementation</li><li>About</li></ul>
+          <a href="#" class="cta">Book a walkthrough</a>
+        </nav>
+
+        <div class="hero">
+          <div class="eyebrow">Operations software · East Africa</div>
+          <h1>From the port to the shelf to the <em>bank</em>.</h1>
+          <p class="sub">One system follows the goods and the money through every hand they pass — and tells you where they stopped.</p>
+        </div>
+
+        <div class="spine">
+          <h2>Where our software sits in your operation</h2>
+          <div class="track">
+            <div class="stop hot">
+              <div class="st">Supplier</div>
+              <div class="sd">Purchase orders, landed cost, and what you actually owe.</div>
+              <span class="tag">WizERP</span>
+            </div>
+            <div class="stop">
+              <div class="st">Warehouse</div>
+              <div class="sd">Goods received against the order, not against a memory.</div>
+              <span class="tag">WizERP</span>
+            </div>
+            <div class="stop">
+              <div class="st">Branch</div>
+              <div class="sd">Every till in step with head office stock, all day.</div>
+              <span class="tag">WizPOS</span>
+            </div>
+            <div class="stop">
+              <div class="st">Rep</div>
+              <div class="sd">Route plans, priced orders and collections from a phone.</div>
+              <span class="tag">WizSales</span>
+            </div>
+            <div class="stop">
+              <div class="st">Customer</div>
+              <div class="sd">Invoices that file with KRA the moment they are raised.</div>
+              <span class="tag">eTIMS</span>
+            </div>
+            <div class="stop">
+              <div class="st">Cash</div>
+              <div class="sd">Receipts matched to invoices, ageing you can act on.</div>
+              <span class="tag">WizERP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim">
+          <p>We wrote the software. So when it needs to fit your business, <b>we change the code</b> — not the ticket queue.</p>
+          <p class="by">WizERP, WizPOS, WizSales and TeamKazi are ours. Most of the market resells a licence from abroad and waits on someone else's roadmap.</p>
+        </div>
+
+        <div class="foot">
+          <strong>Wise &amp; Agile Solutions Ltd</strong>
+          <span>Unga House, Muthithi Road, Westlands</span>
+          <span class="ph">+254 711 408 108</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh-note">
+      <h2>Direction B · Routes</h2>
+      <p>The structural device is the <strong>route your goods and money actually take</strong> — supplier, warehouse, branch, rep, customer, cash. It runs as a spine down the page on a phone and turns horizontal on a wide screen, with each product tagged to the stage it covers.</p>
+      <p>That solves the positioning problem directly: instead of nineteen services in a list, a buyer sees exactly where you plug into <em>their</em> operation. Deep teal ground with a signal orange — confident and East African without reaching for any of the usual imagery.</p>
+      <p><strong>Says:</strong> we understand how your business actually moves. <strong>Risk:</strong> the warmest and most opinionated — it commits hardest to a colour.</p>
+    </div>
+  </section>
+
+  <!-- ===================== C · CONTROL ROOM ===================== -->
+  <section id="p-control" hidden>
+    <div class="sh-frame" id="f-control">
+      <div class="smp d-control">
+        <nav class="nav">
+          <div class="mark">WIZ<i>AG</i></div>
+          <ul><li>Products</li><li>Industries</li><li>Implementation</li><li>About</li></ul>
+          <a href="#" class="cta">Book a walkthrough</a>
+        </nav>
+
+        <div class="hero">
+          <div class="eyebrow">Live · four branches</div>
+          <h1>The whole operation on one screen.</h1>
+          <p class="sub">Stock, cash and the people moving both — updating as it happens, not as it gets typed up.</p>
+        </div>
+
+        <div class="panel">
+          <div class="pbar"><span class="dot"></span><span>WizERP · Group overview</span><span class="rt" id="cr-clock">synced 2s ago</span></div>
+          <div class="kpis">
+            <div class="kpi"><div class="k">Stock at cost</div><div class="v" id="cr-stock">KSh 48.2M</div><div class="d up">▲ 1.4% this week</div></div>
+            <div class="kpi"><div class="k">Cash position</div><div class="v" id="cr-cash">KSh 9.61M</div><div class="d up">▲ 320K today</div></div>
+            <div class="kpi"><div class="k">Receivables 60d+</div><div class="v">KSh 3.04M</div><div class="d warn">▲ 6 accounts</div></div>
+            <div class="kpi"><div class="k">Orders today</div><div class="v" id="cr-ord">184</div><div class="d up">▲ 22 vs yesterday</div></div>
+          </div>
+          <div class="rows">
+            <div class="r"><span class="br">Industrial Area · main store</span><span class="nu">KSh 21.4M</span><span class="pill ok">In stock</span></div>
+            <div class="r"><span class="br">Mombasa Road · branch</span><span class="nu">KSh 12.8M</span><span class="pill ok">In stock</span></div>
+            <div class="r"><span class="br">Nakuru · branch</span><span class="nu">KSh 9.10M</span><span class="pill lo">14 lines low</span></div>
+            <div class="r"><span class="br">Eldoret · depot</span><span class="nu">KSh 4.90M</span><span class="pill no">3 lines out</span></div>
+          </div>
+        </div>
+
+        <div class="prods">
+          <h2>The stack</h2>
+          <div class="grid">
+            <div class="card"><div class="nm">WizERP</div><div class="ds">Stock, purchasing and the general ledger in one place.</div></div>
+            <div class="card"><div class="nm">WizPOS</div><div class="ds">Checkout and back office in step across every branch.</div></div>
+            <div class="card"><div class="nm">WizSales</div><div class="ds">Routes, orders and collections from a rep's phone.</div></div>
+            <div class="card"><div class="nm">TeamKazi</div><div class="ds">Targets and follow-through for the people doing the work.</div></div>
+            <div class="card"><div class="nm">CloudHR</div><div class="ds">Payroll, leave and time that agree with the ledger.</div></div>
+            <div class="card"><div class="nm">Sage</div><div class="ds">When you need the deeper ledger, we implement it.</div></div>
+          </div>
+        </div>
+
+        <div class="claim">
+          <p>We wrote this software. When it needs to fit your business, we change the code.</p>
+          <p class="by">That is the difference between us and a reseller. There is no roadmap in another country, and no ticket waiting behind three hundred others.</p>
+        </div>
+
+        <div class="foot">
+          <strong>Wise &amp; Agile Solutions Ltd</strong>
+          <span>Unga House, Muthithi Road, Westlands</span>
+          <span class="ph">+254 711 408 108</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sh-note">
+      <h2>Direction C · Control Room</h2>
+      <p>The most direct answer to "prove you build software": <strong>the hero is the product</strong>. A live group-overview panel with real branch names, stock at cost, and status pills that read at a glance. Figures tick quietly so it feels connected rather than screenshotted.</p>
+      <p>Semantic colour does the work — green in stock, amber running low, red out — kept deliberately separate from the cyan accent, which is the discipline that stops a dashboard turning into confetti.</p>
+      <p><strong>Says:</strong> we are engineers and this is real. <strong>Risk:</strong> dark technical UI is the most common look in software marketing, so it has the least differentiation working in its favour — it wins on execution, not novelty.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var dirBtns  = document.querySelectorAll('.sh-group [data-dir]');
+  var widthBtns= document.querySelectorAll('.sh-group [data-w]');
+  var panes    = { ledger:document.getElementById('p-ledger'),
+                   routes:document.getElementById('p-routes'),
+                   control:document.getElementById('p-control') };
+  var frames   = [document.getElementById('f-ledger'),
+                  document.getElementById('f-routes'),
+                  document.getElementById('f-control')];
+
+  function press(list, el){
+    list.forEach(function(b){ b.setAttribute('aria-pressed', b===el ? 'true':'false'); });
+  }
+
+  dirBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      Object.keys(panes).forEach(function(k){ panes[k].hidden = (k !== btn.dataset.dir); });
+      press(Array.prototype.slice.call(dirBtns), btn);
+      window.scrollTo({ top:0, behavior:'smooth' });
+    });
+  });
+
+  widthBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      frames.forEach(function(f){ f.style.setProperty('--w', btn.dataset.w); });
+      press(Array.prototype.slice.call(widthBtns), btn);
+    });
+  });
+
+  /* Control Room: quiet ticking so the panel reads as connected, not screenshotted. */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    var stock=document.getElementById('cr-stock'), cash=document.getElementById('cr-cash'),
+        ord=document.getElementById('cr-ord'), clock=document.getElementById('cr-clock');
+    var s=48.2, c=9.61, o=184, t=2, seed=7;
+    function rnd(){ seed=(seed*1103515245+12345)%2147483648; return seed/2147483648; }
+    setInterval(function(){
+      s += (rnd()-0.42)*0.05; c += (rnd()-0.4)*0.03; t += 3;
+      if(rnd() > 0.62){ o += 1; ord.textContent = o; }
+      if(t > 45){ t = 1; }
+      stock.textContent = 'KSh ' + s.toFixed(1) + 'M';
+      cash.textContent  = 'KSh ' + c.toFixed(2) + 'M';
+      clock.textContent = 'synced ' + t + 's ago';
+    }, 3000);
+  }
+})();
+</script>

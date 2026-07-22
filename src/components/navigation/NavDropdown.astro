@@ -1,0 +1,105 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { NavLink } from '../../data/navigation';
+
+/**
+ * A single top-level nav item with a dropdown panel.
+ *
+ * Opens on click AND on hover — never hover-only, which would be
+ * unusable by keyboard and unreliable on touch (brief §13).
+ * The trigger is a real <button> carrying aria-expanded/aria-controls;
+ * behaviour lives in Header.astro's script so one listener set serves
+ * every dropdown.
+ */
+interface Props {
+  /** Terse label shown in the bar. */
+  label: string;
+  /** Full name, used for the "All …" link at the foot of the panel. */
+  fullLabel?: string;
+  href: string;
+  id: string;
+  items: NavLink[];
+  /** Two-column panels for the longer menus. */
+  columns?: 1 | 2;
+  /** Right-align panels near the end of the bar so they don't overflow. */
+  align?: 'left' | 'right';
+}
+
+const { label, fullLabel, href, id, items, columns = 1, align = 'left' } = Astro.props;
+
+const panelWidth = columns === 2 ? 'w-[38rem]' : 'w-[19rem]';
+---
+
+<li class="relative" data-nav-item>
+  <button
+    type="button"
+    class="flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-2 font-medium
+           text-navy-700 transition-colors duration-[var(--duration-fast)]
+           hover:text-orange-700 aria-expanded:text-orange-700 xl:px-2.5"
+    aria-expanded="false"
+    aria-controls={id}
+    data-nav-trigger
+  >
+    {label}
+    <Icon
+      name="chevron-down"
+      size={15}
+      class="mt-px transition-transform duration-[var(--duration-fast)] [button[aria-expanded=true]_&]:rotate-180"
+    />
+  </button>
+
+  <div
+    id={id}
+    class:list={[
+      'absolute top-[calc(100%+0.75rem)] z-50 rounded-[var(--radius-md)] border border-grey-100',
+      'bg-paper p-3 shadow-[var(--shadow-panel)]',
+      panelWidth,
+      align === 'right' ? 'right-0' : 'left-0',
+    ]}
+    data-nav-panel
+    hidden
+  >
+    <ul class:list={['grid gap-0.5', columns === 2 && 'sm:grid-cols-2']}>
+      {
+        items.map((item) => (
+          <li
+            class:list={[
+              item.dividerBefore && 'mt-2 border-t border-grey-100 pt-2',
+              item.dividerBefore && columns === 2 && 'sm:col-span-2',
+            ]}
+          >
+            <a
+              href={item.href}
+              class="block rounded-[var(--radius-sm)] px-3 py-2.5 transition-colors
+                     duration-[var(--duration-fast)] hover:bg-navy-50"
+            >
+              <span class="block text-base font-semibold text-navy-700">
+                {item.label}
+              </span>
+              {item.summary && (
+                <span class="mt-0.5 block text-sm leading-snug text-ink-soft">
+                  {item.summary}
+                </span>
+              )}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-2 border-t border-grey-100 px-3 pt-3">
+      <a
+        href={href}
+        class="group inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700
+               transition-colors duration-[var(--duration-fast)] hover:text-orange-700"
+      >
+        All {fullLabel ?? label}
+        <Icon
+          name="arrow-right"
+          size={15}
+          class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+        />
+      </a>
+    </div>
+  </div>
+</li>

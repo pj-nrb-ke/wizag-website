@@ -1,0 +1,40 @@
+---
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { engagementModels } from '../../data/home';
+
+/**
+ * Engagement models (brief §8.10).
+ *
+ * Four equal columns making the commercial model easy to read at a glance.
+ * No pricing table — the brief permits one only where approved pricing
+ * exists (§8.10), and none has been provided.
+ */
+---
+
+<Section tone="warm" id="engagement">
+  <SectionHeading
+    eyebrow="How we engage"
+    lead="Different problems need different commercial shapes. These are the four ways clients typically work with us."
+    measure="max-w-[20ch]"
+    class="max-w-3xl"
+    data-reveal
+  >
+    Flexible ways to work with WIZAG
+  </SectionHeading>
+
+  <ul class="@@mt-6@@ grid gap-x-10 gap-y-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-8">
+    {
+      engagementModels.map((model, i) => (
+        <li
+          class="border-t-2 border-navy-700 py-6"
+          data-reveal
+          data-reveal-delay={Math.min(i, 3) * 60}
+        >
+          <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">{model.name}</h3>
+          <p class="mt-3 text-base leading-relaxed text-ink">{model.body}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Section>

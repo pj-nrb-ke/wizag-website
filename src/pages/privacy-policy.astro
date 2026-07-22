@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/layout/PageHero.astro';
+import Section from '../components/layout/Section.astro';
+import { company } from '../data/navigation';
+
+/**
+ * Privacy notice.
+ *
+ * Every statement here is true of the site as currently built: no cookies
+ * are set, no third-party analytics run, and the fonts are self-hosted so no
+ * visitor IP is disclosed to a font CDN.
+ *
+ * ⚠ MUST BE UPDATED when the contact form goes live — it will collect
+ * personal data, which makes WIZAG a data controller under the Kenyan Data
+ * Protection Act 2019 and requires the lawful basis, retention period and
+ * data-subject rights below to be reviewed by a qualified adviser before
+ * launch. This page is a factual starting point, not legal advice.
+ */
+const { address } = company;
+
+const sections = [
+  {
+    heading: 'Who we are',
+    body: `${company.legalName} ("WIZAG") operates this website. Our registered office is ${address.building}, ${address.unit}, ${address.street}, ${address.area}, ${address.city}, ${address.country}. For any question about this notice, contact ${company.email}.`,
+  },
+  {
+    heading: 'What this website collects',
+    body: 'This website does not set cookies, does not run third-party analytics, and does not embed third-party trackers. Typefaces are served from our own domain, so your browser makes no request to an external font provider. Our hosting provider processes standard server logs, including IP address, for security and availability purposes.',
+  },
+  {
+    heading: 'When you contact us',
+    body: `If you email us or request an assessment, we process the details you choose to share — typically your name, organisation, contact details and what you have asked about. We use them only to respond to you and to manage the resulting relationship. We do not sell personal data and we do not share it for advertising.`,
+  },
+  {
+    heading: 'Lawful basis',
+    body: 'Where you contact us or request an assessment, we rely on your consent and on our legitimate interest in responding to business enquiries. You may withdraw consent at any time.',
+  },
+  {
+    heading: 'How long we keep it',
+    body: 'Enquiry correspondence is retained for as long as needed to answer it and to manage any resulting engagement, after which it is deleted in line with our internal retention schedule.',
+  },
+  {
+    heading: 'Your rights',
+    body: `Under the Data Protection Act 2019, you have the right to be informed, to access your personal data, to have it corrected or erased, to object to or restrict its processing, and to data portability. To exercise any of these, contact ${company.email}. You also have the right to lodge a complaint with the Office of the Data Protection Commissioner.`,
+  },
+  {
+    heading: 'Changes to this notice',
+    body: 'We update this notice when our processing changes. The current version always appears on this page.',
+  },
+];
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="How Wise & Agile Solutions Ltd handles personal data on wizag.biz."
+>
+  <PageHero
+    title="Privacy Policy"
+    lead="How we handle personal data on this website."
+    crumbs={[{ label: 'Home', href: '/' }]}
+  />
+
+  <Section tone="paper" width="narrow">
+    {
+      sections.map((section) => (
+        <div class="border-t border-grey-300 py-8 first:border-t-0 first:pt-0">
+          <h2 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+            {section.heading}
+          </h2>
+          <p class="mt-3 text-[length:var(--text-lg)] leading-relaxed text-ink">{section.body}</p>
+        </div>
+      ))
+    }
+  </Section>
+</BaseLayout>

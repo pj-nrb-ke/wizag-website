@@ -1,0 +1,43 @@
+---
+import Section from '../layout/Section.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { company } from '../../data/navigation';
+
+/**
+ * Final call to action (brief §8.13, rewritten per design audit §2.10).
+ *
+ * The earlier heading — "Let's improve how your business operates" — was
+ * judged commercially vague. This version names the specific thing the
+ * assessment produces, and the supporting line removes the risk of asking.
+ */
+---
+
+<Section tone="deep" id="contact-cta" space="loose">
+  <div class="mx-auto max-w-3xl text-center" data-reveal>
+    <h2 class="text-[length:var(--text-4xl)] leading-tight text-paper">
+      Identify where technology, automation and better systems can improve your business
+    </h2>
+
+    <p class="mx-auto mt-6 max-w-[54ch] text-[length:var(--text-xl)] leading-relaxed text-navy-100">
+      No obligation. We will review your current systems, operational bottlenecks and
+      transformation priorities, then tell you plainly where the value is.
+    </p>
+
+    <div class="mt-7 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <Button href="/contact" variant="inverse" size="large" arrow>
+        Book a 30-Minute Assessment
+      </Button>
+
+      <a
+        href={`mailto:${company.email}`}
+        class="inline-flex items-center gap-2 py-2 font-semibold text-paper
+               underline-offset-4 transition-colors duration-[var(--duration-fast)]
+               hover:text-orange-500 hover:underline"
+      >
+        <Icon name="mail" size={16} />
+        {company.email}
+      </a>
+    </div>
+  </div>
+</Section>

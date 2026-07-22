@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/home/HeroSection.astro';
+import CustomerProblems from '../components/home/CustomerProblems.astro';
+import CoreServices from '../components/home/CoreServices.astro';
+import ERPSpotlight from '../components/home/ERPSpotlight.astro';
+import WETOSection from '../components/home/WETOSection.astro';
+import TransformationFramework from '../components/home/TransformationFramework.astro';
+import IndustriesSection from '../components/home/IndustriesSection.astro';
+import WhyWizag from '../components/home/WhyWizag.astro';
+import EngagementModels from '../components/home/EngagementModels.astro';
+import BusinessOutcomes from '../components/home/BusinessOutcomes.astro';
+import FinalCTA from '../components/home/FinalCTA.astro';
+
+/**
+ * Homepage — section order follows brief §8.
+ *
+ * The Insights section (§8.12) is built but not mounted: it requires three
+ * real articles, and §8.12 forbids invented titles, dates or authors. Import
+ * and drop it in between BusinessOutcomes and FinalCTA once content exists.
+ *
+ * Ground tones alternate paper/warm to give the page rhythm, with the two
+ * navy bands (WETO, Final CTA) spaced well apart so neither loses impact.
+ */
+---
+
+<BaseLayout
+  title="Technology Services That Move Your Business Forward"
+  description="WIZAG helps organisations improve operations, modernise ERP and business systems, adopt AI, and manage technology more effectively — through one experienced transformation partner."
+>
+  <HeroSection />
+  <CustomerProblems />
+  <CoreServices />
+  <ERPSpotlight />
+  <WETOSection />
+  <TransformationFramework />
+  <IndustriesSection />
+  <WhyWizag />
+  <EngagementModels />
+  <BusinessOutcomes />
+  <FinalCTA />
+</BaseLayout>

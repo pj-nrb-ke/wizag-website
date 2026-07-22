@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/layout/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import { primaryNav } from '../data/navigation';
+
+/**
+ * 404. Routes onward rather than apologising — an error page is a
+ * navigation problem, not an occasion for a message.
+ */
+const destinations = primaryNav.filter((item) => item.label !== 'Contact');
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you were looking for does not exist."
+  noindex={true}
+>
+  <Section tone="paper" space="loose">
+    <p class="eyebrow mb-4 text-orange-700">Error 404</p>
+    <h1 class="optical-left max-w-[18ch] text-[length:var(--text-5xl)] leading-tight text-navy-700">
+      That page does not exist
+    </h1>
+    <p class="mt-6 max-w-[52ch] text-[length:var(--text-xl)] leading-relaxed text-ink">
+      The link may be out of date, or the address slightly off. Here is everything else on
+      the site.
+    </p>
+
+    <ul class="mt-8 grid gap-x-12 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        destinations.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="group flex items-center justify-between gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] font-semibold text-navy-700 transition-colors duration-[var(--duration-fast)] hover:text-orange-700"
+            >
+              {item.label}
+              <Icon
+                name="arrow-right"
+                size={17}
+                class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)] group-hover:text-orange-700 motion-safe:group-hover:translate-x-0.5"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <Button href="/contact" variant="primary" size="large" arrow class="mt-8">
+      Book an Assessment
+    </Button>
+  </Section>
+</BaseLayout>
