@@ -1,0 +1,21 @@
+{
+  // Cloudflare Workers deployment config.
+  //
+  // This is a static-assets-only Worker: there is no `main` entry script,
+  // because every page is pre-rendered at build time. Cloudflare serves the
+  // contents of dist/ straight from the edge — nothing executes per request.
+  //
+  // When the contact endpoint is added, `main` gets pointed at a handler and
+  // the static assets continue to be served exactly as they are now.
+  "name": "wizag-website",
+  "compatibility_date": "2025-11-01",
+
+  "assets": {
+    "directory": "./dist",
+
+    // Astro emits dist/404.html at the root (it special-cases 404 rather than
+    // using the directory format the other routes use), so unmatched paths
+    // render our own branded 404 instead of Cloudflare's generic one.
+    "not_found_handling": "404-page"
+  }
+}
