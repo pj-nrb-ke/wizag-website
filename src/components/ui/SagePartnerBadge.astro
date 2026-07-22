@@ -14,6 +14,20 @@
  * registered trademark being used under a partner agreement, so the
  * supplied asset is the only defensible one.
  *
+ * ⚠ 2026-07-22: the first file supplied (820x273) was a SCREENSHOT of the
+ * badge with the editor's transparency chequerboard baked in as pixels —
+ * 0% of it was actually transparent, and its corners alternated
+ * rgb(239,239,239) and rgb(255,255,255) in a grid. It would have rendered a
+ * grey-and-white chequer behind the logo. Before flipping ASSET_READY,
+ * verify the replacement:
+ *
+ *   Add-Type -AssemblyName System.Drawing
+ *   $b=[System.Drawing.Bitmap]::FromFile("public/brand/sage-business-partner.png")
+ *   $b.GetPixel(2,2)     # expect A=0 on a transparent asset
+ *
+ * A real transparent PNG reports A=0 at the corners. If it reports A=255
+ * with a light grey or white value, it is a screenshot again.
+ *
  * ── WHY IT ONLY GOES ON LIGHT SECTIONS ────────────────────────────────
  * The badge is green wordmark plus GREY "Business Partner" lettering, drawn
  * for white. On the site's navy sections that grey drops to roughly 2:1
@@ -47,8 +61,8 @@ const { width = '13rem', class: className = '' } = Astro.props as Props;
       <img
         src="/brand/sage-business-partner.png"
         alt="Sage Business Partner"
-        width="640"
-        height="236"
+        width="820"
+        height="273"
         loading="lazy"
         decoding="async"
         class="badge-img"
