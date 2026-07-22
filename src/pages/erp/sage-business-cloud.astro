@@ -5,7 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import ImageSlot from '../../components/ui/ImageSlot.astro';
+import SagePartnerBadge from '../../components/ui/SagePartnerBadge.astro';
 import SageReportingDemo from '../../components/diagrams/SageReportingDemo.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
 import {
@@ -159,10 +159,14 @@ import {
       </div>
 
       <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="120">
-        <ImageSlot
-          ratio="4/3"
-          brief="A business owner at a desk in a small Nairobi office, laptop open beside a printed report, seen from behind or in profile. Face not identifiable."
-          purpose="The person the reports are for. Grounds cloud accounting in an actual Kenyan business."
+        <img
+          src="/images/sage/sage-reporting.jpg"
+          alt="A business owner seen from behind at a desk, holding a printed report beside an open laptop, with manila folders and a calculator on the desk."
+          width="930"
+          height="620"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
         />
       </div>
     </div>
@@ -205,12 +209,22 @@ import {
 
     {/* A letterbox band rather than a portrait slot: this section is two
         dense checklists, and a full-height image beside them would crowd
-        both. It works as a divider instead. */}
-    <div class="mt-9" data-reveal>
-      <ImageSlot
-        ratio="21/9"
-        brief="Inside a small Nairobi wholesale storeroom: metal racking stacked with plain cartons, a stock controller mid-aisle checking a phone, shot from behind at distance."
-        purpose="Inventory is the module that decides whether the software fits. A real storeroom says that better than a render."
+        both. It works as a divider instead.
+
+        Width-capped deliberately. The source frame is 717px wide — it came
+        from one panel of a composite — and letting it span the full column
+        would upscale it to ~1184px and visibly soften it. Capped at 48rem it
+        renders at roughly 1:1. If a full-bleed band is ever wanted here, the
+        shot has to be regenerated on its own at full resolution. */}
+    <div class="mx-auto mt-9 max-w-3xl" data-reveal>
+      <img
+        src="/images/sage/sage-inventory.jpg"
+        alt="A stock controller checking a phone in the aisle of a small wholesale storeroom, racking stacked with cartons and sacks either side."
+        width="717"
+        height="403"
+        loading="lazy"
+        decoding="async"
+        class="w-full rounded-[var(--radius-md)] object-cover"
       />
     </div>
 
@@ -310,10 +324,14 @@ import {
       </div>
 
       <div data-reveal data-reveal-delay="120">
-        <ImageSlot
-          ratio="4/3"
-          brief="An orderly desk with a labelled box file of receipts open beside a laptop, in daylight. Hands only, or nobody in frame."
-          purpose="Audit-readiness as a physical state, not an abstraction. Avoids any tax-authority branding."
+        <img
+          src="/images/sage/sage-records.jpg"
+          alt="An open box file of neatly filed receipts and slips on a desk beside a laptop, with a stapler and pen alongside."
+          width="669"
+          height="446"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
         />
       </div>
     </div>
@@ -330,6 +348,13 @@ import {
     >
       Software is the easy half
     </SectionHeading>
+
+    {/* Warm section, so the badge's grey "Business Partner" lettering has the
+        light ground it was drawn for. It must never go on a navy section —
+        see the contrast note in the component. */}
+    <div class="mt-7" data-reveal>
+      <SagePartnerBadge />
+    </div>
 
     <ul class="mt-10 grid gap-5 sm:grid-cols-3">
       {

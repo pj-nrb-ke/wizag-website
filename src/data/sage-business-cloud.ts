@@ -43,11 +43,16 @@ export const sage = {
   audience: 'For businesses that have outgrown spreadsheets but do not need a full ERP.',
 };
 
-/* The client confirmed authorised partner status on 2026-07-21. Wording is
-   kept deliberately plain: no tier name is claimed, because none has been
-   evidenced. Replace only against something official from Sage. */
+/* Partner wording, settled 2026-07-22 against the badge Sage issued: it
+   reads "Sage | Business Partner", so that is the designation — verbatim,
+   capitalised as Sage capitalises it.
+
+   Do NOT embellish it. Not "authorised", not "certified", not "premier",
+   and never the source brochure's "Enterprise ERP Infrastructure Partner",
+   which is not a Sage designation at all. If a tier is ever earned, it will
+   come with its own badge and its own wording. */
 export const partnerNote =
-  'WIZAG is an authorised Sage business partner. We implement, migrate, integrate and support Sage Business Cloud Accounting for businesses across Kenya and East Africa.';
+  'WIZAG is a Sage Business Partner. We implement, migrate, integrate and support Sage Business Cloud Accounting for businesses across Kenya and East Africa.';
 
 /* The honest statement of the compliance position. Says what is true of the
    software, and what WIZAG does about the rest. */

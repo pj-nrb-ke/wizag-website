@@ -1,0 +1,117 @@
+---
+/**
+ * The Sage Business Partner badge.
+ *
+ * ── FLIP THIS WHEN THE ARTWORK LANDS ──────────────────────────────────
+ * Save the file Sage issued to `public/brand/sage-business-partner.png`,
+ * then set ASSET_READY to true. That is the whole job — the layout below
+ * is already sized for it.
+ *
+ * Use the file SAGE SUPPLIED. Not a screenshot of it, not a background-
+ * removed version, and above all not an AI-regenerated or auto-traced
+ * lookalike: the Sage wordmark has distinctive letterforms and a redrawn
+ * one is visibly wrong to anyone who knows the brand. It is also a
+ * registered trademark being used under a partner agreement, so the
+ * supplied asset is the only defensible one.
+ *
+ * ── WHY IT ONLY GOES ON LIGHT SECTIONS ────────────────────────────────
+ * The badge is green wordmark plus GREY "Business Partner" lettering, drawn
+ * for white. On the site's navy sections that grey drops to roughly 2:1
+ * against the background and becomes unreadable. If it is ever needed on
+ * navy, ask Sage for the reversed version rather than filtering this one.
+ *
+ * ── CLEAR SPACE ───────────────────────────────────────────────────────
+ * Brand guidelines for badges of this kind universally require clear space
+ * around the mark, so the padding below is structural rather than
+ * decorative — do not tighten it to close a gap.
+ *
+ * ⚠ The exact rules live in SAGE PARTNER MARKRTING GUIDEBOOK.pdf in the
+ * client's Dropbox (ADMIN/SAGE). It was a cloud placeholder and could not
+ * be read; check minimum size and clear-space ratios against it before
+ * launch.
+ */
+const ASSET_READY = false;
+
+interface Props {
+  /** Rendered width. Badges read as a credential, not a headline — keep small. */
+  width?: string;
+  class?: string;
+}
+
+const { width = '13rem', class: className = '' } = Astro.props as Props;
+---
+
+<div class:list={['badge-wrap', className]} style={`--badge-w:${width}`}>
+  {
+    ASSET_READY ? (
+      <img
+        src="/brand/sage-business-partner.png"
+        alt="Sage Business Partner"
+        width="640"
+        height="236"
+        loading="lazy"
+        decoding="async"
+        class="badge-img"
+      />
+    ) : (
+      <div class="badge-pending" aria-hidden="true">
+        <p class="badge-pending-title">Sage Business Partner badge</p>
+        <p class="badge-pending-note">
+          Save Sage's supplied artwork to <code>public/brand/sage-business-partner.png</code> and
+          set <code>ASSET_READY</code> to true in this component.
+        </p>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .badge-wrap {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .badge-img {
+    display: block;
+    width: var(--badge-w);
+    max-width: 100%;
+    height: auto;
+    /* Structural clear space — see the note above. */
+    padding: 0.5rem;
+  }
+
+  .badge-pending {
+    width: var(--badge-w);
+    max-width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px dashed var(--color-grey-300);
+    border-radius: var(--radius-sm);
+    background: repeating-linear-gradient(
+      135deg,
+      transparent 0 8px,
+      rgba(27, 48, 108, 0.04) 8px 16px
+    );
+  }
+
+  .badge-pending-title {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-navy-700);
+  }
+
+  .badge-pending-note {
+    margin-top: 0.4rem;
+    font-size: var(--text-2xs);
+    line-height: 1.5;
+    color: var(--color-ink-soft);
+  }
+
+  .badge-pending code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+    color: var(--color-orange-700);
+    overflow-wrap: anywhere;
+  }
+</style>
