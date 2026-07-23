@@ -1,0 +1,198 @@
+---
+import Icon from '../ui/Icon.astro';
+import { modules } from '../../data/wizerp';
+
+/**
+ * The WizERP module map.
+ *
+ * WHY THIS SHAPE
+ * A six-box grid lists what the software has. It does not explain why that
+ * matters. The claim worth making is that all six sit on ONE ledger — which
+ * is the actual difference between an ERP and six applications that email
+ * each other.
+ *
+ * So the modules are drawn as columns standing on a shared foundation bar,
+ * with connector stems running down into it. Read at a glance it says
+ * "separate functions, one set of numbers" — the entire integration argument,
+ * without a sentence of body copy. That is what has to survive a director
+ * scanning the page for thirty seconds.
+ *
+ * The stems light in sequence and the foundation fills last, so the eye is
+ * led down into the shared ledger rather than across the modules.
+ *
+ * Static and complete under prefers-reduced-motion.
+ */
+---
+
+<figure class="map" aria-labelledby="map-cap">
+  <figcaption id="map-cap" class="sr-only">
+    WizERP's six modules — {modules.map((m) => m.name).join(', ')} — all posting to a single
+    shared general ledger.
+  </figcaption>
+
+  <ul class="cols">
+    {
+      modules.map((mod, i) => (
+        <li class="col" style={`--i:${i}`}>
+          <div class="card">
+            <Icon name={mod.icon} size={20} class="card-icon" />
+            <h3 class="card-name">{mod.name}</h3>
+            <ul class="items">
+              {mod.items.map((item) => (
+                <li class="item">{item}</li>
+              ))}
+            </ul>
+          </div>
+          <span class="stem" aria-hidden="true"></span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- what makes it an ERP rather than six applications -->
+  <div class="base">
+    <p class="base-title">One shared general ledger</p>
+    <p class="base-body">
+      A sale, a stock movement and an accounting posting are the same event — not three
+      systems reconciled afterwards.
+    </p>
+  </div>
+</figure>
+
+<style>
+  .map { margin: 0; }
+
+  .cols {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem 1rem;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card {
+    flex: 1;
+    padding: 1.15rem 1.15rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-grey-100);
+    background: var(--color-paper);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-icon { color: var(--color-orange-500); }
+
+  .card-name {
+    margin-top: 0.75rem;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-navy-700);
+  }
+
+  .items {
+    list-style: none;
+    margin: 0.8rem 0 0;
+    padding: 0;
+  }
+
+  .item {
+    padding: 0.34rem 0;
+    border-top: 1px solid var(--color-grey-300);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+
+  /* ---- the connector into the ledger ---- */
+  .stem {
+    display: block;
+    width: 2px;
+    height: 1.1rem;
+    margin: 0 auto;
+    background: var(--color-orange-500);
+    transform-origin: top center;
+  }
+
+  /* ---- the shared foundation ---- */
+  .base {
+    border-radius: var(--radius-md);
+    padding: 1.15rem 1.4rem 1.25rem;
+    background: linear-gradient(120deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+    box-shadow: var(--shadow-panel);
+    text-align: center;
+  }
+
+  .base-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-orange-500);
+  }
+
+  .base-body {
+    margin: 0.5rem auto 0;
+    max-width: 58ch;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-navy-100);
+  }
+
+  @media (max-width: 62rem) {
+    .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 38rem) {
+    .cols { grid-template-columns: 1fr; gap: 0.9rem; }
+    /* One column means the stems would form a ladder rather than six feeds
+       into a shared base — the metaphor stops working, so drop them. */
+    .stem { display: none; }
+    .cols { margin-bottom: 1.1rem; }
+  }
+
+  /* ---- motion -------------------------------------------------------
+     Cards settle in, then the stems draw downward in sequence, then the
+     ledger arrives — leading the eye into the thing that matters. */
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      animation: card-in 18s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.13s);
+      opacity: 0;
+    }
+
+    .stem {
+      animation: stem-draw 18s ease-out infinite;
+      animation-delay: calc(0.9s + var(--i) * 0.13s);
+      transform: scaleY(0);
+    }
+
+    .base {
+      animation: base-in 18s ease-out infinite;
+      opacity: 0;
+    }
+  }
+
+  @keyframes card-in {
+    0%, 1%   { opacity: 0; transform: translateY(6px); }
+    6%, 94%  { opacity: 1; transform: translateY(0); }
+    99%, 100% { opacity: 0; transform: translateY(0); }
+  }
+
+  @keyframes stem-draw {
+    0%, 4%   { transform: scaleY(0); }
+    9%, 94%  { transform: scaleY(1); }
+    99%, 100% { transform: scaleY(0); }
+  }
+
+  /* Lands after the last stem (5 × 0.13s + 0.9s ≈ 1.55s ≈ 9% of 18s). */
+  @keyframes base-in {
+    0%, 10%  { opacity: 0; transform: translateY(6px); }
+    16%, 94% { opacity: 1; transform: translateY(0); }
+    99%, 100% { opacity: 0; transform: translateY(0); }
+  }
+</style>

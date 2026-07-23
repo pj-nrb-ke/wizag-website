@@ -113,7 +113,13 @@ export const erp: NavLink[] = [
     href: '/erp/sage-business-cloud',
     summary: 'Cloud accounting for businesses that have outgrown spreadsheets',
   },
-  { label: 'WizERP', href: '/erp/wizerp', stub: true },
+  /* WIZAG's own ERP, and the highest-margin product in this menu — no
+     licence revenue leaves the group, and the implementation is all ours. */
+  {
+    label: 'WizERP',
+    href: '/erp/wizerp',
+    summary: 'Our own open-source ERP — no licence fee, fully customisable',
+  },
   /* WIZAG's own product, and the only item in this menu sold to accounting
      FIRMS rather than to end businesses — the summary has to carry that,
      because the menu context implies the opposite. */

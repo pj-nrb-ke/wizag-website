@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import ErpDashboard from '../../components/diagrams/ErpDashboard.astro';
+import ModuleMap from '../../components/diagrams/ModuleMap.astro';
+import StepFlow from '../../components/diagrams/StepFlow.astro';
+import {
+  wizerp,
+  headlineFacts,
+  capabilities,
+  quoteToCash,
+  ecosystem,
+  platform,
+  whyWizerp,
+  wizagRole,
+  statutoryNote,
+} from '../../data/wizerp';
+
+/**
+ * WizERP. Content extracted from the client's OCR of the WizERP Brochure
+ * 2026 — PAGES 1–5 ONLY.
+ *
+ * ⚠ That PDF is two decks bound together. Pages 6–17 are HRGenie (CloudHR,
+ * CloudWage, TimeTrax), a separate product published by Skillmind Software
+ * Limited. None of it appears here, and TimeTrax is on the client's own
+ * exclusion list. See the header note in src/data/wizerp.ts.
+ *
+ * ⚠ The brochure's contact block reads skillmindsoftware.com. Not carried
+ * over — this page routes to /contact like every other. Flagged for the
+ * client as a positioning question.
+ *
+ * ── BUILT FOR A 30–60 SECOND READ ────────────────────────────────────
+ * The brief was an impression on a director inside a minute. That drove
+ * every structural decision:
+ *
+ *  · The hero shows a working dashboard, because the first question a
+ *    director asks is "is this real?" and a screenshot answers faster than
+ *    a paragraph.
+ *  · Three enormous facts sit immediately below it — zero licence cost,
+ *    60+ reports, 6 modules. If someone reads nothing else, they read those.
+ *  · The module map draws six columns standing on one shared ledger, so the
+ *    integration argument survives being scanned rather than read.
+ *  · Every section leads with a number or a claim, not a paragraph.
+ *
+ * This is WIZAG's own product and the highest-margin thing on the site, so
+ * it gets the most visual investment of any ERP page.
+ */
+---
+
+<BaseLayout title={`${wizerp.name} — ${wizerp.hook}`} description={wizerp.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li><a href="/erp" class="py-1 transition-colors hover:text-paper">ERP</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">{wizerp.name}</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
+        <div>
+          <div class="flex items-baseline gap-3">
+            <p class="eyebrow text-orange-500">{wizerp.name}</p>
+            <span class="font-serif text-sm italic text-navy-100/70">{wizerp.tagline}</span>
+          </div>
+
+          <h1 class="optical-left mt-4 max-w-[17ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {wizerp.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {wizerp.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Request a Demo</Button>
+            <a
+              href="#suite"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              See what it covers
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{wizerp.audience}</p>
+        </div>
+
+        <div>
+          <ErpDashboard />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE THREE FACTS ---------------------------------------------------
+       The 10-second payoff. Deliberately the largest type on the page after
+       the h1: if a director reads three things, these are the three. -->
+  <Section tone="paper" space="tight">
+    <ul class="grid gap-6 sm:grid-cols-3 sm:gap-8">
+      {
+        headlineFacts.map((f, i) => (
+          <li
+            class="border-t-[3px] border-orange-500 pt-5"
+            data-reveal
+            data-reveal-delay={i * 80}
+          >
+            <div class="flex items-baseline gap-2.5">
+              <span class="font-mono text-[length:var(--text-6xl)] font-bold leading-none text-navy-700">
+                {f.value}
+              </span>
+              <span class="text-[length:var(--text-lg)] font-semibold text-orange-700">
+                {f.label}
+              </span>
+            </div>
+            <p class="mt-3.5 max-w-[38ch] text-base leading-relaxed text-ink">{f.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- THE SUITE ---------------------------------------------------------- -->
+  <Section tone="warm" id="suite">
+    <SectionHeading
+      eyebrow="The suite"
+      lead="Six modules covering the whole operating cycle — and one ledger underneath all of them."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Complete business management
+    </SectionHeading>
+
+    <div class="mt-10" data-reveal>
+      <ModuleMap />
+    </div>
+  </Section>
+
+  <!-- QUOTE TO CASH ------------------------------------------------------ -->
+  <Section tone="paper">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Workflow" measure="max-w-[15ch]">
+          Quotation to payment, posted as it goes
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Every step raises its own accounting entries. There is no batch at the end of the month,
+          no re-keying between systems, and no gap between what was shipped and what was billed.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          The same applies in reverse for purchasing: order, goods received, supplier invoice,
+          payment.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <StepFlow steps={quoteToCash} orientation="vertical" cycle={18} tone="light" />
+      </div>
+    </div>
+  </Section>
+
+  <!-- CAPABILITIES ------------------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Features that drive results"
+      lead="The capabilities a finance director asks about in the second meeting, answered in the first."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Control, not just record-keeping
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-x-8 gap-y-0 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        capabilities.map((c, i) => (
+          <li
+            class="border-t border-grey-300 py-6"
+            data-reveal
+            data-reveal-delay={Math.min(i, 5) * 50}
+          >
+            <Icon name={c.icon} size={20} class="text-orange-500" />
+            <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+              {c.name}
+            </h3>
+            <p class="mt-1.5 text-base leading-relaxed text-ink">{c.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- WHY IT WINS -------------------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Why WizERP</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          {wizerp.promise}
+        </h2>
+        <p class="mt-5 max-w-[46ch] text-base leading-relaxed text-navy-100">
+          Most ERP decisions are made under licence pressure — how many seats, at what annual
+          renewal, with what penalty for growing. This one is not.
+        </p>
+
+        <ul class="mt-8 grid gap-x-10 sm:grid-cols-2">
+          {
+            whyWizerp.map((w) => (
+              <li class="border-t border-navy-500/40 py-4">
+                <Icon name={w.icon} size={19} class="text-orange-500" />
+                <h3 class="mt-2.5 text-[length:var(--text-lg)] font-bold leading-snug text-paper">
+                  {w.title}
+                </h3>
+                <p class="mt-1.5 text-base leading-relaxed text-navy-100">{w.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {/* Platform facts as a spec panel — a technical evaluator will look for
+          exactly these, and burying them wastes everyone's time. */}
+      <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="100">
+        <div class="rounded-[var(--radius-md)] border border-navy-500/40 bg-navy-900/45 p-6 sm:p-7">
+          <div class="flex items-center gap-3">
+            <Icon name="cloud" size={20} class="text-orange-500" />
+            <h3 class="text-[length:var(--text-xl)] font-bold text-paper">Technology</h3>
+          </div>
+          <dl class="mt-5">
+            {
+              platform.map((p) => (
+                <div class="flex items-baseline justify-between gap-4 border-t border-navy-500/40 py-3">
+                  <dt class="text-[length:var(--text-2xs)] font-bold uppercase tracking-[0.08em] text-navy-300">
+                    {p.label}
+                  </dt>
+                  <dd class="text-right text-base font-semibold text-paper">{p.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- THE ECOSYSTEM ------------------------------------------------------ -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Beyond the core"
+      lead="Because the platform is open, it has been extended well past accounting — each piece sharing the same customers, catalogue and stock position."
+      measure="max-w-[19ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      One system, connected outwards
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        ecosystem.map((e, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <Icon name={e.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-3.5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {e.name}
+            </h3>
+            <p class="mt-2 text-base leading-relaxed text-ink">{e.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p
+      class="mt-8 max-w-[62ch] border-l-[3px] border-orange-500 bg-warm p-5 text-base leading-relaxed text-ink sm:p-6"
+      data-reveal
+    >
+      <strong class="font-bold text-navy-700">Industry extensions go further still.</strong> For a
+      paint retailer we built a colour visualiser, a painter loyalty programme and a home-services
+      scheduling module on the same platform. That is what open source buys you: the system bends
+      to the trade, rather than the trade bending to the system.
+    </p>
+  </Section>
+
+  <!-- KENYAN STATUTORY POSITION ------------------------------------------ -->
+  <Section tone="warm">
+    <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="On Kenyan compliance" measure="max-w-[17ch]">
+          Configured to your obligations, not assumed
+        </SectionHeading>
+        <p class="mt-5 max-w-[50ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          {statutoryNote}
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <ImageSlot
+          ratio="4/3"
+          brief="A finance director and an implementation consultant reviewing an ERP requirements document across a boardroom table, one gesturing at a line item. Mixed African and Asian professionals, mid-30s to mid-50s, smart business dress."
+          purpose="An ERP is a decision made by senior people. This should read as scoping — a conversation, not a demo."
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- WHERE WIZAG COMES IN ------------------------------------------------ -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Working with WIZAG"
+      lead="WizERP is our own product. The licence costs nothing, which means the implementation is the entire product — and it is the part we are accountable for."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Software is free. Getting it right is not.
+    </SectionHeading>
+
+    {/* A letterbox band rather than a side-by-side: this page is diagram-heavy
+        by design, and a wide human image here breaks the run of panels right
+        before the close. */}
+    <div class="mt-9" data-reveal>
+      <ImageSlot
+        ratio="21/9"
+        brief="A WIZAG implementation team at work in a Nairobi office — three or four colleagues around a desk with a laptop and a printed process map, mid-discussion. Mixed African and Asian professionals, smart business dress."
+        purpose="The whole argument of this section is that the people are the product. This is the only place on the page where the delivery team appears."
+      />
+    </div>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        wizagRole.map((item, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={i * 60}
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-2 text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- CTA ----------------------------------------------------------------- -->
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-paper">
+          Bring the process nobody wants to own
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-navy-100">
+          Month-end, stock reconciliation, the spreadsheet three people maintain by hand. Walk us
+          through one of those and we will show you what it looks like inside WizERP.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>
