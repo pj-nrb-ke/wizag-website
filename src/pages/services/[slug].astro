@@ -116,13 +116,32 @@ const image = practiceImage[practice.slug];
             </p>
           </div>
 
-          <ImageSlot
-            ratio="4/3"
-            brief={image.brief}
-            purpose={image.purpose}
-            data-reveal
-            data-reveal-delay="120"
-          />
+          {/* A real photograph where one exists; the documented placeholder
+              otherwise, so an unfinished practice page is obvious rather than
+              quietly empty. */}
+          {
+            image.file ? (
+              <img
+                src={`/images/services/${image.file}`}
+                alt={image.alt}
+                width={image.w}
+                height={image.h}
+                loading="lazy"
+                decoding="async"
+                class="w-full rounded-[var(--radius-md)] object-cover"
+                data-reveal
+                data-reveal-delay="120"
+              />
+            ) : (
+              <ImageSlot
+                ratio="4/3"
+                brief={image.brief}
+                purpose={image.purpose}
+                data-reveal
+                data-reveal-delay="120"
+              />
+            )
+          }
         </div>
       </Section>
     )

@@ -357,10 +357,28 @@ export const practiceShift: Record<string, { before: string; after: string }[]> 
   ],
 };
 
-/* Photography brief per practice. One image each — see
-   docs/services-image-prompts.md for the full prompts. */
-export const practiceImage: Record<string, { brief: string; purpose: string }> = {
+/* Photography per practice — one image each.
+   `file` present means a real photograph is in place; `brief`/`purpose` alone
+   means the slot still shows a documented placeholder. Prompts for the
+   outstanding ones are in docs/services-image-prompts.md.
+
+   ⚠ Three images placed 2026-07-23 from a 3-panel grid, at the client's
+   instruction and against my advice — they are ~560-680px wide where the slot
+   wants ~1120 for a retina display, and the boardroom pair are smiling
+   straight at the camera, which the house style bans. The boardroom frame
+   also had a fabricated BI dashboard behind it with garbled headings and
+   "Sales by Region" printed twice; the crop was pulled tight to reduce it to
+   an out-of-focus sliver, but it is still there. Client has accepted these as
+   interim and expects to replace them. */
+export const practiceImage: Record<
+  string,
+  { brief: string; purpose: string; file?: string; alt?: string; w?: number; h?: number }
+> = {
   'executive-technology-services': {
+    file: 'services-executive-technology.jpg',
+    alt: 'Two senior colleagues seated at a boardroom table in a sunlit office, a wall screen out of focus behind them.',
+    w: 560,
+    h: 420,
     brief:
       'A senior technology advisor presenting to two directors across a boardroom table in a sunlit Nairobi office, mid-explanation with an open confident gesture, the directors engaged and one smiling.',
     purpose: 'This practice is sold to boards. Show the room it is sold in.',
@@ -376,6 +394,10 @@ export const practiceImage: Record<string, { brief: string; purpose: string }> =
     purpose: 'Automation is abstract. The recognisable moment is the relief when it works.',
   },
   'process-operational-excellence': {
+    file: 'services-process-excellence.jpg',
+    alt: 'Three colleagues standing in discussion, one explaining a point from a tablet, sticky notes on a board behind them.',
+    w: 680,
+    h: 510,
     brief:
       'Four colleagues standing at a wall covered in sticky notes mapping a process, one placing a note while another gestures at the flow, energetic and collaborative.',
     purpose: 'Process work is visibly collaborative. This is the one practice with a real physical activity to photograph.',
@@ -386,6 +408,10 @@ export const practiceImage: Record<string, { brief: string; purpose: string }> =
     purpose: 'The product of analytics is a person understanding something. Show the understanding.',
   },
   'managed-technology-services': {
+    file: 'services-managed-services.jpg',
+    alt: 'An open-plan operations floor, colleagues working at monitors while three others confer over a tablet nearby.',
+    w: 680,
+    h: 510,
     brief:
       'Two support engineers at a bright, well-kept operations desk with several monitors, relaxed and in control, one turning to speak to the other.',
     purpose: 'Managed services sells calm. The room should look like nothing is on fire — because it is not.',
