@@ -1,0 +1,219 @@
+---
+import Icon from '../ui/Icon.astro';
+
+/**
+ * The industries model, in one picture.
+ *
+ * Every industry page lands on the same argument: WIZAG rarely replaces the
+ * system at the centre of a business — often it cannot, because the centre
+ * is mandated (IFMIS, a SHA-accredited HMIS, KEMIS, a SASRA-regulated core).
+ * What WIZAG does is build the finance, process, reporting and integration
+ * layer AROUND that centre.
+ *
+ * This diagram states exactly that, once, on the index — so a reader arrives
+ * at any individual sector page already holding the frame. The four layers
+ * light in sequence to read as the active, WIZAG-supplied part; the core
+ * card never changes, because it is the thing the client keeps.
+ *
+ * Static and fully readable under prefers-reduced-motion, with all four
+ * layers resolved to their lit state.
+ */
+const layers = [
+  { icon: 'balance' as const, label: 'Finance & control' },
+  { icon: 'process-excellence' as const, label: 'Process & workflow' },
+  { icon: 'data-analytics' as const, label: 'Reporting & BI' },
+  { icon: 'migrate' as const, label: 'Integration' },
+];
+---
+
+<figure class="model">
+  <figcaption class="sr-only">
+    WIZAG builds four layers around a business's existing system of record:
+    finance and control, process and workflow, reporting and business
+    intelligence, and integration. The system of record itself — an ERP
+    core, IFMIS, a hospital system or a core banking platform — stays in
+    place.
+  </figcaption>
+
+  <ul class="layers" aria-hidden="true">
+    {
+      layers.map((layer, i) => (
+        <li class="layer" style={`--i:${i}`}>
+          <Icon name={layer.icon} size={18} class="layer-icon" />
+          <span>{layer.label}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="join" aria-hidden="true">
+    <span class="join-bar" />
+    <span class="join-drop" />
+  </div>
+
+  <div class="core" aria-hidden="true">
+    <p class="core-label">Your system of record</p>
+    <p class="core-sub">ERP core · IFMIS · hospital system · core banking — whatever you run</p>
+  </div>
+
+  <p class="model-note">
+    We rarely replace the system at the centre. We build the layer around it —
+    and make the parts talk to each other.
+  </p>
+</figure>
+
+<style>
+  .model {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 0;
+  }
+
+  .layers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .layer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-grey-300);
+    background: var(--color-paper);
+    font-size: var(--text-sm);
+    font-weight: 650;
+    color: var(--color-ink-soft);
+  }
+
+  .layer-icon {
+    color: var(--color-grey-500);
+  }
+
+  .join {
+    position: relative;
+    width: 100%;
+    max-width: 30rem;
+    height: 2.4rem;
+    display: grid;
+    justify-items: center;
+  }
+
+  .join-bar {
+    position: absolute;
+    top: 0.9rem;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: var(--color-grey-300);
+    transform-origin: center;
+  }
+
+  .join-drop {
+    position: absolute;
+    top: 0.9rem;
+    height: 1.5rem;
+    width: 2px;
+    background: var(--color-grey-300);
+    transform-origin: top center;
+  }
+
+  .core {
+    width: 100%;
+    max-width: 32rem;
+    text-align: center;
+    padding: 1.15rem 1.5rem;
+    border-radius: var(--radius-md);
+    background: var(--color-navy-700);
+    color: var(--color-paper);
+  }
+
+  .core-label {
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+
+  .core-sub {
+    margin-top: 0.25rem;
+    font-size: var(--text-2xs);
+    line-height: 1.5;
+    color: var(--color-navy-100);
+  }
+
+  .model-note {
+    margin-top: 1.5rem;
+    max-width: 40ch;
+    text-align: center;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+  }
+
+  /* ---- motion: staging only; the diagram is complete without it ------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .layer {
+      animation: layer-lit 12s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.9s);
+    }
+
+    .join-bar {
+      animation: bar-draw 12s ease-out infinite;
+      animation-delay: 3.8s;
+    }
+
+    .join-drop {
+      animation: drop-draw 12s ease-out infinite;
+      animation-delay: 4.4s;
+    }
+  }
+
+  @keyframes layer-lit {
+    0%,
+    3% {
+      border-color: var(--color-grey-300);
+      background: var(--color-paper);
+      color: var(--color-ink-soft);
+    }
+    12%,
+    82% {
+      border-color: var(--color-orange-500);
+      background: var(--color-orange-100);
+      color: var(--color-navy-700);
+    }
+    92%,
+    100% {
+      border-color: var(--color-grey-300);
+      background: var(--color-paper);
+      color: var(--color-ink-soft);
+    }
+  }
+
+  @keyframes bar-draw {
+    0%,
+    28% {
+      transform: scaleX(0);
+    }
+    40%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes drop-draw {
+    0%,
+    33% {
+      transform: scaleY(0);
+    }
+    45%,
+    100% {
+      transform: scaleY(1);
+    }
+  }
+</style>

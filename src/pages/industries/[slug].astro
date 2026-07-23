@@ -1,40 +1,284 @@
 ---
-import ShellPage from '../../components/layout/ShellPage.astro';
-import { industries } from '../../data/navigation';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import IndustryFlow from '../../components/diagrams/IndustryFlow.astro';
+import { industries } from '../../data/industries';
 
 /**
- * Industry pages.
+ * Industry detail — one page per sector.
  *
- * Shells: the "covers" list describes what each page will address, drawn
- * from the six service practices. No client names, sector statistics or
- * case studies appear — none have been supplied, and inventing them is
- * exactly what the brief §3.2 rules out.
+ * ── BUILT 2026-07-23 ─────────────────────────────────────────────────
+ * These were shells (title + one generated sentence + a six-item "will
+ * cover" list). The client's brief for the rebuild: this is where a
+ * decision maker decides whether WIZAG fits their sector, so each page now
+ * runs a full argument, in the order that argument has to be made:
+ *
+ *   1. situation   the sector's real operating problem, with a fact only
+ *                  someone who works here would cite                → credibility
+ *   2. flow        an animated diagram of the sector's operating cycle,
+ *                  with the friction named at each link             → recognition
+ *   3. products    which WIZAG products they'd run, and WHY those    → the offer
+ *   4. practices   which WIZAG services they'd need, and WHY those   → the offer
+ *   5. firstMove   what the opening engagement actually is          → concreteness
+ *   6. fit         what WIZAG does NOT do in this sector             → trust
+ *
+ * The `fit` section is the one a sceptical reader is looking for. Four of
+ * these sectors have a mandated system of record WIZAG has no product for;
+ * naming that turns the gap into a defensible position (we do the finance,
+ * ops and reporting layer around it) instead of a lie waiting to be caught.
+ *
+ * All content is per-sector — the only shared prose on this template is
+ * section headings and the CTA. Every product/service `why` is specific to
+ * the sector; none is a generic feature line.
  */
 export function getStaticPaths() {
-  return industries.map((item) => ({
-    params: { slug: item.href.replace('/industries/', '') },
-    props: { item },
+  return industries.map((industry) => ({
+    params: { slug: industry.slug },
+    props: { industry },
   }));
 }
 
-const { item } = Astro.props;
+const { industry } = Astro.props;
+const others = industries.filter((i) => i.slug !== industry.slug);
+const img = industry.image;
 ---
 
-<ShellPage
-  title={item.label}
-  description={`Technology, ERP and operational improvement services for ${item.label.toLowerCase()} organisations in Kenya and the wider region.`}
-  lead={`How WIZAG's practices apply to ${item.label.toLowerCase()} — the systems, the processes and the reporting behind them.`}
-  eyebrow="Industries"
-  crumbs={[
-    { label: 'Home', href: '/' },
-    { label: 'Industries', href: '/industries' },
-  ]}
-  covers={[
-    'Common operating challenges in the sector',
-    'Relevant ERP and business systems',
-    'Process and workflow improvement',
-    'Reporting and management visibility',
-    'Automation opportunities',
-    'Typical engagement shape',
-  ]}
-/>
+<BaseLayout
+  title={industry.title}
+  description={industry.positioning}
+>
+  <PageHero
+    title={industry.title}
+    lead={industry.lead}
+    eyebrow="Industries"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Industries', href: '/industries' },
+    ]}
+  />
+
+  <!-- 1. THE SITUATION ------------------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="The situation" measure="max-w-[16ch]">
+          What we usually find
+        </SectionHeading>
+
+        <p
+          class="mt-6 border-l-2 border-orange-500 pl-5 text-[length:var(--text-lg)]
+                 leading-relaxed text-ink"
+        >
+          {industry.audience}
+        </p>
+
+        <div class="mt-6">
+          {
+            industry.situation.map((paragraph, i) => (
+              <p
+                class:list={[
+                  'max-w-[60ch] text-base leading-relaxed text-ink',
+                  i > 0 && 'mt-4',
+                ]}
+              >
+                {paragraph}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="lg:pt-14" data-reveal data-reveal-delay="120">
+        {
+          img.file ? (
+            <img
+              src={`/images/industries/${img.file}`}
+              alt={img.alt}
+              width={img.w}
+              height={img.h}
+              loading="lazy"
+              decoding="async"
+              class="w-full rounded-[var(--radius-md)] object-cover"
+            />
+          ) : (
+            <ImageSlot ratio="4/3" brief={img.brief} purpose={img.purpose} />
+          )
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- 2. THE OPERATING CYCLE ------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="How the work flows"
+      lead="Every business in this sector runs a version of this cycle. These are the points where it strains when the systems behind it do not join up — and where the value of joining them up shows first."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Where the pressure points are
+    </SectionHeading>
+
+    <div class="mt-12" data-reveal>
+      <IndustryFlow stages={industry.flow} label={industry.flowLabel} />
+    </div>
+  </Section>
+
+  <!-- 3. THE PRODUCTS -------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="What you would run"
+      lead="Not every product, and never one we cannot justify for your operation. These are the ones that fit this sector, and the reason each one is here."
+      measure="max-w-[16ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The products behind it
+    </SectionHeading>
+
+    <div class="mt-11 grid gap-x-12 gap-y-0 lg:grid-cols-2">
+      {
+        industry.products.map((product, i) => (
+          <a
+            href={product.href}
+            class="group grid gap-2 border-t border-grey-300 py-7"
+            data-reveal
+            data-reveal-delay={String(Math.min(i, 3) * 70)}
+          >
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                {product.name}
+              </h3>
+              <Icon
+                name="arrow-up-right"
+                size={18}
+                class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)] group-hover:text-orange-700 motion-safe:group-hover:-translate-y-0.5"
+              />
+            </div>
+            <p class="max-w-[54ch] text-base leading-relaxed text-ink">{product.why}</p>
+          </a>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- 4. THE PRACTICES ------------------------------------------------- -->
+  <Section tone="deep">
+    <SectionHeading
+      eyebrow="What we would bring"
+      lead="The products are only half of it. These are the practices an engagement in this sector actually draws on, and what each one does here."
+      tone="deep"
+      measure="max-w-[16ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The work around the software
+    </SectionHeading>
+
+    <div class="mt-11 grid gap-x-12 gap-y-0 lg:grid-cols-2">
+      {
+        industry.practices.map((prac, i) => (
+          <a
+            href={prac.href}
+            class="group grid gap-2 border-t border-white/15 py-7"
+            data-reveal
+            data-reveal-delay={String(Math.min(i, 3) * 70)}
+          >
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-paper transition-colors duration-[var(--duration-fast)] group-hover:text-orange-500">
+                {prac.name}
+              </h3>
+              <Icon
+                name="arrow-right"
+                size={18}
+                class="shrink-0 text-navy-300 transition-all duration-[var(--duration-fast)] group-hover:text-orange-500 motion-safe:group-hover:translate-x-0.5"
+              />
+            </div>
+            <p class="max-w-[54ch] text-base leading-relaxed text-navy-100">{prac.why}</p>
+          </a>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- 5. THE FIRST MOVE ------------------------------------------------ -->
+  <Section tone="paper">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
+      <SectionHeading eyebrow="Where we'd start" measure="max-w-[12ch]" data-reveal>
+        The first move
+      </SectionHeading>
+
+      <p
+        class="text-[length:var(--text-2xl)] leading-[1.5] text-navy-700"
+        data-reveal
+        data-reveal-delay="100"
+      >
+        {industry.firstMove}
+      </p>
+    </div>
+  </Section>
+
+  <!-- 6. THE FIT ------------------------------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="max-w-[66ch] border-l-2 border-orange-500 pl-6 md:pl-8" data-reveal>
+      <p class="eyebrow text-ink-soft">Where we are not the answer</p>
+      <p class="mt-4 text-[length:var(--text-lg)] leading-relaxed text-ink">
+        {industry.fit}
+      </p>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-[length:var(--text-3xl)] text-paper">
+          Is this how your operation runs?
+        </h2>
+        <p class="mt-3 max-w-[54ch] text-base text-navy-100">
+          Tell us where it strains, and we will tell you plainly which of this is relevant to
+          you and which of it is not — before you commit to anything.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>
+        Book an Assessment
+      </Button>
+    </div>
+  </Section>
+
+  <!-- Other industries ------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading eyebrow="Also in industries" measure="max-w-[20ch]" data-reveal>
+      Other sectors we work in
+    </SectionHeading>
+
+    <ul class="mt-7 grid gap-x-10 gap-y-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-12" data-reveal>
+      {
+        others.map((other) => (
+          <li class="group border-t border-grey-300">
+            <a
+              href={`/industries/${other.slug}`}
+              class="flex items-center justify-between gap-3 py-5 text-base font-medium text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700"
+            >
+              <span class="flex items-center gap-3">
+                <Icon name={other.icon} size={20} class="text-orange-500" />
+                {other.title}
+              </span>
+              <Icon
+                name="arrow-right"
+                size={16}
+                class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)] group-hover:text-orange-700 motion-safe:group-hover:translate-x-0.5"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+</BaseLayout>
