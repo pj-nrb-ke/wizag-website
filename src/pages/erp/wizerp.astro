@@ -5,7 +5,6 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import ImageSlot from '../../components/ui/ImageSlot.astro';
 import ErpDashboard from '../../components/diagrams/ErpDashboard.astro';
 import ModuleMap from '../../components/diagrams/ModuleMap.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
@@ -318,10 +317,14 @@ import {
       </div>
 
       <div data-reveal data-reveal-delay="120">
-        <ImageSlot
-          ratio="4/3"
-          brief="Three colleagues in animated, visibly enjoyable discussion around a table in a sunlit modern Nairobi office. Warm bright light, genuine smiles, energy. Mixed African and Asian professionals, mid-30s to mid-50s."
-          purpose="This is WIZAG's flagship. It should read as a business that is growing and pleased about it — not an audit."
+        <img
+          src="/images/wizerp/wizerp-growth.jpg"
+          alt="Three colleagues in animated conversation around a table in a sunlit office, one making a point while the others listen and laugh."
+          width="1160"
+          height="870"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
         />
       </div>
     </div>
@@ -339,14 +342,23 @@ import {
       The people who wrote it are the people who deliver it
     </SectionHeading>
 
-    {/* A letterbox band rather than a side-by-side: this page is diagram-heavy
-        by design, and a wide human image here breaks the run of panels right
-        before the close. */}
+    {/* A wide band rather than a side-by-side: this page is diagram-heavy by
+        design, and a broad human image here breaks the run of panels right
+        before the close.
+
+        Used at its native 16:9 rather than cropped to the 21:9 originally
+        briefed — the tighter band would have clipped the standing figure's
+        head, and a damaged composition costs more than an extra 80px of
+        height gains. */}
     <div class="mt-9" data-reveal>
-      <ImageSlot
-        ratio="21/9"
-        brief="The WIZAG team around a desk in a bright sunlit office — one standing and gesturing at a printed process diagram with energy, the others leaning in, one laughing. Warm vivid light, clear momentum."
-        purpose="The section argues the people are the product. They need to look like a team you would want on your project — capable, and visibly enjoying it."
+      <img
+        src="/images/wizerp/wizerp-team.jpg"
+        alt="Four colleagues around a table in a bright office, one standing and gesturing at a large printed process diagram while the others lean in."
+        width="1600"
+        height="900"
+        loading="lazy"
+        decoding="async"
+        class="w-full rounded-[var(--radius-md)] object-cover"
       />
     </div>
 
