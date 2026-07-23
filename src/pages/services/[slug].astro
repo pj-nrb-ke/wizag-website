@@ -7,23 +7,40 @@ import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
 import ImageSlot from '../../components/ui/ImageSlot.astro';
 import PracticeShift from '../../components/diagrams/PracticeShift.astro';
+import StepFlow from '../../components/diagrams/StepFlow.astro';
 import { practices, practiceShift, practiceImage } from '../../data/services';
 
 /**
- * Service practice detail pages — one per practice, generated from the
- * brief §6 content. Six real pages, not stubs.
+ * Service practice detail — one page per practice.
  *
- * These were the last text-only pages on the site: two bullet lists and a
- * call to action, against product pages carrying working diagrams and
- * photography. Each now leads with the PracticeShift diagram — the brief's
- * outcomes paired with the conditions they replace — followed by a
- * photograph, so the services read as the same calibre of offering as the
- * products.
+ * ── REBUILT 2026-07-23 ───────────────────────────────────────────────
+ * The previous version had three content sections, and one of them — "How
+ * this actually runs" — carried the SAME two paragraphs on all six pages.
+ * A reader who opened two practices in adjacent tabs saw identical copy,
+ * which undoes whatever the rest of the page earned.
  *
- * The shift diagram deliberately comes BEFORE the capability list. A buyer
- * decides whether a practice is for them from the problem, not from an
- * inventory of what we can do; the capabilities then answer "how", which is
- * the second question and never the first.
+ * Every section below now draws from per-practice content. There is no
+ * shared prose left on this template except the section headings and the
+ * standing CTA.
+ *
+ * The order answers a buyer's questions in the order they ask them:
+ *
+ *   1. situation      Do you understand my problem?      ← earns the rest
+ *   2. shift          What actually changes?
+ *   3. capabilities   What can you do?
+ *   4. engagement     What will happen if I call?
+ *   5. deliverables   What do I end up holding?
+ *   6. boundaries     When would you tell me no?         ← earns the trust
+ *
+ * Capabilities deliberately sit fourth, not first. Nobody chooses an
+ * advisory firm from an inventory of what it can do; they choose from
+ * whether it understood the problem. The list matters once they are already
+ * interested, which is exactly where it now appears.
+ *
+ * `boundaries` is the section most likely to be questioned, so: it is there
+ * on purpose. A page that only claims strengths reads as a brochure. One
+ * that names where it is the wrong answer is the only kind a sceptical
+ * finance director finishes reading.
  */
 export function getStaticPaths() {
   return practices.map((practice) => ({
@@ -38,21 +55,51 @@ const shift = practiceShift[practice.slug] ?? [];
 const image = practiceImage[practice.slug];
 ---
 
-<BaseLayout
-  title={practice.title}
-  description={practice.positioning}
->
+<BaseLayout title={practice.title} description={practice.positioning}>
   <PageHero
     title={practice.title}
-    lead={practice.positioning}
+    lead={practice.lead}
     eyebrow="Services"
     crumbs={[{ label: 'Services', href: '/services' }]}
   />
 
-  <!-- The shift — the problem first, the outcome second -->
+  <!-- 1. THE SITUATION — the problem in the buyer's own terms ----------- -->
+  <Section tone="paper">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="The situation" measure="max-w-[14ch]">
+          What we usually find
+        </SectionHeading>
+
+        <p
+          class="mt-6 border-l-2 border-orange-500 pl-5 text-[length:var(--text-lg)]
+                 leading-relaxed text-ink"
+        >
+          {practice.audience}
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="100">
+        {
+          practice.situation.map((paragraph, i) => (
+            <p
+              class:list={[
+                'max-w-[62ch] text-[length:var(--text-lg)] leading-relaxed text-ink',
+                i > 0 && 'mt-5',
+              ]}
+            >
+              {paragraph}
+            </p>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- 2. THE SHIFT ----------------------------------------------------- -->
   {
     shift.length > 0 && (
-      <Section tone="paper">
+      <Section tone="warm">
         <SectionHeading
           eyebrow="What changes"
           lead="Most organisations arrive at this practice from a recognisable place. This is the distance it covers."
@@ -70,84 +117,139 @@ const image = practiceImage[practice.slug];
     )
   }
 
-  <!-- What's included -->
-  <Section tone="warm">
-    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-      <div data-reveal>
-        <SectionHeading eyebrow="What's included" measure="max-w-[14ch]">
-          Capabilities in this practice
-        </SectionHeading>
-        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-ink">
-          Engagements draw on whichever of these the situation needs. Very few use all of them,
-          and we will say which we think apply before you commit to anything.
-        </p>
-      </div>
+  <!-- 3. WHAT THE PRACTICE COVERS -------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="What this practice covers"
+      lead="Engagements draw on whichever of these the situation needs. Very few use all of them, and we will say which we think apply before you commit to anything."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      The work itself
+    </SectionHeading>
 
-      <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
-        {
-          practice.capabilities.map((capability) => (
-            <li class="flex items-start gap-3 border-t border-grey-300 py-3.5 text-base text-ink">
-              <Icon name="check" size={16} class="mt-1 shrink-0 text-orange-700" />
-              {capability}
-            </li>
-          ))
-        }
-      </ul>
+    <div class="mt-12 grid gap-x-14 gap-y-10 lg:grid-cols-2">
+      {
+        practice.capabilityGroups.map((group, i) => (
+          <div
+            class="border-t border-grey-300 pt-6"
+            data-reveal
+            data-reveal-delay={String(Math.min(i, 3) * 70)}
+          >
+            <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {group.name}
+            </h3>
+
+            <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-ink-soft">
+              {group.blurb}
+            </p>
+
+            <ul class="mt-5 flex flex-wrap gap-x-2 gap-y-2">
+              {group.items.map((item) => (
+                <li
+                  class="inline-flex items-center gap-1.5 rounded-full border border-grey-300
+                         bg-warm px-3 py-1 text-sm text-ink"
+                >
+                  <Icon name="check" size={13} class="shrink-0 text-orange-700" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </div>
   </Section>
 
-  <!-- The practice in the room -->
-  {
-    image && (
-      <Section tone="paper">
-        <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-          <div data-reveal>
-            <SectionHeading eyebrow="Working together" measure="max-w-[15ch]">
-              How this actually runs
-            </SectionHeading>
-            <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
-              Short engagements with named people, agreed outcomes and a decision point at the
-              end of each stage. You always know what is being worked on and what it is for.
-            </p>
-            <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
-              Most engagements start in one practice and grow into others as the operating
-              picture becomes clearer — which is a decision you make later, not a commitment you
-              make now.
-            </p>
-          </div>
+  <!-- 4. HOW AN ENGAGEMENT RUNS ---------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="How it runs" tone="deep" measure="max-w-[13ch]">
+          What happens if you call us
+        </SectionHeading>
 
-          {/* A real photograph where one exists; the documented placeholder
-              otherwise, so an unfinished practice page is obvious rather than
-              quietly empty. */}
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-navy-100">
+          Every engagement has a decision point at the end of each stage. You can stop at
+          any one of them, and what you have paid for up to that point is yours to take
+          elsewhere.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="100">
+        <StepFlow steps={practice.engagement} orientation="vertical" tone="deep" cycle={16} />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 5. WHAT YOU END UP HOLDING --------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="What you get" measure="max-w-[15ch]">
+          The things you keep
+        </SectionHeading>
+
+        <p class="mt-5 max-w-[48ch] text-base leading-relaxed text-ink-soft">
+          Advisory work is easy to buy and hard to hold on to. These are the artefacts that
+          remain with you afterwards, and they belong to you whether or not the engagement
+          continues.
+        </p>
+
+        <ul class="mt-7">
           {
-            image.file ? (
-              <img
-                src={`/images/services/${image.file}`}
-                alt={image.alt}
-                width={image.w}
-                height={image.h}
-                loading="lazy"
-                decoding="async"
-                class="w-full rounded-[var(--radius-md)] object-cover"
-                data-reveal
-                data-reveal-delay="120"
-              />
-            ) : (
-              <ImageSlot
-                ratio="4/3"
-                brief={image.brief}
-                purpose={image.purpose}
-                data-reveal
-                data-reveal-delay="120"
-              />
-            )
+            practice.deliverables.map((deliverable) => (
+              <li class="flex items-start gap-3 border-t border-grey-300 py-3.5 text-base leading-relaxed text-ink">
+                <Icon name="document" size={17} class="mt-0.5 shrink-0 text-orange-700" />
+                {deliverable}
+              </li>
+            ))
           }
-        </div>
-      </Section>
-    )
-  }
+        </ul>
+      </div>
 
-  <!-- CTA -->
+      {/* A real photograph where one exists; the documented placeholder
+          otherwise, so an unfinished practice page is obvious rather than
+          quietly empty. */}
+      {
+        image &&
+          (image.file ? (
+            <img
+              src={`/images/services/${image.file}`}
+              alt={image.alt}
+              width={image.w}
+              height={image.h}
+              loading="lazy"
+              decoding="async"
+              class="w-full rounded-[var(--radius-md)] object-cover"
+              data-reveal
+              data-reveal-delay="120"
+            />
+          ) : (
+            <ImageSlot
+              ratio="4/3"
+              brief={image.brief}
+              purpose={image.purpose}
+              data-reveal
+              data-reveal-delay="120"
+            />
+          ))
+      }
+    </div>
+  </Section>
+
+  <!-- 6. WHERE THIS IS NOT THE ANSWER ---------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="max-w-[64ch] border-l-2 border-orange-500 pl-6 md:pl-8" data-reveal>
+      <p class="eyebrow text-ink-soft">Where this is not the answer</p>
+      <p class="mt-4 text-[length:var(--text-xl)] leading-relaxed text-ink">
+        {practice.boundaries}
+      </p>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
   <Section tone="deep" space="tight">
     <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
       <div>
@@ -163,7 +265,7 @@ const image = practiceImage[practice.slug];
     </div>
   </Section>
 
-  <!-- Other practices -->
+  <!-- Other practices -------------------------------------------------- -->
   <Section tone="paper">
     <SectionHeading eyebrow="Also in services" measure="max-w-[20ch]" data-reveal>
       Other practices
@@ -178,7 +280,11 @@ const image = practiceImage[practice.slug];
               <h3 class="mt-3 text-[length:var(--text-2xl)] leading-snug text-navy-700">
                 {other.title}
               </h3>
-              <p class="mt-2 text-base leading-relaxed text-ink">{other.positioning}</p>
+              {/* `audience` rather than `positioning` here. The positioning
+                  lines are one-clause summaries — fine as meta descriptions,
+                  but next to the copy above them they read as filler. "Who
+                  this is for" is the more useful line at card size. */}
+              <p class="mt-2 text-base leading-relaxed text-ink">{other.audience}</p>
               <span class="mt-4 inline-flex items-center gap-1.5 text-base font-semibold text-navy-700 group-hover:text-orange-700">
                 Learn more
                 <Icon name="arrow-right" size={16} />

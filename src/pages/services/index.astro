@@ -2,9 +2,49 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/layout/PageHero.astro';
 import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import { practices } from '../../data/services';
+import { practices, allCapabilities } from '../../data/services';
+
+/**
+ * Services index.
+ *
+ * Rewritten 2026-07-23 alongside the practice pages. The previous version
+ * was a hero and six cards, each carrying one sentence and four capability
+ * words — a directory, with nothing on it to explain how WIZAG works or why
+ * the six practices are on one site rather than six.
+ *
+ * The band between the hero and the cards now answers that: how an
+ * engagement starts, what we do before proposing anything, and the fact
+ * that practices are bought separately rather than as a bundle. That is the
+ * question a serious buyer has on this page, and it was not addressed
+ * anywhere.
+ *
+ * Cards carry positioning AND audience. One line saying what a practice is
+ * plus one line saying who it is for lets a reader rule themselves out
+ * quickly, which is a service to both parties.
+ */
+
+/* Kept in this order deliberately: it runs from the boardroom down to the
+   operations floor, which is roughly the order a business encounters them. */
+const howWeWork = [
+  {
+    icon: 'exec-technology' as const,
+    title: 'We look before we propose',
+    body: 'Nothing is quoted from a conversation. We read what exists, talk to the people using it daily, and come back with a written position — including the parts you will not enjoy reading.',
+  },
+  {
+    icon: 'process-excellence' as const,
+    title: 'Stages with a decision at the end of each',
+    body: 'Engagements are broken into stages with a stopping point after every one. You can end it at any of them, and what has been produced up to that point is yours.',
+  },
+  {
+    icon: 'balance' as const,
+    title: 'Bought separately, not as a programme',
+    body: 'The six practices are not a bundle and there is no advantage to us in selling you more than one. Most engagements start in a single practice and grow into others only when the operating picture makes the case.',
+  },
+];
 ---
 
 <BaseLayout
@@ -13,54 +53,101 @@ import { practices } from '../../data/services';
 >
   <PageHero
     title="One partner across your technology journey"
-    lead="Six practices that work together. Most engagements start in one and grow into others as the operating picture becomes clearer."
+    lead="Six practices, bought separately and working together. Each one starts with an assessment of what you already have — because the most common finding is that the problem is not where the business thought it was."
     eyebrow="Services"
     crumbs={[{ label: 'Home', href: '/' }]}
   />
 
-  <Section tone="paper">
-    <ul class="grid gap-x-12 gap-y-0 lg:grid-cols-2">
+  <!-- HOW WE WORK ------------------------------------------------------ -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="How we work"
+      lead="Advisory firms are difficult to compare, because every proposal reads the same until the work starts. These are the three things about ours that are worth checking against anyone else you are speaking to."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Before you read the list
+    </SectionHeading>
+
+    <ul class="mt-11 grid gap-x-12 gap-y-8 lg:grid-cols-3">
       {
-        practices.map((practice) => (
-          <li class="group border-t border-grey-300 py-8" data-reveal>
-            <a href={`/services/${practice.slug}`} class="block">
-              <Icon name={practice.icon} size={24} class="text-orange-500" />
-
-              <h2 class="mt-4 text-[length:var(--text-3xl)] leading-snug text-navy-700">
-                {practice.title}
-              </h2>
-
-              <p class="mt-3 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
-                {practice.positioning}
-              </p>
-
-              <p class="mt-4 flex flex-wrap gap-x-2 gap-y-1 text-sm text-ink-soft">
-                {practice.capabilities.slice(0, 4).map((capability, i) => (
-                  <span>
-                    {capability}
-                    {i < 3 && <span class="ml-2 text-grey-500">·</span>}
-                  </span>
-                ))}
-                <span class="text-grey-500">
-                  +{practice.capabilities.length - 4} more
-                </span>
-              </p>
-
-              <span
-                class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-navy-700
-                       underline-offset-4 transition-colors duration-[var(--duration-fast)]
-                       group-hover:text-orange-700 group-hover:underline"
-              >
-                Explore this practice
-                <Icon
-                  name="arrow-right"
-                  size={16}
-                  class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
-                />
-              </span>
-            </a>
+        howWeWork.map((item, i) => (
+          <li
+            class="border-t border-grey-300 pt-6"
+            data-reveal
+            data-reveal-delay={String(i * 90)}
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-3 max-w-[46ch] text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))
+      }
+    </ul>
+  </Section>
+
+  <!-- THE SIX PRACTICES ------------------------------------------------ -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="The practices"
+      lead="Each page sets out the situation the practice addresses, how an engagement runs, what you end up holding, and where it is the wrong answer."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Six practices
+    </SectionHeading>
+
+    <ul class="mt-11 grid gap-x-12 gap-y-0 lg:grid-cols-2">
+      {
+        practices.map((practice) => {
+          const capabilities = allCapabilities(practice);
+          return (
+            <li class="group border-t border-grey-300 py-8" data-reveal>
+              <a href={`/services/${practice.slug}`} class="block">
+                <Icon name={practice.icon} size={24} class="text-orange-500" />
+
+                <h3 class="mt-4 text-[length:var(--text-3xl)] leading-snug text-navy-700">
+                  {practice.title}
+                </h3>
+
+                <p class="mt-3 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+                  {practice.positioning}
+                </p>
+
+                <p class="mt-3 max-w-[52ch] border-l-2 border-grey-300 pl-4 text-base leading-relaxed text-ink-soft">
+                  {practice.audience}
+                </p>
+
+                <p class="mt-5 flex flex-wrap gap-x-2 gap-y-1 text-sm text-ink-soft">
+                  {capabilities.slice(0, 4).map((capability, i) => (
+                    <span>
+                      {capability}
+                      {i < 3 && <span class="ml-2 text-grey-500">·</span>}
+                    </span>
+                  ))}
+                  <span class="text-grey-500">+{capabilities.length - 4} more</span>
+                </p>
+
+                <span
+                  class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-navy-700
+                         underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                         group-hover:text-orange-700 group-hover:underline"
+                >
+                  Explore this practice
+                  <Icon
+                    name="arrow-right"
+                    size={16}
+                    class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                  />
+                </span>
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
   </Section>
@@ -71,9 +158,11 @@ import { practices } from '../../data/services';
         <h2 class="text-[length:var(--text-3xl)] text-paper">
           Not sure which of these you need?
         </h2>
-        <p class="mt-3 max-w-[52ch] text-base text-navy-100">
-          That is what the assessment is for. We look at your systems and operations first,
-          then tell you where the value actually is.
+        <p class="mt-3 max-w-[56ch] text-base text-navy-100">
+          That is what the assessment is for, and it is the honest answer to the question.
+          We look at your systems and operations first, then tell you where the value
+          actually is — which is regularly not where you expected, and occasionally not in
+          anything we sell.
         </p>
       </div>
       <Button href="/contact" variant="inverse" size="large" arrow>Book an Assessment</Button>

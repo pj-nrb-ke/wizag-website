@@ -8,6 +8,10 @@ import Icon from '../../components/ui/Icon.astro';
 import { getPractice } from '../../data/services';
 import { erp } from '../../data/navigation';
 
+/* This page is a shop window onto the ERP practice: the same content as
+   /services/erp-business-systems, cut down, with the platform list added.
+   It reads from the practice record so the two can never drift — when the
+   practice copy was rewritten on 2026-07-23 this page inherited it. */
 const practice = getPractice('erp-business-systems')!;
 const platforms = erp.filter((item) => item.href !== '/erp');
 ---
@@ -18,27 +22,46 @@ const platforms = erp.filter((item) => item.href !== '/erp');
 >
   <PageHero
     title="ERP that works around your business"
-    lead={practice.positioning}
+    lead={practice.lead}
     eyebrow="ERP"
     crumbs={[{ label: 'Home', href: '/' }]}
   />
 
   <Section tone="paper">
     <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-      <SectionHeading eyebrow="Services" measure="max-w-[14ch]" data-reveal>
-        Across the full ERP lifecycle
-      </SectionHeading>
+      <div data-reveal>
+        <SectionHeading eyebrow="Services" measure="max-w-[14ch]">
+          Across the full ERP lifecycle
+        </SectionHeading>
 
-      <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        <p
+          class="mt-6 border-l-2 border-orange-500 pl-5 text-[length:var(--text-lg)]
+                 leading-relaxed text-ink"
+        >
+          {practice.audience}
+        </p>
+      </div>
+
+      <div class="grid gap-x-10 gap-y-8 sm:grid-cols-2" data-reveal data-reveal-delay="100">
         {
-          practice.capabilities.map((capability) => (
-            <li class="flex items-start gap-3 border-t border-grey-300 py-3.5 text-base text-ink">
-              <Icon name="check" size={16} class="mt-1 shrink-0 text-orange-700" />
-              {capability}
-            </li>
+          practice.capabilityGroups.map((group) => (
+            <div class="border-t border-grey-300 pt-5">
+              <h2 class="text-[length:var(--text-xl)] font-semibold leading-snug text-navy-700">
+                {group.name}
+              </h2>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">{group.blurb}</p>
+              <ul class="mt-3">
+                {group.items.map((item) => (
+                  <li class="flex items-start gap-2.5 py-1 text-base text-ink">
+                    <Icon name="check" size={15} class="mt-1 shrink-0 text-orange-700" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))
         }
-      </ul>
+      </div>
     </div>
   </Section>
 
