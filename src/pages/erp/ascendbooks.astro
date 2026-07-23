@@ -5,7 +5,6 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import ImageSlot from '../../components/ui/ImageSlot.astro';
 import DivisionOfLabour from '../../components/diagrams/DivisionOfLabour.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
 import {
@@ -254,10 +253,14 @@ import {
         </ul>
       </div>
 
-      <ImageSlot
-        ratio="4/3"
-        brief="Two partners of an accounting practice in discussion at a meeting table, one holding a tablet — the moment a firm decides to take on a platform. Smartly dressed, mixed African and Asian professionals, mid-30s to mid-50s."
-        purpose="This page sells to practice owners, not finance staff. The image should read as a business decision between principals."
+      <img
+        src="/images/ascendbooks/ascendbooks-partners.jpg"
+        alt="Two partners of an accounting practice at a meeting table, one holding a tablet and explaining a point while the other listens, a notepad and pen in front of him."
+        width="1160"
+        height="870"
+        loading="lazy"
+        decoding="async"
+        class="w-full rounded-[var(--radius-md)] object-cover"
         data-reveal
         data-reveal-delay="120"
       />
