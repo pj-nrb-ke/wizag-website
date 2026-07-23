@@ -18,7 +18,7 @@ export function getStaticPaths() {
      collide. Declared INSIDE the function: Astro hoists getStaticPaths out
      of module scope, so a const alongside it would be undefined at call
      time. Add here whenever a real page lands. */
-  const WRITTEN = ['/erp/sage-business-cloud', '/erp/sage-200'];
+  const WRITTEN = ['/erp/sage-business-cloud', '/erp/sage-200', '/erp/ascendbooks'];
 
   return erp
     .filter((item) => item.href !== '/erp' && !WRITTEN.includes(item.href))

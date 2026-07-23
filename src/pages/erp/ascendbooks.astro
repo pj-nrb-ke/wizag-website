@@ -1,0 +1,313 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import DivisionOfLabour from '../../components/diagrams/DivisionOfLabour.astro';
+import StepFlow from '../../components/diagrams/StepFlow.astro';
+import {
+  ascendbooks as ab,
+  whyPartner,
+  howItWorks,
+  managed,
+  capabilities,
+  migratesFrom,
+  gains,
+  idealFor,
+  capacityNote,
+} from '../../data/ascendbooks';
+
+/**
+ * AscendBooks™. Content extracted from the client's brochure
+ * (Downloads/AscendBooks Brochure (A4) New.pdf).
+ *
+ * ⚠ THE AUDIENCE IS ACCOUNTING FIRMS, NOT BUSINESSES. This is a partner
+ * programme: the firm runs its SME clients on the platform and keeps the
+ * relationship; WIZAG runs the infrastructure beneath it. Every other page
+ * in the ERP menu sells to end businesses, so an SME owner arriving from
+ * that menu will misread this page unless told immediately. Hence the
+ * audience appears in the eyebrow, the headline and the first paragraph —
+ * three chances to catch them before they bounce.
+ *
+ * WIZAG's own product, so unlike the Sage pages there is no third-party
+ * brand restriction: the logo is ours to adapt and the claims are ours to
+ * make. The systems named under "we migrate from" are other companies'
+ * marks, used nominatively — do not style them as partnerships.
+ *
+ * ⚠ The brochure's direct phone number and sales@ address are NOT carried
+ * over: the site publishes no telephone number (brief §8.14) and routes
+ * everything through /contact. Flagged for the client.
+ */
+---
+
+<BaseLayout title={`${ab.name} — ${ab.hook}`} description={ab.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li><a href="/erp" class="py-1 transition-colors hover:text-paper">ERP</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">{ab.name}</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-14">
+        <div>
+          {/* Reversed mark: the brand navy is within a few percent of this
+              background and would disappear. */}
+          <img
+            src="/brand/ascendbooks-logo-reversed.svg"
+            alt="AscendBooks"
+            width="60"
+            height="52"
+            class="mb-5 h-12 w-auto"
+          />
+
+          <p class="eyebrow text-orange-500">{ab.eyebrow}</p>
+
+          <h1 class="optical-left mt-4 max-w-[19ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {ab.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {ab.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Book a partner call</Button>
+            <a
+              href="#how-it-works"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              How the partnership works
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{ab.audience}</p>
+        </div>
+
+        <div>
+          <DivisionOfLabour />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE PROPOSITION --------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Why partner"
+      lead="Most practices reach the same ceiling: the next tier of client needs a real system, and building one is not a reasonable thing to ask an accounting firm to do."
+      measure="max-w-[19ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Sell the capability. Skip the platform.
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-x-8 gap-y-0 sm:grid-cols-2">
+      {
+        whyPartner.map((item, i) => (
+          <li class="border-t border-grey-300 py-6" data-reveal data-reveal-delay={Math.min(i, 3) * 60}>
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-3.5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-2 max-w-[46ch] text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- HOW IT WORKS ------------------------------------------------------ -->
+  <Section tone="warm" id="how-it-works">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="How it works" measure="max-w-[15ch]">
+          Four steps, and only one of them is yours
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Setup, migration and everything afterwards sit with us. What stays with your firm is
+          the work your clients are actually paying you for.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          {ab.tagline}
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <StepFlow steps={howItWorks} orientation="vertical" cycle={16} tone="light" />
+      </div>
+    </div>
+  </Section>
+
+  <!-- WHAT WE MANAGE ---------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="What we run for you"
+      lead="The three things that turn a licence into a working service — and the three most likely to consume a practice that takes them on alone."
+      measure="max-w-[17ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Nobody at your firm becomes the administrator
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+      {
+        managed.map((m, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
+            data-reveal
+            data-reveal-delay={i * 70}
+          >
+            <Icon name={m.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">{m.name}</h3>
+            <p class="mt-2.5 text-base leading-relaxed text-ink">{m.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- CAPABILITIES + MIGRATION ------------------------------------------ -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">On the platform</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Move the conversation past bookkeeping
+        </h2>
+
+        <ul class="mt-7">
+          {
+            capabilities.map((c) => (
+              <li class="border-t border-navy-500/40 py-4">
+                <div class="flex items-center gap-3">
+                  <Icon name={c.icon} size={19} class="text-orange-500" />
+                  <h3 class="text-[length:var(--text-lg)] font-bold leading-snug text-paper">
+                    {c.name}
+                  </h3>
+                </div>
+                <p class="mt-2 max-w-[52ch] text-base leading-relaxed text-navy-100">{c.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="100">
+        <div class="rounded-[var(--radius-md)] border border-navy-500/40 bg-navy-900/45 p-6 sm:p-7">
+          <div class="flex items-center gap-3">
+            <Icon name="migrate" size={20} class="text-orange-500" />
+            <h3 class="text-[length:var(--text-xl)] font-bold text-paper">We migrate them from</h3>
+          </div>
+          <p class="mt-2.5 text-base leading-relaxed text-navy-100">
+            Whatever a client arrives on. Mapping, validation and reconciliation are ours to
+            handle, and the balances agree before anyone relies on them.
+          </p>
+
+          <ul class="mt-5 flex flex-wrap gap-2">
+            {
+              migratesFrom.map((sys) => (
+                <li class="rounded-full border border-navy-500/60 bg-navy-800/60 px-3 py-1.5 text-sm font-semibold text-navy-100">
+                  {sys}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- WHAT YOUR FIRM GAINS ---------------------------------------------- -->
+  <Section tone="warm">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="What your firm gains" measure="max-w-[16ch]">
+          Growth that does not cost you an IT department
+        </SectionHeading>
+
+        <ul class="mt-7">
+          {
+            gains.map((g) => (
+              <li class="flex items-start gap-3 border-t border-grey-300 py-3 text-base leading-relaxed text-ink">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                {g}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <ImageSlot
+        ratio="4/3"
+        brief="Two partners of an accounting practice in discussion at a meeting table, one holding a tablet — the moment a firm decides to take on a platform. Smartly dressed, mixed African and Asian professionals, mid-30s to mid-50s."
+        purpose="This page sells to practice owners, not finance staff. The image should read as a business decision between principals."
+        data-reveal
+        data-reveal-delay="120"
+      />
+    </div>
+  </Section>
+
+  <!-- IDEAL FOR --------------------------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Is this you?" measure="max-w-[16ch]">
+          Built for firms that are already growing
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          The programme suits practices at a particular point — enough clients that the current
+          approach is straining, and enough ambition that the next tier is the target.
+        </p>
+        <p
+          class="mt-6 max-w-[48ch] border-l-[3px] border-orange-500 bg-warm p-5 text-base leading-relaxed text-ink sm:p-6"
+        >
+          {capacityNote}
+        </p>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          idealFor.map((item) => (
+            <li class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-5">
+              <Icon name="check" size={18} class="text-orange-500" />
+              <p class="mt-3 text-base font-semibold leading-relaxed text-navy-700">{item}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- CTA --------------------------------------------------------------- -->
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-paper">
+          Bring the client you cannot serve yet
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-navy-100">
+          The quickest way to judge this is against a real prospect — one your practice has had
+          to turn down, or one you are carrying on spreadsheets and would rather not be.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Book a partner call</Button>
+    </div>
+  </Section>
+</BaseLayout>

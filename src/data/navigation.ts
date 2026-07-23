@@ -114,7 +114,14 @@ export const erp: NavLink[] = [
     summary: 'Cloud accounting for businesses that have outgrown spreadsheets',
   },
   { label: 'WizERP', href: '/erp/wizerp', stub: true },
-  { label: 'AscendBooks', href: '/erp/ascendbooks', stub: true },
+  /* WIZAG's own product, and the only item in this menu sold to accounting
+     FIRMS rather than to end businesses — the summary has to carry that,
+     because the menu context implies the opposite. */
+  {
+    label: 'AscendBooks',
+    href: '/erp/ascendbooks',
+    summary: 'Managed ERP platform for accounting firms',
+  },
 ];
 
 /* -------------------------------------------------------------------------

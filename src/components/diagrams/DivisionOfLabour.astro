@@ -1,0 +1,228 @@
+---
+import Icon from '../ui/Icon.astro';
+import { division } from '../../data/ascendbooks';
+
+/**
+ * The AscendBooks split — what the firm keeps, and what WIZAG runs beneath it.
+ *
+ * WHY THIS IS THE HERO VISUAL
+ * The page has exactly one idea to land: your firm keeps the client-facing
+ * work, we absorb the technical burden underneath. A feature grid cannot say
+ * that. Two stacked layers can say it before the reader has finished the
+ * headline.
+ *
+ * The stacking is literal and load-bearing. The top layer is lighter and
+ * sits forward — the part the client sees, and the part the firm is paid
+ * for. The bottom is darker and recessed — foundation, deliberately out of
+ * sight. Anyone who reads the diagram as "surface and substructure" has
+ * understood the commercial proposition without reading a word of the body
+ * copy.
+ *
+ * The seam between them carries the sentence that matters commercially:
+ * as far as the client is concerned, this is one service from one firm.
+ *
+ * Static and fully readable under prefers-reduced-motion, with every row
+ * present — the animation only stages the order.
+ */
+---
+
+<figure class="split" aria-labelledby="split-cap">
+  <figcaption id="split-cap" class="sr-only">
+    How the partnership divides. Your firm keeps: {division.firmItems.join(', ')}. WIZAG runs:
+    {division.wizagItems.join(', ')}. To the client it is one service.
+  </figcaption>
+
+  <!-- The layer the client sees -->
+  <div class="layer layer--firm">
+    <p class="layer-title">
+      <Icon name="team" size={16} class="layer-icon" />
+      {division.firmTitle}
+    </p>
+    <ul class="rows">
+      {
+        division.firmItems.map((item, i) => (
+          <li class="row" style={`--i:${i}`}>
+            <span class="dot" aria-hidden="true" />
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- The commercial point, on the join -->
+  <p class="seam" aria-hidden="true">
+    <span class="seam-label">{division.seam}</span>
+  </p>
+
+  <!-- The layer underneath -->
+  <div class="layer layer--wizag">
+    <p class="layer-title">
+      <Icon name="cloud" size={16} class="layer-icon" />
+      {division.wizagTitle}
+    </p>
+    <ul class="rows">
+      {
+        division.wizagItems.map((item, i) => (
+          <li class="row" style={`--i:${i + 4}`}>
+            <span class="dot dot--muted" aria-hidden="true" />
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</figure>
+
+<style>
+  .split {
+    margin: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-panel);
+  }
+
+  .layer {
+    padding: 1.15rem 1.25rem 1.3rem;
+  }
+
+  /* Forward, lighter: the part the client sees. */
+  .layer--firm {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(247, 157, 7, 0.35);
+  }
+
+  /* Recessed, darker: foundation, deliberately out of sight. */
+  .layer--wizag {
+    background: var(--color-navy-900);
+  }
+
+  .layer-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .layer--firm .layer-title {
+    color: var(--color-orange-500);
+  }
+
+  .layer--wizag .layer-title {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .layer-icon {
+    color: currentColor;
+  }
+
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    padding: 0.42rem 0;
+    font-size: var(--text-sm);
+    line-height: 1.45;
+  }
+
+  .layer--firm .row {
+    color: rgba(255, 255, 255, 0.94);
+    font-weight: 600;
+  }
+
+  .layer--wizag .row {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--color-orange-500);
+    transform: translateY(-2px);
+  }
+
+  .dot--muted {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* ---- the seam ---- */
+  .seam {
+    position: relative;
+    margin: 0;
+    padding: 0.55rem 1.25rem;
+    background: rgba(247, 157, 7, 0.14);
+    text-align: center;
+  }
+
+  .seam-label {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: var(--color-orange-300);
+  }
+
+  /* ---- motion -------------------------------------------------------
+     A single 15s pass. The firm's layer fills first, then the seam, then
+     what sits underneath — which is the order the argument is made in.
+     Everything holds for most of the cycle. */
+  @media (prefers-reduced-motion: no-preference) {
+    .row {
+      animation: row-in 15s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.28s);
+      opacity: 0;
+    }
+
+    .seam {
+      animation: seam-in 15s ease-out infinite;
+      opacity: 0;
+    }
+  }
+
+  @keyframes row-in {
+    0%,
+    2% {
+      opacity: 0;
+      transform: translateX(-4px);
+    }
+    9%,
+    92% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    98%,
+    100% {
+      opacity: 0;
+      transform: translateX(0);
+    }
+  }
+
+  /* Lands after the firm's four rows (4 × 0.28s ≈ 1.1s ≈ 7% of 15s). */
+  @keyframes seam-in {
+    0%,
+    9% {
+      opacity: 0;
+    }
+    15%,
+    92% {
+      opacity: 1;
+    }
+    98%,
+    100% {
+      opacity: 0;
+    }
+  }
+</style>
