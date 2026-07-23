@@ -136,16 +136,15 @@ single frame is prettiest.
 Filenames are stable. **To replace an existing image, save the new file over
 the old one with the same name** — no code changes needed.
 
-### Priority 1 — currently in the old muted style
+### Priority 1 — still in the old muted style
 
 | Page | File | Ratio | Shots |
 |---|---|---|---|
-| WizCRM | `wizcrm-*.jpg` | 4:3 / 3:2 | 4 |
-| TeamKazi | `teamkazi-*.jpg` | 4:3 / 3:2 | 4 |
+| TeamKazi | `teamkazi-timesheets.jpg` | 3:2 | 1 |
 | Sage Business Cloud | `sage-*.jpg` | 4:3 / 16:9 | 3 |
 
-These eleven were shot in the documentary style with no faces. They are the
-ones that look flat.
+Four left of the original eleven. `teamkazi-timesheets.jpg` is an empty desk
+at dusk with no people in it at all — the single flattest image on the site.
 
 ### Priority 2 — not yet generated
 
@@ -163,6 +162,16 @@ dashboards, dark network-operations rooms).
 | Page | Note |
 |---|---|
 | WizERP | Both images generated and placed 2026-07-23. They set this register. |
+| WizCRM | All four replaced 2026-07-23. |
+| TeamKazi | Three of four replaced 2026-07-23 — margin, scope document, client meeting. |
+
+**Resolution note on the WizCRM and TeamKazi set.** These came back as two
+1536×1024 sheets of six panels each, so every panel was only ~510px wide
+before cropping — *less* than the 760px images they replaced. They are placed
+at 504×336 and the browser scales them up slightly on a large screen. They
+hold together because the compositions are clean, but they are the softest
+photographs on the site and a per-image regeneration would roughly triple the
+detail. See **Generating** above: one image at a time, every time.
 
 ### Already close — refresh only if you want perfect consistency
 

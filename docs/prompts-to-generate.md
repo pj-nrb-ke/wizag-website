@@ -15,7 +15,27 @@ smile, and every background surface for banners, pull-up stands or logos.
 
 ---
 
-## WizCRM — 4 images
+## Where this stands — 2026-07-23
+
+| | |
+|---|---|
+| **Placed** | WizCRM ×4, TeamKazi ×3 (margin, scope document, client meeting) |
+| **Still needed** | `teamkazi-timesheets.jpg`, and the three Sage Business Cloud shots |
+
+The placed set arrived as two six-panel sheets, which left each frame at only
+~510px wide. Prompts 1–7 are kept below so they can be **re-run one image at
+a time** for roughly triple the resolution — the compositions are right, only
+the pixel count is short.
+
+Two things had to be fixed by hand in that batch, both worth avoiding next
+time: one shirt carried a garbled embroidered wordmark that read as a
+misspelt WIZAG logo, and one alternate frame had a legible shopfront name on
+a background banner. Add *"no text or lettering on clothing"* to any prompt
+with a uniform or polo shirt in it.
+
+---
+
+## WizCRM — 4 images · **placed, re-run for resolution only**
 
 ### 1. `wizcrm-visit-capture.jpg` · ask for **4:3**
 
@@ -51,11 +71,17 @@ Avoid: grinning at camera, glowing phone screens, staged posing, brand-new showr
 
 ---
 
-## TeamKazi — 4 images
+## TeamKazi — 4 images · **3 placed, `timesheets` outstanding**
 
 **Note:** TeamKazi's argument is that it does not flatter you. Warm and
 confident, but **grounded** — a firm in control of its numbers, not one
 celebrating.
+
+The image now in the `scope-document` slot shows two colleagues marking up a
+printed plan rather than the thick bound document the prompt below asks for.
+It was the better frame available and it suits the pillar — *start from a
+document, not a blank page* — but the prompt is left as written in case you
+prefer the original idea.
 
 ### 5. `teamkazi-margin.jpg` · ask for **4:3**
 
