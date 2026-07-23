@@ -230,6 +230,10 @@ export const industries: Industry[] = [
       'We would start by following one product from purchase order to despatch note and asking what it cost — then comparing that answer to the standard cost the business currently prices from. That single exercise usually settles what the real problem is, and it is frequently not the one the business called us about.',
     fit: 'We are not a shop-floor automation or SCADA vendor, and we do not supply machine controllers or line telemetry. Where production data lives in plant equipment we integrate with it; we do not replace it. If your problem is on the machine rather than in the ledger, we are the wrong first call.',
     image: {
+      file: 'manufacturing-industrial.jpg',
+      alt: 'Two colleagues on a modern factory floor beside racks of machined metal parts — one holding a tablet, the other pointing to an item on a high shelf, an overhead crane and a press behind them.',
+      w: 1160,
+      h: 870,
       brief:
         'Two colleagues on a clean, well-lit production floor in Kenya — one holding a tablet, the other pointing at a stock rack, both engaged and one smiling. Modern, orderly, busy. No branding on any packaging.',
       purpose:
