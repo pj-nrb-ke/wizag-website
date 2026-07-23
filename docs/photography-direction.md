@@ -151,7 +151,18 @@ ones that look flat.
 
 | Page | File | Ratio | Shots |
 |---|---|---|---|
-| WizERP | `wizerp-*.jpg` | 4:3 / 21:9 | 2 |
+| Services (6 practice pages) | `services-*.jpg` | 4:3 | 6 |
+
+These sell people and judgement rather than software, so every frame is a
+working conversation between peers. See `docs/services-image-prompts.md` —
+three of them carry a specific cliché to avoid (AI robots, fabricated
+dashboards, dark network-operations rooms).
+
+### Done
+
+| Page | Note |
+|---|---|
+| WizERP | Both images generated and placed 2026-07-23. They set this register. |
 
 ### Already close — refresh only if you want perfect consistency
 

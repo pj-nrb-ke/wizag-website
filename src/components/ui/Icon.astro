@@ -7,6 +7,23 @@
  *
  * Icons are decorative by default and hidden from assistive tech. Pass a
  * `title` only when the icon is the sole carrier of meaning.
+ *
+ * ⚠ STYLING AN ICON FROM A PARENT'S SCOPED <style> DOES NOT WORK.
+ * Astro scopes styles by adding `data-astro-cid-*` to elements in the
+ * parent's own template. This <svg> is rendered here, in the child, so it
+ * never receives that attribute — a rule like `.my-icon { color: … }` in the
+ * parent compiles to `.my-icon[data-astro-cid-abc]` and silently matches
+ * nothing. The class lands on the element; the styles do not.
+ *
+ * It fails quietly, which is the dangerous part: the icon still renders, just
+ * with none of the colour, rotation or animation intended. It was caught on
+ * 2026-07-23 after five diagram components had shipped with dead icon rules.
+ *
+ * Two ways round it, both fine:
+ *   · `:global(.my-icon) { … }` in the parent — used by the diagram
+ *     components. Keep the class name distinctive, since it is global.
+ *   · wrap the <Icon /> in a span and style the span — better when you need
+ *     layout, since the wrapper is a real element in the parent's template.
  */
 interface Props {
   name: IconName;

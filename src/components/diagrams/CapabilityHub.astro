@@ -85,7 +85,7 @@ const CELLS = [
     border: 1px solid rgba(255, 255, 255, 0.09);
   }
 
-  .cell-icon {
+  :global(.cell-icon) {
     color: rgba(255, 255, 255, 0.45);
   }
 
@@ -134,7 +134,7 @@ const CELLS = [
       animation-delay: calc(var(--i) * 0.42s);
     }
 
-    .cell-icon {
+    :global(.cell-icon) {
       animation: icon-lit 14s ease-out infinite;
       animation-delay: calc(var(--i) * 0.42s);
     }

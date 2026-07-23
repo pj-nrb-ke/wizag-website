@@ -1,0 +1,323 @@
+---
+import Icon from '../ui/Icon.astro';
+
+interface Pair {
+  before: string;
+  after: string;
+}
+
+interface Props {
+  pairs: Pair[];
+  /** Seconds for one full pass. */
+  cycle?: number;
+}
+
+/**
+ * The practice shift — what each service changes.
+ *
+ * WHY PAIRS RATHER THAN A LIST OF OUTCOMES
+ * The brief gives each practice a list of outcomes: "better visibility",
+ * "lower operating costs", "improved governance". Every consultancy in
+ * Nairobi publishes that list, so on its own it carries no information —
+ * a reader scans it and learns nothing about whether we understand them.
+ *
+ * Pairing each outcome with the condition it replaces changes what the
+ * section does. The left column is where the reader recognises their own
+ * Tuesday; the right column then means something because it is answering a
+ * problem they have just admitted to. Recognition first, promise second.
+ *
+ * The animation carries that argument rather than decorating it: each row's
+ * "after" side begins as muted as its "before", and only lights once the
+ * connector has crossed. Nothing is claimed before the bridge is drawn.
+ *
+ * Static and fully readable under prefers-reduced-motion, with every row
+ * resolved to its finished state.
+ */
+const { pairs, cycle = 16 } = Astro.props as Props;
+
+/* Stagger so the last row lands around 55% of the cycle, leaving the rest as
+   a hold on the completed diagram. */
+const stagger = ((cycle * 0.55) / Math.max(pairs.length, 1)).toFixed(2);
+---
+
+<figure class="shift" style={`--cycle:${cycle}s; --stagger:${stagger}s`}>
+  <figcaption class="sr-only">
+    What this practice changes.
+    {pairs.map((p) => `${p.before} becomes: ${p.after}.`).join(' ')}
+  </figcaption>
+
+  <div class="heads" aria-hidden="true">
+    <span class="head head--before">Where most start</span>
+    <span class="head head--after">Where this takes you</span>
+  </div>
+
+  <ol class="rows">
+    {
+      pairs.map((pair, i) => (
+        <li class="row" style={`--i:${i}`}>
+          <p class="before">{pair.before}</p>
+
+          <span class="link" aria-hidden="true">
+            <span class="link-line" />
+            <Icon name="arrow-right" size={15} class="link-arrow" />
+          </span>
+
+          <p class="after">{pair.after}</p>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .shift {
+    margin: 0;
+  }
+
+  /* ---- column headings ---- */
+  .heads {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3.25rem minmax(0, 1fr);
+    gap: 0 0.5rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .head {
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .head--before {
+    color: var(--color-grey-500);
+  }
+
+  .head--after {
+    grid-column: 3;
+    color: var(--color-orange-700);
+  }
+
+  /* ---- rows ---- */
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3.25rem minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0 0.5rem;
+  }
+
+  .before,
+  .after {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    line-height: 1.45;
+  }
+
+  .before {
+    background: var(--color-grey-100);
+    color: var(--color-ink-soft);
+  }
+
+  .after {
+    background: var(--color-warm);
+    border: 1px solid var(--color-grey-300);
+    font-weight: 650;
+    color: var(--color-navy-700);
+  }
+
+  /* ---- the connector ---- */
+  .link {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  .link-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--color-grey-300);
+    transform-origin: left center;
+  }
+
+  :global(.link-arrow) {
+    position: relative;
+    color: var(--color-grey-500);
+    background: var(--color-paper);
+    border-radius: 50%;
+  }
+
+  /* On a narrow screen the three columns stack and the connector turns to
+     point downward, so the reading order still carries the argument. */
+  @media (max-width: 46rem) {
+    .heads {
+      display: none;
+    }
+
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .link {
+      height: 1.6rem;
+    }
+
+    .link-line {
+      left: 50%;
+      right: auto;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      height: auto;
+      margin: 0 0 0 -1px;
+      transform-origin: top center;
+    }
+
+    :global(.link-arrow) {
+      transform: rotate(90deg);
+    }
+  }
+
+  /* ---- motion -------------------------------------------------------
+     Per row: the "before" settles, the connector crosses, and only then
+     does the "after" light. The order is the argument. */
+  @media (prefers-reduced-motion: no-preference) {
+    .before {
+      animation: settle var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger));
+      opacity: 0;
+    }
+
+    .link-line {
+      animation: cross var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger) + 0.2s);
+      transform: scaleX(0);
+    }
+
+    /* Opacity only — never transform. On mobile this element carries a
+       rotate(90deg) to turn the arrow downward, and an animated transform
+       would overwrite it and leave the arrow pointing off the side. */
+    :global(.link-arrow) {
+      animation: fade-only var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger) + 0.45s);
+      opacity: 0;
+    }
+
+    .after {
+      animation: light var(--cycle) ease-out infinite;
+      animation-delay: calc(var(--i) * var(--stagger) + 0.5s);
+      opacity: 0;
+    }
+
+    @media (max-width: 46rem) {
+      .link-line {
+        animation-name: cross-y;
+      }
+    }
+  }
+
+  @keyframes settle {
+    0%,
+    1% {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    6%,
+    93% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    99%,
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-only {
+    0%,
+    1% {
+      opacity: 0;
+    }
+    6%,
+    93% {
+      opacity: 1;
+    }
+    99%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes cross {
+    0%,
+    2% {
+      transform: scaleX(0);
+    }
+    8%,
+    93% {
+      transform: scaleX(1);
+    }
+    99%,
+    100% {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes cross-y {
+    0%,
+    2% {
+      transform: scaleY(0);
+    }
+    8%,
+    93% {
+      transform: scaleY(1);
+    }
+    99%,
+    100% {
+      transform: scaleY(0);
+    }
+  }
+
+  /* The "after" arrives already accented — the colour change IS the beat, so
+     it must not fade in neutral and shift afterwards. */
+  @keyframes light {
+    0%,
+    2% {
+      opacity: 0;
+      transform: translateY(4px);
+      background: var(--color-grey-100);
+      border-color: var(--color-grey-300);
+    }
+    9%,
+    93% {
+      opacity: 1;
+      transform: translateY(0);
+      background: rgba(247, 157, 7, 0.11);
+      border-color: rgba(247, 157, 7, 0.4);
+    }
+    99%,
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+      background: rgba(247, 157, 7, 0.11);
+      border-color: rgba(247, 157, 7, 0.4);
+    }
+  }
+</style>

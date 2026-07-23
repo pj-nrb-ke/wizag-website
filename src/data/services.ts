@@ -225,3 +225,169 @@ export const practices: ServicePractice[] = [
 ];
 
 export const getPractice = (slug: string) => practices.find((p) => p.slug === slug);
+
+/* -------------------------------------------------------------------------
+   THE SHIFT — drives the PracticeShift diagram on each practice page.
+
+   The brief's `outcomes` are the destination; these pair each one with the
+   state it replaces. A buyer recognises themselves in the left column, which
+   is what makes the right column mean anything — a list of good outcomes on
+   its own reads as everyone's list.
+
+   ⚠ The "before" lines describe common operating conditions, not any client
+   or engagement. Nothing here claims a result WIZAG has produced. Kept
+   generic deliberately: brief §8.12 forbids invented case material.
+
+   Added as a separate record rather than a field on ServicePractice so the
+   brief's approved content stays exactly as approved.
+   ------------------------------------------------------------------------- */
+export const practiceShift: Record<string, { before: string; after: string }[]> = {
+  'executive-technology-services': [
+    {
+      before: 'Technology decisions taken without senior technical judgement in the room',
+      after: 'A technology view at board level, on every decision',
+    },
+    {
+      before: 'Vendors managed by whoever happened to pick up the phone',
+      after: 'One person accountable for every vendor relationship',
+    },
+    {
+      before: 'IT spend agreed project by project, as each one arrives',
+      after: 'Investment planned against a roadmap you can defend',
+    },
+    {
+      before: 'Risk discovered during the audit',
+      after: 'Risk reviewed long before it becomes a finding',
+    },
+  ],
+
+  'erp-business-systems': [
+    {
+      before: 'Month-end assembled by hand from several systems',
+      after: 'Reporting that runs from one set of numbers',
+    },
+    {
+      before: 'Stock figures nobody entirely trusts',
+      after: 'One inventory position, visible to everyone',
+    },
+    {
+      before: 'The same data keyed into three different places',
+      after: 'Entered once, posted everywhere it belongs',
+    },
+    {
+      before: 'An ERP nobody uses past the basics',
+      after: 'The system finally earning what you paid for it',
+    },
+  ],
+
+  'ai-intelligent-automation': [
+    {
+      before: 'Documents keyed in by hand, one at a time',
+      after: 'Extracted, validated and posted for approval',
+    },
+    {
+      before: 'Forecasts built on last year plus a feeling',
+      after: 'Forecasts built on what the data actually shows',
+    },
+    {
+      before: 'Problems noticed when somebody complains',
+      after: 'Anomalies flagged as they appear',
+    },
+    {
+      before: 'Skilled people spending their week on repetition',
+      after: 'Skilled people on the work that needs judgement',
+    },
+  ],
+
+  'process-operational-excellence': [
+    {
+      before: 'Nobody can draw how the work actually flows',
+      after: 'The process mapped, agreed and measured',
+    },
+    {
+      before: 'Approvals sitting in somebody’s inbox',
+      after: 'Steps that move without being chased',
+    },
+    {
+      before: 'The same check done twice by two teams',
+      after: 'Duplicate work removed, the control kept',
+    },
+    {
+      before: 'Performance discussed by opinion',
+      after: 'Performance tracked against agreed measures',
+    },
+  ],
+
+  'data-analytics-business-intelligence': [
+    {
+      before: 'Numbers living in separate spreadsheets',
+      after: 'One integrated source everyone reports from',
+    },
+    {
+      before: 'A management pack that takes three days to build',
+      after: 'A dashboard that is already current',
+    },
+    {
+      before: 'Different answers depending who you ask',
+      after: 'One version of the figure everyone can stand behind',
+    },
+    {
+      before: 'Reporting requests queued behind IT',
+      after: 'Managers answering their own questions',
+    },
+  ],
+
+  'managed-technology-services': [
+    {
+      before: 'Faults reported by the people they affect',
+      after: 'Issues caught by monitoring first',
+    },
+    {
+      before: 'Backups assumed to be working',
+      after: 'Recovery tested rather than hoped for',
+    },
+    {
+      before: 'Internal staff pulled off their jobs onto support',
+      after: 'Your team back on the work you hired them for',
+    },
+    {
+      before: 'Vendors pointing at each other',
+      after: 'One party accountable for the outcome',
+    },
+  ],
+};
+
+/* Photography brief per practice. One image each — see
+   docs/services-image-prompts.md for the full prompts. */
+export const practiceImage: Record<string, { brief: string; purpose: string }> = {
+  'executive-technology-services': {
+    brief:
+      'A senior technology advisor presenting to two directors across a boardroom table in a sunlit Nairobi office, mid-explanation with an open confident gesture, the directors engaged and one smiling.',
+    purpose: 'This practice is sold to boards. Show the room it is sold in.',
+  },
+  'erp-business-systems': {
+    brief:
+      'Three colleagues around a desk in a bright modern office reviewing a printed operations report together, one pointing at a figure, all pleased with what they are seeing.',
+    purpose: 'ERP is bought by finance and operations together, not by one person.',
+  },
+  'ai-intelligent-automation': {
+    brief:
+      'Two colleagues at a bright desk watching a laptop as something completes, both reacting with genuine pleasure — the moment work that used to take hours finishes on its own.',
+    purpose: 'Automation is abstract. The recognisable moment is the relief when it works.',
+  },
+  'process-operational-excellence': {
+    brief:
+      'Four colleagues standing at a wall covered in sticky notes mapping a process, one placing a note while another gestures at the flow, energetic and collaborative.',
+    purpose: 'Process work is visibly collaborative. This is the one practice with a real physical activity to photograph.',
+  },
+  'data-analytics-business-intelligence': {
+    brief:
+      'A manager and an analyst side by side at a bright desk, the analyst turning a laptop toward the manager and the manager reacting with recognition — a question finally answered.',
+    purpose: 'The product of analytics is a person understanding something. Show the understanding.',
+  },
+  'managed-technology-services': {
+    brief:
+      'Two support engineers at a bright, well-kept operations desk with several monitors, relaxed and in control, one turning to speak to the other.',
+    purpose: 'Managed services sells calm. The room should look like nothing is on fire — because it is not.',
+  },
+};

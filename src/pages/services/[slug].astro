@@ -5,11 +5,25 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import { practices } from '../../data/services';
+import ImageSlot from '../../components/ui/ImageSlot.astro';
+import PracticeShift from '../../components/diagrams/PracticeShift.astro';
+import { practices, practiceShift, practiceImage } from '../../data/services';
 
 /**
  * Service practice detail pages — one per practice, generated from the
  * brief §6 content. Six real pages, not stubs.
+ *
+ * These were the last text-only pages on the site: two bullet lists and a
+ * call to action, against product pages carrying working diagrams and
+ * photography. Each now leads with the PracticeShift diagram — the brief's
+ * outcomes paired with the conditions they replace — followed by a
+ * photograph, so the services read as the same calibre of offering as the
+ * products.
+ *
+ * The shift diagram deliberately comes BEFORE the capability list. A buyer
+ * decides whether a practice is for them from the problem, not from an
+ * inventory of what we can do; the capabilities then answer "how", which is
+ * the second question and never the first.
  */
 export function getStaticPaths() {
   return practices.map((practice) => ({
@@ -20,6 +34,8 @@ export function getStaticPaths() {
 
 const { practice } = Astro.props;
 const others = practices.filter((p) => p.slug !== practice.slug);
+const shift = practiceShift[practice.slug] ?? [];
+const image = practiceImage[practice.slug];
 ---
 
 <BaseLayout
@@ -33,12 +49,39 @@ const others = practices.filter((p) => p.slug !== practice.slug);
     crumbs={[{ label: 'Services', href: '/services' }]}
   />
 
+  <!-- The shift — the problem first, the outcome second -->
+  {
+    shift.length > 0 && (
+      <Section tone="paper">
+        <SectionHeading
+          eyebrow="What changes"
+          lead="Most organisations arrive at this practice from a recognisable place. This is the distance it covers."
+          measure="max-w-[16ch]"
+          class="max-w-3xl"
+          data-reveal
+        >
+          From where you are, to where this gets you
+        </SectionHeading>
+
+        <div class="mt-10" data-reveal>
+          <PracticeShift pairs={shift} />
+        </div>
+      </Section>
+    )
+  }
+
   <!-- What's included -->
-  <Section tone="paper">
+  <Section tone="warm">
     <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-      <SectionHeading eyebrow="What's included" measure="max-w-[14ch]" data-reveal>
-        Capabilities in this practice
-      </SectionHeading>
+      <div data-reveal>
+        <SectionHeading eyebrow="What's included" measure="max-w-[14ch]">
+          Capabilities in this practice
+        </SectionHeading>
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-ink">
+          Engagements draw on whichever of these the situation needs. Very few use all of them,
+          and we will say which we think apply before you commit to anything.
+        </p>
+      </div>
 
       <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
         {
@@ -53,25 +96,37 @@ const others = practices.filter((p) => p.slug !== practice.slug);
     </div>
   </Section>
 
-  <!-- Outcomes -->
-  <Section tone="warm">
-    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-      <SectionHeading eyebrow="What changes" measure="max-w-[14ch]" data-reveal>
-        The outcomes this delivers
-      </SectionHeading>
+  <!-- The practice in the room -->
+  {
+    image && (
+      <Section tone="paper">
+        <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+          <div data-reveal>
+            <SectionHeading eyebrow="Working together" measure="max-w-[15ch]">
+              How this actually runs
+            </SectionHeading>
+            <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+              Short engagements with named people, agreed outcomes and a decision point at the
+              end of each stage. You always know what is being worked on and what it is for.
+            </p>
+            <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+              Most engagements start in one practice and grow into others as the operating
+              picture becomes clearer — which is a decision you make later, not a commitment you
+              make now.
+            </p>
+          </div>
 
-      <ul class="grid gap-x-10 gap-y-0 sm:grid-cols-2" data-reveal data-reveal-delay="100">
-        {
-          practice.outcomes.map((outcome) => (
-            <li class="flex items-center gap-3 border-t border-grey-300 py-4 text-[length:var(--text-lg)] font-medium text-navy-700">
-              <Icon name="check" size={16} class="shrink-0 text-orange-700" />
-              {outcome}
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </Section>
+          <ImageSlot
+            ratio="4/3"
+            brief={image.brief}
+            purpose={image.purpose}
+            data-reveal
+            data-reveal-delay="120"
+          />
+        </div>
+      </Section>
+    )
+  }
 
   <!-- CTA -->
   <Section tone="deep" space="tight">
