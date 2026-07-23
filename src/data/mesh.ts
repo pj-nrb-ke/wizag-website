@@ -24,21 +24,27 @@ const b = (label: string): Tile => ({ label, kind: 'benefit' });
    HOMEPAGE — the business systems WIZAG connects.
    Authored in themed groups for readability; the component flattens and
    re-chunks them to whatever column count it is given.
+
+   ⚠ WizPOS, RestPOS and CloudHR were removed on 2026-07-23 (client
+   instruction) and must not be re-added — CloudHR belongs to Skillmind
+   Software Limited, not WIZAG. The generic capability tiles that replaced
+   them ('Point of Sale', 'Payroll') describe what WIZAG's systems do without
+   naming a product that is not ours to market.
    ------------------------------------------------------------------------- */
 export const wizagMesh: Tile[] = [
   p('WizERP'), f('General Ledger'), b('Faster month-end close'), f('Accounts Payable'),
   f('Bank Reconciliation'), p('Sage 200'), b('Audit-ready records'),
   f('Multi-currency'), f('Credit Control'), b('Fewer manual entries'), f('Cash Flow'),
 
-  f('Inventory'), b('Real-time stock visibility'), p('WizPOS'), f('Stock Counts'),
+  f('Inventory'), b('Real-time stock visibility'), f('Stock Counts'),
   f('Reorder Levels'), b('Less stock written off'), f('Warehousing'), f('Dispatch'),
-  p('RestPOS'), f('Multi-branch'), b('One stock position'),
+  f('Point of Sale'), f('Multi-branch'), b('One stock position'),
 
   f('Procurement'), p('Sage Business Cloud'), f('Purchase Orders'), b('Lower operating cost'),
   f('Supplier Ledger'), f('Approvals'), b('Spend under control'), f('Goods Received'),
   p('AscendBooks'), f('Landed Cost'), b('Better supplier terms'),
 
-  p('CloudHR'), f('Payroll'), f('Leave'), b('Payroll that reconciles'),
+  f('Payroll'), f('Leave'), b('Payroll that reconciles'),
   f('Time & Attendance'), f('HR Records'), p('TeamKazi'), b('Targets people act on'),
   f('Statutory Returns'), f('Employee Self-Service'), b('Less admin per head'),
 

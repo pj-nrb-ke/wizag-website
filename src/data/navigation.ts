@@ -118,7 +118,7 @@ export const erp: NavLink[] = [
   {
     label: 'WizERP',
     href: '/erp/wizerp',
-    summary: 'Our own open-source ERP — no licence fee, fully customisable',
+    summary: 'Our own enterprise ERP — built, implemented and supported by us',
   },
   /* WIZAG's own product, and the only item in this menu sold to accounting
      FIRMS rather than to end businesses — the summary has to carry that,
