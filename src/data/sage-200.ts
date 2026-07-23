@@ -49,13 +49,18 @@ export const sage200 = {
   hook: 'One system for the whole business',
   positioning:
     'Finance, stock, sales and reporting in a single system — the power of the desktop with the reach of the cloud. Implemented, migrated and supported from Nairobi by WIZAG.',
-  /* p4: "ideal for companies with a turnover of £1 million to £30 million,
-     or typically 5 to 200 employees, across all business sectors". Employee
-     count leads because it travels; the turnover band keeps its currency
-     rather than being converted at an invented rate. */
+  /* p4 gives the fit as "a turnover of £1 million to £30 million, or
+     typically 5 to 200 employees".
+
+     ⚠ THE TURNOVER BAND IS DELIBERATELY NOT PUBLISHED (client, 2026-07-23).
+     A sterling figure on a Kenyan page invites a prospect to convert it,
+     land below the line and disqualify themselves before speaking to anyone
+     — and the real question is complexity, not size. Employee count stays
+     because it is currency-free and starts low enough to include rather
+     than exclude. Do not reinstate the amounts. */
   audience: 'Typically 5 to 200 employees, across any sector.',
   fitNote:
-    'Sage positions it for businesses turning over roughly £1m to £30m, or about 5 to 200 employees — companies that have outgrown entry-level accounting but do not want a full-scale ERP programme.',
+    'Built for companies that have outgrown entry-level accounting but are not ready to commit to a full-scale ERP programme — which is a question about how complex your operation is, not how large.',
 };
 
 /* The two editions, from p7 — text, so quoted closely. */
