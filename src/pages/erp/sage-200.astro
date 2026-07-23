@@ -5,7 +5,6 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
-import ImageSlot from '../../components/ui/ImageSlot.astro';
 import CapabilityHub from '../../components/diagrams/CapabilityHub.astro';
 import {
   sage200,
@@ -204,10 +203,14 @@ import {
       </div>
 
       <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="120">
-        <ImageSlot
-          ratio="4/3"
-          brief="Four professionals around a Nairobi boardroom table, mid-discussion over an open printed financial report. A mix of African and South Asian men and women, mid-30s to mid-50s, smart business dress."
-          purpose="An ERP is bought by a committee. Four people looking at the same page carries the 'one set of numbers' argument better than stating it."
+        <img
+          src="/images/sage-200/sage-200-daily-operations.jpg"
+          alt="Two colleagues reviewing figures on a tablet together in an open-plan finance office, while a third works at a monitor nearby."
+          width="652"
+          height="489"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
         />
       </div>
     </div>
@@ -272,10 +275,14 @@ import {
       </div>
 
       <div data-reveal data-reveal-delay="120">
-        <ImageSlot
-          ratio="4/3"
-          brief="Two professionals at the corner of a boardroom table working through a bound statutory document together — an advisor and a client, composed and attentive. No letterheads, stamps or authority marks on the paperwork."
-          purpose="Compliance as a competent conversation, not a filing cabinet. Must carry no KRA or other authority branding."
+        <img
+          src="/images/sage-200/sage-200-scoping.jpg"
+          alt="Four colleagues standing in discussion beside a wall screen showing a project agenda, one explaining a point to the others."
+          width="1160"
+          height="870"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
         />
       </div>
     </div>
@@ -283,17 +290,31 @@ import {
 
   <!-- WHERE WIZAG COMES IN ---------------------------------------------- -->
   <Section tone="paper">
-    <SectionHeading
-      eyebrow="Working with WIZAG"
-      lead="WIZAG is a Sage Business Partner. The licence is the easy part to buy — what decides whether this works is everything around it."
-      measure="max-w-[18ch]"
-      class="max-w-3xl"
-      data-reveal
-    >
-      The project, not the purchase
-    </SectionHeading>
+    <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Working with WIZAG" measure="max-w-[16ch]">
+          The project, not the purchase
+        </SectionHeading>
+        <p class="mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          WIZAG is a Sage Business Partner. The licence is the easy part to buy — what decides
+          whether this works is everything around it.
+        </p>
+      </div>
 
-    <ul class="mt-10 grid gap-5 sm:grid-cols-3">
+      <img
+        src="/images/sage-200/sage-200-partnership.jpg"
+        alt="A team of colleagues seated and standing around a boardroom table, a wall screen showing a reporting dashboard behind them."
+        width="1160"
+        height="870"
+        loading="lazy"
+        decoding="async"
+        class="w-full rounded-[var(--radius-md)] object-cover"
+        data-reveal
+        data-reveal-delay="120"
+      />
+    </div>
+
+    <ul class="mt-12 grid gap-5 sm:grid-cols-3">
       {
         wizagRole.map((item, i) => (
           <li
