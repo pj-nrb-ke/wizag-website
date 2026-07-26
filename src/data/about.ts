@@ -13,8 +13,11 @@
  * invention is most damaging. NONE of the following appears, because none is
  * verified and the brief (§3.2 / §8.12) forbids it:
  *
- *   · Founding year / years in business — public directories list BOTH 2013
- *     and 2003. Stating either would be a guess presented as fact.
+ *   · Founding year: CONFIRMED 2013 by the client 2026-07-26, and now stated
+ *     in story[0]. (Some public directories list 2003 — that is wrong and
+ *     wants a correction sweep. 2013 is the client's own figure.)
+ *   · Years-in-business as a running count is avoided — "founded in 2013" is
+ *     evergreen; "13 years' experience" would need maintaining and ages.
  *   · Headcount, number of clients, projects delivered, revenue.
  *   · Client names, logos, testimonials, case studies.
  *   · Leadership names, titles or biographies (that is /about/leadership,
@@ -40,7 +43,7 @@ import type { IconName } from '../components/ui/Icon.astro';
    invented facts, written to say what WIZAG is and, more usefully, what it
    deliberately is not. */
 export const story: string[] = [
-  'Wise & Agile Solutions — WIZAG — is an enterprise transformation and technology services company based in Nairobi. We help established organisations improve how they operate: the systems they run on, the processes that move work through them, and the reporting their leadership depends on to make decisions.',
+  'Wise & Agile Solutions — WIZAG — is an enterprise transformation and technology services company based in Nairobi and operating since 2013. We help established organisations improve how they operate: the systems they run on, the processes that move work through them, and the reporting their leadership depends on to make decisions.',
   'We are deliberately not a software vendor, an ERP reseller or an AI startup. A business built to sell a product tends to arrive with the answer already decided — the licence, the platform, the model — before the question has been asked. We are engaged to understand the operating problem first, and to recommend the smallest change that solves it. Sometimes that is one of our own products; sometimes it is a platform we implement; and sometimes it is neither.',
   'That distinction shapes everything downstream — how we scope work, how we price it, and why we will tell a client when the thing they have asked for is not the thing they need. It is easier to say once, on this page, than to prove one engagement at a time: we would rather be the firm that talked you out of the wrong project than the one that delivered it well.',
 ];
