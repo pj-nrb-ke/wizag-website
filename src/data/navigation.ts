@@ -186,7 +186,9 @@ export const industries: NavLink[] = [
 export const about: NavLink[] = [
   { label: 'Company Overview', href: '/about' },
   { label: 'Leadership', href: '/about/leadership', stub: true },
-  { label: 'Partners', href: '/about/partners', stub: true },
+  /* Partners is a real page (about/partners.astro) as of 2026-07-23 — built
+     from the Sage partnership and WIZAG's own products. No longer a stub. */
+  { label: 'Partners', href: '/about/partners' },
   { label: 'Careers', href: '/about/careers', stub: true },
 ];
 

@@ -3,15 +3,18 @@ import ShellPage from '../../components/layout/ShellPage.astro';
 import { about } from '../../data/navigation';
 
 /**
- * About sub-pages — Leadership, Partners, Careers.
+ * About sub-pages — Leadership and Careers.
  *
- * Shells. Leadership needs real names, roles and photographs; Partners needs
- * the official Sage partner assets and permitted wording. Neither may be
- * approximated.
+ * Shells. Leadership needs real names, roles and photographs; Careers needs a
+ * confirmed hiring position. Neither may be approximated.
+ *
+ * Partners is NO LONGER a shell — it has its own page at about/partners.astro,
+ * built from the Sage partnership and WIZAG's own products. It is excluded
+ * here so the two routes do not collide.
  */
 export function getStaticPaths() {
   return about
-    .filter((item) => item.href !== '/about')
+    .filter((item) => item.href !== '/about' && item.href !== '/about/partners')
     .map((item) => ({
       params: { slug: item.href.replace('/about/', '') },
       props: { item },

@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { partnersLede, sagePartnership, ownProducts, selectionNote } from '../../data/about';
+
+/**
+ * Partners — built 2026-07-23 from established material only.
+ *
+ * The page makes a virtue of the exact thing it is honest about: WIZAG both
+ * partners for a third-party platform (Sage) AND publishes its own products,
+ * which is what lets it claim to select on merit. It states the commercial
+ * interest plainly rather than hiding it — consistent with the disclosure
+ * already on /services/executive-technology-services.
+ *
+ * Deliberately NOT here: any Sage partner tier, SAP Business One, or any
+ * other technology partner — none is verified. See src/data/about.ts.
+ * No Sage badge is shown until the real asset and permitted wording arrive
+ * (SagePartnerBadge.astro is ready for it).
+ *
+ * No photography: a partnerships page is about platforms, and a stock office
+ * photo here would be filler. The structure and icons carry it.
+ */
+---
+
+<BaseLayout
+  title="Partners"
+  description="WIZAG is a Sage business partner and publishes its own ERP and business applications — which is what lets it recommend the platform that fits, not the one it is tied to."
+>
+  <PageHero
+    title="The platforms behind our delivery"
+    lead="We implement a third-party platform we believe in, and we publish our own. That combination is what lets us recommend the system that fits your business rather than the only one we are able to sell."
+    eyebrow="About WIZAG"
+    crumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'About WIZAG', href: '/about' },
+    ]}
+  />
+
+  <!-- THE PRINCIPLE ---------------------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
+      <SectionHeading eyebrow="How we partner" measure="max-w-[13ch]" data-reveal>
+        Not tied to one vendor
+      </SectionHeading>
+
+      <div data-reveal data-reveal-delay="100">
+        {
+          partnersLede.map((paragraph, i) => (
+            <p
+              class:list={[
+                'max-w-[62ch] text-[length:var(--text-lg)] leading-relaxed text-ink',
+                i > 0 && 'mt-5',
+              ]}
+            >
+              {paragraph}
+            </p>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- SAGE ------------------------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Platform partnership"
+      lead={sagePartnership.body}
+      measure="max-w-[14ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Sage business partner
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-x-12 gap-y-0 sm:grid-cols-2" data-reveal>
+      {
+        sagePartnership.products.map((product) => (
+          <li class="group border-t-2 border-navy-700">
+            <a href={product.href} class="grid gap-2 py-6">
+              <div class="flex items-center justify-between gap-3">
+                <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                  {product.name}
+                </h3>
+                <Icon
+                  name="arrow-right"
+                  size={16}
+                  class="shrink-0 text-grey-500 transition-all duration-[var(--duration-fast)] group-hover:text-orange-700 motion-safe:group-hover:translate-x-0.5"
+                />
+              </div>
+              <p class="max-w-[46ch] text-base leading-relaxed text-ink">{product.note}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- OWN PRODUCTS ----------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Our own products"
+      lead="Where a third-party platform is the wrong answer, we have our own — and we hold full copyright to them. That is what keeps our advice honest: we are never forced to fit you to someone else's roadmap."
+      measure="max-w-[16ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Built and owned by WIZAG
+    </SectionHeading>
+
+    <div class="mt-11 grid gap-x-12 gap-y-0 lg:grid-cols-2">
+      {
+        ownProducts.map((product, i) => (
+          <a
+            href={product.href}
+            class="group grid gap-2 border-t border-grey-300 py-7"
+            data-reveal
+            data-reveal-delay={String(Math.min(i, 3) * 70)}
+          >
+            <div class="flex items-center gap-3">
+              <Icon name={product.icon} size={22} class="text-orange-500" />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                {product.name}
+              </h3>
+            </div>
+            <p class="max-w-[52ch] text-base leading-relaxed text-ink">{product.note}</p>
+          </a>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- HOW WE CHOOSE ---------------------------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="max-w-[64ch] border-l-2 border-orange-500 pl-6 md:pl-8" data-reveal>
+      <p class="eyebrow text-ink-soft">How we choose</p>
+      <p class="mt-4 text-[length:var(--text-xl)] leading-relaxed text-ink">
+        {selectionNote}
+      </p>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
+  <Section tone="deep" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-[length:var(--text-3xl)] text-paper">Not sure which platform fits?</h2>
+        <p class="mt-3 max-w-[52ch] text-base text-navy-100">
+          That is the selection question, and it is one we answer on merit — including when the
+          answer is a platform we do not sell, or the system you already own.
+        </p>
+      </div>
+      <Button href="/contact" variant="inverse" size="large" arrow>Book an Assessment</Button>
+    </div>
+  </Section>
+</BaseLayout>

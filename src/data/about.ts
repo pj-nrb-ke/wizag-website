@@ -119,6 +119,76 @@ export const pillars: {
 export const boundary =
   'We are not the right partner for everyone. If your need is a single licence at the lowest price, a body of contractors to direct yourself, or a system your regulator has already chosen for you, there are firms better shaped for that than we are — and we will say so early, rather than bill you to find out slowly.';
 
+/* ---------------------------------------------------------------------
+   PARTNERS — /about/partners.
+   Built only from what is established site-wide: the Sage business
+   partnership (client-confirmed) and WIZAG's own products. NOTHING ELSE.
+
+   ⚠ Not stated: any Sage partner TIER (Gold/Platinum/etc.) — unverified;
+   SAP Business One — an old unverified claim absent from the whole site;
+   any other technology partner (Microsoft, AWS, Oracle, etc.) — none
+   established. If the client supplies the real Sage tier and badge asset,
+   the wording here and SagePartnerBadge.astro are where it goes.
+   --------------------------------------------------------------------- */
+export const partnersLede: string[] = [
+  'WIZAG recommends the platform that fits the business, not the one that pays best to be recommended. Two things make that possible, and this page is really about both: we implement a major third-party platform we believe in, and we publish our own — so no client is ever quietly fitted to a single product because it is the only one we sell.',
+  'It also means we are not a disinterested party on platform selection, and we would rather say so plainly than have you infer it. Where we have a commercial interest in the answer, we tell you before you ask.',
+];
+
+export const sagePartnership: {
+  body: string;
+  products: { name: string; href: string; note: string }[];
+} = {
+  body: 'WIZAG is a Sage business partner. We select, license, implement, integrate and support Sage platforms for organisations across the region — from the selection decision through migration to the first month-end after go-live. Working through a partner means one accountable relationship for the software, the implementation and the support, instead of three parties pointing at each other.',
+  products: [
+    {
+      name: 'Sage 200',
+      href: '/erp/sage-200',
+      note: 'Business management for companies of roughly 5 to 200 people.',
+    },
+    {
+      name: 'Sage Business Cloud',
+      href: '/erp/sage-business-cloud',
+      note: 'Cloud accounting for businesses that have outgrown spreadsheets.',
+    },
+  ],
+};
+
+export const ownProducts: {
+  name: string;
+  href: string;
+  note: string;
+  icon: IconName;
+}[] = [
+  {
+    name: 'WizERP',
+    href: '/erp/wizerp',
+    note: 'Our own enterprise ERP — finance, sales, purchasing, inventory, manufacturing and fixed assets on one ledger. Built, implemented and supported by us, and changed by us when it needs to fit your process.',
+    icon: 'erp-systems',
+  },
+  {
+    name: 'AscendBooks',
+    href: '/erp/ascendbooks',
+    note: 'A managed ERP platform for accounting firms, so a practice runs its clients on one system instead of a dozen. Built by WIZAG and fully owned by us.',
+    icon: 'cloud',
+  },
+  {
+    name: 'WizCRM',
+    href: '/business-applications/wizcrm',
+    note: 'An AI-first CRM built for field-sales teams — offline-first, GPS-verified, capturing the visit and the order on the phone.',
+    icon: 'growth',
+  },
+  {
+    name: 'TeamKazi',
+    href: '/business-applications/teamkazi',
+    note: 'Project management with a live profit and loss on every project, for firms that bill time against agreed fees.',
+    icon: 'balance',
+  },
+];
+
+export const selectionNote =
+  'Because our advice is not captive to one vendor, platform selection is done on merit and shown with its reasoning — including the honest question of whether the system you already own can be made to do the job. We will recommend a platform we do not sell, or none at all, when that is the right answer.';
+
 /* Photography. `file` present renders the image; otherwise the documented
    placeholder shows. Prompts for the office shot are in
    docs/about-image-prompts.md.
