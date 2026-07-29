@@ -21,6 +21,31 @@ const { title, description, noindex = false, bare = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wizag.biz');
 const fullTitle = title.includes(company.brand) ? title : `${title} | ${company.brand}`;
+
+/* Organization structured data (JSON-LD), rendered sitewide in <head> below.
+   Verified facts only: legal name, brand, the Parklands address, email,
+   founding year (2013, client-confirmed) and the LinkedIn profile. No phone
+   (brief §8.14), nothing invented. */
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://wizag.biz/#organization',
+  name: company.legalName,
+  alternateName: company.brand,
+  url: 'https://wizag.biz/',
+  logo: 'https://wizag.biz/brand/wizag-logo.svg',
+  description:
+    'Enterprise transformation and technology services company in Nairobi, operating since 2013.',
+  foundingDate: '2013',
+  email: company.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${company.address.building}, ${company.address.unit}, ${company.address.street}, ${company.address.area}`,
+    addressLocality: company.address.city,
+    addressCountry: 'KE',
+  },
+  sameAs: [company.linkedin],
+};
 ---
 
 <!doctype html>
@@ -60,7 +85,15 @@ const fullTitle = title.includes(company.brand) ? title : `${title} | ${company.
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content="https://wizag.biz/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="WIZAG — enterprise transformation and technology services" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://wizag.biz/og-image.png" />
+
+    <!-- Organization structured data (JSON-LD) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(orgSchema)} />
 
     <!-- Flags JS before first paint so reveal animations never flash their
          start state. Without JS, [data-reveal] content stays visible. -->

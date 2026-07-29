@@ -1,0 +1,5 @@
+# WIZAG — https://wizag.biz
+User-agent: *
+Allow: /
+
+Sitemap: https://wizag.biz/sitemap-index.xml
