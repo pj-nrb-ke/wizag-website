@@ -28,14 +28,20 @@ interface Props {
 const { label, fullLabel, href, id, items, columns = 1, align = 'left' } = Astro.props;
 
 const panelWidth = columns === 2 ? 'w-[38rem]' : 'w-[19rem]';
+
+/* When any item in this menu carries a product mark, every row reserves a
+   fixed logo column so labels stay aligned whether or not a given item has a
+   logo (e.g. WizSales sits blank beside WizCRM/TeamKazi). Menus with no logos
+   render exactly as before — no column, no change. */
+const hasLogos = items.some((item) => item.logo);
 ---
 
 <li class="relative" data-nav-item>
   <button
     type="button"
-    class="flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-2 font-medium
+    class="flex items-center gap-1 rounded-[var(--radius-sm)] px-1 py-2 font-medium
            text-navy-700 transition-colors duration-[var(--duration-fast)]
-           hover:text-orange-700 aria-expanded:text-orange-700 xl:px-2.5"
+           hover:text-orange-700 aria-expanded:text-orange-700 lg:px-2 xl:px-2.5"
     aria-expanded="false"
     aria-controls={id}
     data-nav-trigger
@@ -70,17 +76,32 @@ const panelWidth = columns === 2 ? 'w-[38rem]' : 'w-[19rem]';
           >
             <a
               href={item.href}
-              class="block rounded-[var(--radius-sm)] px-3 py-2.5 transition-colors
-                     duration-[var(--duration-fast)] hover:bg-navy-50"
+              class:list={[
+                'flex rounded-[var(--radius-sm)] px-3 py-2.5 transition-colors',
+                'duration-[var(--duration-fast)] hover:bg-navy-50',
+                hasLogos ? 'items-start gap-3' : 'flex-col',
+              ]}
             >
-              <span class="block text-base font-semibold text-navy-700">
-                {item.label}
-              </span>
-              {item.summary && (
-                <span class="mt-0.5 block text-sm leading-snug text-ink-soft">
-                  {item.summary}
+              {hasLogos && (
+                <span
+                  class="mt-0.5 flex h-5 w-7 shrink-0 items-center justify-center"
+                  aria-hidden="true"
+                >
+                  {item.logo && (
+                    <img src={item.logo} alt="" class="h-5 w-auto max-w-full object-contain" />
+                  )}
                 </span>
               )}
+              <span class="min-w-0">
+                <span class="block text-base font-semibold text-navy-700">
+                  {item.label}
+                </span>
+                {item.summary && (
+                  <span class="mt-0.5 block text-sm leading-snug text-ink-soft">
+                    {item.summary}
+                  </span>
+                )}
+              </span>
             </a>
           </li>
         ))

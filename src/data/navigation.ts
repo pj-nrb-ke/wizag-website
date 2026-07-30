@@ -23,6 +23,10 @@ export interface NavLink {
   short?: string;
   /** Short line shown under the label in mega/dropdown menus. */
   summary?: string;
+  /** Path to a product mark in /public/brand. When set, the desktop dropdown
+   *  and the mobile drawer show it beside the label. Use the light-ground
+   *  (true-colour) variant — both menus sit on a white (paper) panel. */
+  logo?: string;
   /** Renders a hairline divider ABOVE this item — used to separate
    *  the ERP service from the ERP platforms. */
   dividerBefore?: boolean;
@@ -155,11 +159,13 @@ export const businessApplications: NavLink[] = [
     label: 'WizCRM',
     href: '/business-applications/wizcrm',
     summary: 'The AI-first CRM for field-sales teams',
+    logo: '/brand/wizcrm-logo.svg',
   },
   {
     label: 'TeamKazi',
     href: '/business-applications/teamkazi',
     summary: 'Project management with a live P&L on every project',
+    logo: '/brand/teamkazi-logo.svg',
   },
   { label: 'WizSales', href: '/business-applications/wizsales', stub: true },
 ];
@@ -283,3 +289,20 @@ export const footerColumns = [
   { title: 'Industries', links: industries.slice(0, 5), allHref: '/industries' },
   { title: 'Company', links: about, allHref: '/about' },
 ] as const;
+
+/* -------------------------------------------------------------------------
+   ACTIVE-STATE HELPER
+   Marks the current top-level nav item and the current dropdown link, so a
+   visitor can see where they are without reading the breadcrumbs.
+   ------------------------------------------------------------------------- */
+/**
+ * True when `pathname` is within the section owned by `href` — an exact match
+ * or a descendant path. `/` only matches the home page itself, never every
+ * page. Trailing slashes are normalised so '/erp' and '/erp/' behave the same.
+ */
+export function isCurrentPath(pathname: string, href: string): boolean {
+  const p = (pathname.replace(/\/+$/, '') || '/').toLowerCase();
+  const h = (href.replace(/\/+$/, '') || '/').toLowerCase();
+  if (h === '/') return p === '/';
+  return p === h || p.startsWith(h + '/');
+}
