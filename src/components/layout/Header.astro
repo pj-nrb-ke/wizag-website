@@ -229,8 +229,8 @@ import { primaryCta, company } from '../../data/navigation';
   });
 
   // Leaving the mobile breakpoint with the drawer open would strand it.
-  // Must match the `lg:hidden` breakpoint on the drawer markup.
-  window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+  // Must match --breakpoint-nav / the `nav:hidden` breakpoint (768px).
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
     if (event.matches && drawerOpen) closeDrawer(false);
   });
 </script>

@@ -3,17 +3,19 @@ import NavDropdown from './NavDropdown.astro';
 import { primaryNav } from '../../data/navigation';
 
 /**
- * Desktop navigation bar, shown from 1024px.
+ * Desktop navigation bar, shown from the custom `nav` breakpoint (896px).
  *
- * Fitting seven items alongside the logo and CTA is a labelling problem, not
- * a type-size one: the bar uses the terse `short` forms ("Applications",
- * "About") which brings the row to ~560px and leaves comfortable clearance
- * at 1024px. Full service names live in the dropdowns and page titles.
+ * Fitting seven items alongside the logo is a labelling problem, not a
+ * type-size one: the bar uses the terse `short` forms ("Applications",
+ * "About") which brings the row to ~600px, so logo + nav fit comfortably from
+ * 896px. (The header CTA button holds off until lg/1024px — it is what needed
+ * the extra room, and it is redundant with the hero + section CTAs.) Full
+ * service names live in the dropdowns and page titles.
  */
 const slugify = (label: string) => label.toLowerCase().replace(/[^a-z]+/g, '-');
 ---
 
-<nav aria-label="Primary" class="hidden lg:block">
+<nav aria-label="Primary" class="hidden nav:block">
   <ul class="flex items-center gap-0.5 text-sm xl:gap-1.5 2xl:text-base">
     {
       primaryNav.map((item) =>
@@ -42,7 +44,7 @@ const slugify = (label: string) => label.toLowerCase().replace(/[^a-z]+/g, '-');
           <li>
             <a
               href={item.href}
-              class="block rounded-[var(--radius-sm)] px-2 py-2 font-medium text-navy-700 xl:px-2.5
+              class="block rounded-[var(--radius-sm)] px-1 py-2 font-medium text-navy-700 lg:px-2 xl:px-2.5
                      transition-colors duration-[var(--duration-fast)] hover:text-orange-700"
             >
               {item.short ?? item.label}

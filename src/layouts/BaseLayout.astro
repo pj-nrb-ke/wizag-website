@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Header from '../components/layout/Header.astro';
+import MobileDrawer from '../components/navigation/MobileDrawer.astro';
 import Footer from '../components/layout/Footer.astro';
 import BackToTop from '../components/ui/BackToTop.astro';
 import LogoSprite from '../components/ui/LogoSprite.astro';
@@ -113,6 +114,10 @@ const orgSchema = {
     <a class="sr-only skip-link" href="#main">Skip to main content</a>
 
     {!bare && <Header />}
+
+    {/* Rendered here, OUTSIDE the backdrop-blur header, so the fixed drawer
+        fills the viewport instead of being clamped to the header's height. */}
+    {!bare && <MobileDrawer />}
 
     <main id="main">
       <slot />

@@ -127,6 +127,15 @@
   --container-content: 1280px; /* max content width (brief §12.1) */
   --container-narrow: 760px; /* long-form reading measure */
 
+  /* Custom breakpoint — the point where the full top nav replaces the
+     hamburger. Set well below Tailwind's lg (1024px) so the full bar shows on
+     13" laptops and higher display-scaling setups, where the effective CSS
+     width dips under 1024. In the 768–1023 band the nav tightens its item
+     padding (see DesktopNav) so logo + seven items fit within the standard
+     32px gutters; the header CTA button holds off until lg, where there is
+     room for it. Below 768px the hamburger drawer takes over. */
+  --breakpoint-nav: 48rem; /* 768px */
+
   /* ---------------------------------------------------------------------
      MOTION — restrained (brief §14). Every use sits behind a
      prefers-reduced-motion guard in global.css.
