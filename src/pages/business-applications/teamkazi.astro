@@ -58,6 +58,20 @@ import { teamkaziMesh } from '../../data/mesh';
 
       <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
         <div>
+          {/* Product mark. Decorative: "TeamKazi" is already the eyebrow below
+              and the page title, so alt text on the logo would double the
+              announcement. Dark-ground variant: the brand plum scores only
+              1.83:1 on this navy and all but vanishes, so the -reversed mark
+              (plum lifted to a lighter tint of the same hue, 4.39:1) is used
+              here. The true-colour teamkazi-logo.svg is for light grounds. */}
+          <img
+            src="/brand/teamkazi-logo-reversed.svg"
+            alt=""
+            width="58"
+            height="48"
+            class="mb-5 h-12 w-auto"
+          />
+
           <p class="eyebrow text-orange-500">TeamKazi</p>
 
           <h1 class="optical-left mt-4 max-w-[16ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">

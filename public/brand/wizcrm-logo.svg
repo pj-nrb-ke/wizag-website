@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 6 120 120" role="img" aria-label="WizCRM">
+  <!--
+    WizCRM mark. WIZAG's own product — copyright Wise & Agile Solutions Ltd,
+    so no third-party usage restriction applies.
+
+    Source: Downloads/WizCRM Logo.svg (Illustrator export). One change for web
+    use: the full-bleed #f0f0fd canvas rectangle is removed — it made the mark
+    a pale box on any coloured ground. The viewBox is tightened to the tile
+    (was 0 0 140 131, with dead space and an off-centre mark) so the artwork
+    sits flush and centred in the space it is given. Paths are untouched.
+
+    This is a full-colour, opaque app tile — a violet squircle with a light
+    lightning bolt — so it reads on light AND dark grounds. Unlike the
+    monochrome WIZAG wordmark / AscendBooks mark it needs no -reversed variant.
+  -->
+  <path d="M 53.00 6.99 C 66.00 7.02 79.00 6.97 92.00 7.01 C 104.86 7.11 117.36 13.80 124.40 24.59 C 129.07 31.51 131.15 39.68 131.07 48.00 C 131.03 60.99 131.25 74.01 131.00 86.99 C 130.52 101.35 121.96 114.78 108.97 121.00 C 100.68 125.19 92.09 125.44 83.00 125.21 C 73.00 125.20 63.00 125.23 53.00 125.20 C 41.67 125.08 30.62 120.49 23.05 111.97 C 16.40 104.60 12.92 94.90 12.90 85.00 C 12.92 71.67 12.83 58.33 13.01 45.00 C 13.46 30.39 22.42 16.78 35.73 10.70 C 41.13 8.17 47.04 6.96 53.00 6.99 Z" fill="#7d5df1" />
+  <path d="M 75.07 34.01 C 78.15 33.75 81.82 36.42 80.81 39.82 C 79.48 45.47 77.05 50.77 75.91 56.49 C 81.28 56.44 86.64 56.42 92.00 56.42 C 94.45 56.51 96.89 56.39 98.75 58.26 C 100.33 60.06 101.23 62.92 100.27 65.21 C 99.49 66.91 97.99 68.36 96.71 69.71 C 88.10 78.40 79.58 87.26 70.95 95.93 C 68.47 98.54 65.02 97.48 63.03 94.92 C 62.08 92.97 62.86 91.13 63.34 89.16 C 64.82 84.44 66.36 79.74 67.87 75.02 C 61.32 74.83 54.68 75.34 48.17 74.78 C 43.46 74.19 41.09 67.91 44.39 64.43 C 52.76 55.49 61.59 46.90 70.04 38.04 C 71.50 36.62 73.11 34.68 75.07 34.01 Z" fill="#f0f0fd" />
+  <path d="M 70.96 47.25 C 70.10 50.48 68.75 53.70 68.29 57.01 C 68.08 60.46 70.74 63.44 74.19 63.68 C 80.15 64.12 86.18 63.64 92.16 63.91 C 85.74 70.51 79.51 77.37 72.79 83.64 C 73.57 80.49 74.99 77.23 75.11 73.98 C 75.24 70.58 72.35 67.87 69.02 67.84 C 63.08 67.52 57.10 67.84 51.15 67.73 C 57.72 60.87 64.40 54.12 70.96 47.25 Z" fill="#7d5df1" />
+</svg>

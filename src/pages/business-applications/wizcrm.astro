@@ -60,6 +60,18 @@ import { wizcrmMesh } from '../../data/mesh';
 
       <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
         <div>
+          {/* Product mark. Decorative: "WizCRM" is already the eyebrow below
+              and the page title, so giving the logo its own alt text would
+              have a screen reader announce the name twice. The violet tile is
+              opaque, so it holds up on this navy hero with no reversed variant. */}
+          <img
+            src="/brand/wizcrm-logo.svg"
+            alt=""
+            width="48"
+            height="48"
+            class="mb-5 h-12 w-auto"
+          />
+
           <p class="eyebrow text-orange-500">WizCRM</p>
 
           <h1 class="optical-left mt-4 max-w-[15ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
