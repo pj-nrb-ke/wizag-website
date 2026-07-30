@@ -1,0 +1,120 @@
+/* ==========================================================================
+   INSIGHTS PROSE
+   Long-form article body, styled entirely from the design tokens. Imported by
+   the Insights post page; every rule is scoped under `.prose`, so it only
+   touches rendered article HTML. Deliberately UNLAYERED, so it overrides the
+   global `ul/ol { list-style:none }` reset and the `a { color:inherit }` base
+   in global.css's @layer base.
+   ========================================================================== */
+
+.prose {
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+  line-height: 1.75;
+}
+
+/* Flow spacing — space comes from the gap between blocks, not margins on each. */
+.prose > * + * {
+  margin-top: 1.2em;
+}
+
+.prose h2 {
+  font-family: var(--font-serif);
+  color: var(--color-navy-700);
+  font-size: var(--text-3xl);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin-top: 1.9em;
+  margin-bottom: 0.5em;
+  text-wrap: balance;
+}
+
+.prose h3 {
+  font-family: var(--font-serif);
+  color: var(--color-navy-700);
+  font-size: var(--text-2xl);
+  line-height: 1.25;
+  margin-top: 1.6em;
+  margin-bottom: 0.4em;
+  text-wrap: balance;
+}
+
+.prose h2:first-child,
+.prose h3:first-child {
+  margin-top: 0;
+}
+
+.prose a {
+  color: var(--color-orange-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.prose a:hover {
+  color: var(--color-navy-700);
+}
+
+.prose strong {
+  color: var(--color-navy-700);
+  font-weight: 650;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose li::marker {
+  color: var(--color-orange-500);
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-orange-500);
+  padding-left: 1.25rem;
+  color: var(--color-ink-soft);
+  font-size: var(--text-xl);
+  line-height: 1.5;
+}
+
+.prose img {
+  border-radius: var(--radius-md);
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-navy-50);
+  color: var(--color-navy-700);
+  padding: 0.12em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.prose pre {
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-grey-100);
+  margin: 2.5em 0;
+}

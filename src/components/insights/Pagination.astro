@@ -1,0 +1,55 @@
+---
+/**
+ * Previous/next pager for the Insights index. Page 1 lives at /insights; every
+ * later page at /insights/page/N (kept off /insights/[slug] so post URLs and
+ * page numbers never collide).
+ */
+interface Props {
+  current: number;
+  total: number;
+}
+
+const { current, total } = Astro.props;
+const href = (n: number) => (n <= 1 ? '/insights' : `/insights/page/${n}`);
+const prev = current > 1 ? href(current - 1) : null;
+const next = current < total ? href(current + 1) : null;
+---
+
+{
+  total > 1 && (
+    <nav
+      class="mt-14 flex items-center justify-between border-t border-grey-100 pt-6"
+      aria-label="Pagination"
+    >
+      {prev ? (
+        <a
+          href={prev}
+          class="inline-flex items-center gap-2 text-sm font-semibold text-navy-700 transition-colors hover:text-orange-700"
+        >
+          <span aria-hidden="true">←</span> Newer
+        </a>
+      ) : (
+        <span class="text-sm text-grey-300" aria-hidden="true">
+          ← Newer
+        </span>
+      )}
+
+      <span class="text-sm text-ink-soft">
+        Page {current} of {total}
+      </span>
+
+      {next ? (
+        <a
+          href={next}
+          class="inline-flex items-center gap-2 text-sm font-semibold text-navy-700 transition-colors hover:text-orange-700"
+        >
+          Older <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span class="text-sm text-grey-300" aria-hidden="true">
+          Older →
+        </span>
+      )}
+    </nav>
+  )
+}
