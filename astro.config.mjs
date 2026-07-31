@@ -20,6 +20,16 @@ const NOINDEX = [
 export default defineConfig({
   site: 'https://wizag.biz',
 
+  // Insights blog images come from the Payload CMS. Authorising that host lets
+  // Astro's build-time image service (Sharp) FETCH each one, downscale huge
+  // uploads and re-encode them to WebP, baking the right-sized result into the
+  // static build. A 1.8 MB / 1672px CMS upload becomes a right-sized image
+  // automatically — and because the optimised file is baked in, the CMS is no
+  // longer needed at view time (it only has to be up during the build).
+  image: {
+    remotePatterns: [{ protocol: 'https', hostname: 'wizag.biz' }],
+  },
+
   // Generates /sitemap-index.xml (+ /sitemap-0.xml) at build. robots.txt in
   // public/ points crawlers at it.
   integrations: [

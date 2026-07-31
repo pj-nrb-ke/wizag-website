@@ -27,8 +27,9 @@ const b = (label: string): Tile => ({ label, kind: 'benefit' });
 
    ⚠ WizPOS, RestPOS and CloudHR were removed on 2026-07-23 (client
    instruction) and must not be re-added — CloudHR belongs to Skillmind
-   Software Limited, not WIZAG. The generic capability tiles that replaced
-   them ('Point of Sale', 'Payroll') describe what WIZAG's systems do without
+   Software Limited, not WIZAG. WizSales was removed on 2026-07-31 (no longer
+   sold). The generic capability tiles that replaced them ('Point of Sale',
+   'Payroll', 'Order Management') describe what WIZAG's systems do without
    naming a product that is not ours to market.
    ------------------------------------------------------------------------- */
 export const wizagMesh: Tile[] = [
@@ -49,7 +50,7 @@ export const wizagMesh: Tile[] = [
   f('Statutory Returns'), f('Employee Self-Service'), b('Less admin per head'),
 
   f('eTIMS'), b('KRA compliance, handled'), f('VAT Returns'), f('Tax'),
-  p('WizSales'), f('Sales Orders'), f('Quotations'), b('Reps close faster'),
+  f('Order Management'), f('Sales Orders'), f('Quotations'), b('Reps close faster'),
   f('CRM'), f('Invoicing'), b('Invoices filed at source'),
 
   f('Dashboards'), b('Decisions on current numbers'), f('KPI Reporting'), f('Budgeting'),

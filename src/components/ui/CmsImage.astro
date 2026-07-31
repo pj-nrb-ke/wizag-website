@@ -1,0 +1,80 @@
+---
+/**
+ * An image that comes from the Payload CMS, optimised at build time.
+ *
+ * Editors upload whatever they have — often a huge photo (the first post's
+ * hero was 1672px wide and 1.8 MB). This component hands that source to
+ * Astro's build-time image service (Sharp), which:
+ *   · downscales it — never past its own width, and never past `maxWidth`;
+ *   · re-encodes it to WebP at a sensible quality;
+ *   · emits a responsive set so each device downloads only what it needs;
+ *   · bakes the results into the static build (no hot-linking the CMS).
+ *
+ * The net effect: a large upload is automatically reduced before it ever
+ * reaches the page. If the CMS did not report the image's dimensions we fall
+ * back to a plain <img> of the original rather than failing the build.
+ */
+import { Image } from 'astro:assets';
+import { mediaUrl, type PayloadMedia } from '../../lib/payload';
+
+interface Props {
+  media: PayloadMedia | null | undefined;
+  alt?: string;
+  /** Hard cap on the largest variant generated (CSS px). The image is never
+   *  enlarged past this, nor past its own native width. */
+  maxWidth?: number;
+  /** Candidate widths for the responsive set; each is kept only if it is no
+   *  wider than both the source image and `maxWidth`. */
+  widths?: number[];
+  /** The <img> `sizes` hint. Defaults to "full width up to maxWidth". */
+  sizes?: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  media,
+  alt,
+  maxWidth = 1200,
+  widths = [400, 640, 800, 1024, 1280, 1600],
+  sizes,
+  class: className = '',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+} = Astro.props;
+
+const url = mediaUrl(media);
+const ow = media?.width ?? undefined;
+const oh = media?.height ?? undefined;
+const altText = alt ?? media?.alt ?? '';
+
+// Cap the biggest variant to the source width AND the requested max — Sharp
+// will not upscale, so asking for more than the source just wastes bytes.
+const cap = Math.min(maxWidth, ow ?? maxWidth);
+const genWidths = Array.from(new Set(widths.filter((w) => w <= cap).concat(cap))).sort(
+  (a, b) => a - b
+);
+const resolvedSizes = sizes ?? `(min-width: ${cap}px) ${cap}px, 100vw`;
+---
+
+{
+  url && ow && oh ? (
+    <Image
+      src={url}
+      alt={altText}
+      width={ow}
+      height={oh}
+      widths={genWidths}
+      sizes={resolvedSizes}
+      format="webp"
+      quality={72}
+      class={className}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  ) : url ? (
+    <img src={url} alt={altText} class={className} loading={loading} decoding="async" />
+  ) : null
+}

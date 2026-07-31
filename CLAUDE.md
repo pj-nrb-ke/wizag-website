@@ -6,7 +6,7 @@
 > prior chat history. It lives in the repo so it travels with the code via git —
 > the per-machine `~/.claude/.../memory/` notes do **not** sync between laptops.
 >
-> Last updated: 2026-07-28.
+> Last updated: 2026-07-31.
 
 ---
 
@@ -26,7 +26,7 @@ generous whitespace ("Concept 3").
 - **Astro 5** (`^5.13.0`) + **TypeScript**, `output: 'static'`. `site: 'https://wizag.biz'` in `astro.config.mjs`.
 - **Tailwind CSS v4** (via `@tailwindcss/vite`) + **CSS custom properties** as design tokens. No CDN; fonts self-hosted & subset.
 - **Zero client-side framework.** The only JS shipped is a couple of tiny inline `<script>`s (reveal observer, back-to-top, nav). Keep it that way.
-- Content is **typed TS in `src/data/`** (phase-1). Hosted Sanity at `studio.wizag.biz` is a *future* phase — not wired yet.
+- Marketing content is **typed TS in `src/data/`**. The **Insights blog** is the exception: it is authored in a self-hosted **Payload CMS** and pulled in at build time — see **§13**. (The old "Sanity at studio.wizag.biz" plan is dropped.)
 
 ```bash
 npm install
@@ -48,8 +48,10 @@ src/
     layout/       BaseLayout is the shell; Section/Container/Header/Footer/PageHero.
     navigation/   DesktopNav, MobileNav, NavDropdown (all read src/data/navigation.ts).
     diagrams/     Self-contained animated SVG/CSS diagrams (see §5).
-    ui/           Button, Icon, SectionHeading, ImageSlot, LogoSprite, BackToTop…
+    ui/           Button, Icon, SectionHeading, ImageSlot, CmsImage, LogoSprite, BackToTop…
   data/           Typed content — ONE source of truth per section. Edit content here.
+  lib/            payload.ts (build-time CMS fetch) + lexical.ts (rich-text→HTML). §13.
+  pages/insights/ Blog index + [slug].astro article, rendered from the Payload CMS. §13.
   styles/         global.css (base+motion), tokens.css (design tokens), fonts.css.
   layouts/        BaseLayout.astro (<head>, chrome, reveal observer).
 docs/             *-image-prompts.md (paste-ready ChatGPT prompts), photography-direction.md.
@@ -175,9 +177,14 @@ arrive), leadership names/titles/bios, or any partnership beyond Sage.
 **Verified facts you may use:** legal name *Wise & Agile Solutions Ltd*; **founded
 2013**; address **Valley View Office Park, Tower A, 4th Floor, Off Limuru Road,
 Parklands, Nairobi**; `info@wizag.biz`; **Sage business partner** (Sage 200 & Sage
-Business Cloud); WIZAG's own products: **WizERP, AscendBooks, WizCRM, TeamKazi**
-(and **WizSales**, currently a stub). Any Kenyan regulatory facts already in
-`src/data/services.ts` were WebSearch-verified with dated re-check notes — re-verify before extending.
+Business Cloud); WIZAG's own products: **WizERP, AscendBooks, WizCRM, TeamKazi**.
+Any Kenyan regulatory facts already in `src/data/services.ts` were WebSearch-verified
+with dated re-check notes — re-verify before extending.
+
+**WizSales was removed 2026-07-31** (client: no longer sold) — from the nav, the
+homepage systems-mesh (`src/data/mesh.ts` → generic 'Order Management' tile) and the
+Business Applications page copy. Do **not** reintroduce it. Treat it like the other
+banned product names in the build check (§9).
 
 ## 7. Images & photography
 
@@ -194,42 +201,54 @@ Business Cloud); WIZAG's own products: **WizERP, AscendBooks, WizCRM, TeamKazi**
 ## 8. SEO (current conventions & known gaps)
 
 Handled in `BaseLayout.astro`: self-referencing **canonical** (from `Astro.site`),
-per-page `title`/`description`, **`noindex`** prop for stubs, **Open Graph** +
-`twitter:card`, font preload, theme-color, favicon.
+per-page `title`/`description`, **`noindex`** prop for stubs, **Open Graph** (incl.
+per-page `ogType`/`ogImage` props — blog posts pass their own hero) + `twitter:card`,
+font preload, theme-color, favicon, and **Organization JSON-LD**.
 
-**Known gaps (not yet done):** `sitemap.xml` (no `@astrojs/sitemap` installed),
-`robots.txt`, Organization/LocalBusiness **JSON-LD**, and an `og:image`. These are
-the agreed pre-launch quick wins.
+**Done (2026-07-31):** `@astrojs/sitemap` (→ `/sitemap-index.xml`, referenced from
+`public/robots.txt`), `og-image.png`, Organization JSON-LD, and **BlogPosting JSON-LD**
+on each Insights article (`[slug].astro`). Sitemap `filter` excludes the `noindex` stubs
+— keep it in sync with the nav stubs.
+
+**Security + caching headers live in Caddy** (server-side, NOT this repo — see the
+deployment memory / §13): HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy,
+Permissions-Policy, a CSP, and 1-year immutable `Cache-Control` on `/_astro/*` + `/fonts/*`.
+Mozilla Observatory **B+ (80)**. The one remaining ding is the CSP's `'unsafe-inline'`
+(needed because the site ships inline scripts/styles); hash/nonce CSP would reach A.
 
 ## 9. Build & verify workflow
 
 Before committing content changes, sanity-check the build:
 1. `npm run build` → `./dist`.
 2. **Grep `dist/` for banned terms** (WizPOS, RestPOS, CloudHR, TimeTrax, MobiSales,
-   CrownEHR, "SAP Business One") — must return nothing.
+   CrownEHR, "SAP Business One", WizSales) — must return nothing.
 3. Check internal links resolve and geometry holds at 1440px and 375px.
 4. For anything visible in the browser, use the preview tools (launch `wizag-dev`,
    read console/network, screenshot) — verify, don't ask the user to check manually.
 
-## 10. Current status (2026-07-28)
+## 10. Current status (2026-07-31)
 
 **Built & substantive:** Home (all `components/home/*`), Services (index + 6 practice
 pages), WETO, ERP (index + `sage-200`, `sage-business-cloud`, `wizerp`, `ascendbooks`),
-Business Applications (index + `wizcrm`, `teamkazi`; `wizsales` stub), Industries
-(index + 9 sectors, Manufacturing featured), About (Company Overview + Partners),
-Contact, Privacy, Terms, 404.
+Business Applications (index + `wizcrm`, `teamkazi`), Industries (index + 9 sectors,
+Manufacturing featured), About (Company Overview + Partners), **Insights blog** (index +
+articles, from Payload — §13), Contact, Privacy, Terms, 404.
 
 **Pending:**
 - **Leadership** (`/about/leadership`) and **Careers** (`/about/careers`) are
   `noindex` shells — they need **real** people/roles/bios and real openings from the
   client. Do **not** fake them.
-- Outstanding images (see §7) and the SEO quick wins (see §8).
+- Outstanding images (see §7).
+- **E-commerce** (sell WIZAG's software directly, M-Pesa + cards) — discussed, not
+  built. Plan: a Products/Pricing page + hosted checkout from a Kenyan gateway
+  (IntaSend/Pesapal/Flutterwave); PJ to open the payment account (Claude can't).
 
-**Deployment reality (important):** the new build is **not deployed**. It exists only
-on localhost + this git repo. **`wizag.biz` currently serves an OLD, different site**
-(a product-vendor page that still lists WizPOS) — so any live audit today reports on
-the old site, not this build. A migration to a **new VPS `169.58.11.173`** is in
-progress (see §12).
+**Deployment reality (important — CORRECTED 2026-07-29):** the site is **LIVE at
+`https://wizag.biz`**, served by **Caddy** from `/srv/wizag/site` on VPS
+**`169.58.11.173`** (SSH alias `signaldesk-vps`). The old WizPOS product-vendor page is
+gone. A **shared box** — SignalDesk + other apps run there too; never disturb them. Full
+deploy + auto-publish details are in the machine-local memory `wizag-deployment.md`;
+the essentials a fresh session needs are in **§13** below.
 
 ## 11. Environment & gotchas (Windows / PowerShell)
 
@@ -253,3 +272,51 @@ progress (see §12).
   wildcard, retired self-hosted-mail subdomains, a live Brevo email setup). Mail = Zoho;
   transactional/marketing = Brevo (DKIM `brevo1`/`brevo2` are the live keys). If asked to
   touch DNS, tread carefully and confirm live/third-party services before deleting.
+
+## 13. Insights blog (Payload CMS) + deployment & auto-publish — READ before deploying
+
+The **Insights blog** and the **live deployment** are the two things a fresh session
+(e.g. a new laptop) most needs to understand. Everything below is server-side on the VPS
+`169.58.11.173` (SSH alias `signaldesk-vps`, key `~/.ssh/signaldesk_vps`, root). **Shared
+box** — SignalDesk (`signal.wizloop.app`, returns 307) and other apps run there; never
+disturb them. Back up + `caddy validate` before any Caddy reload.
+
+**Blog content pipeline (mostly NOT in this repo):**
+- Posts are authored in a self-hosted **Payload CMS 3.86** (Next.js + the box's Postgres),
+  reached at **`https://wizag.biz/cms/admin`**; public content API at
+  **`https://wizag.biz/cms/api/posts`**. The CMS lives at `/srv/wizag/cms` (systemd
+  `wizag-cms`). PJ owns the admin login. This repo does NOT contain the CMS.
+- At **build time** the Astro site fetches published posts (`src/lib/payload.ts`,
+  `PUBLIC_PAYLOAD_URL` defaults to `https://wizag.biz/cms`; fails soft to an empty
+  Insights section if the CMS is unreachable) and renders the Lexical rich text to HTML
+  (`src/lib/lexical.ts`). Pages: `src/pages/insights/`.
+- **Images:** `src/components/ui/CmsImage.astro` + `image.remotePatterns` in
+  `astro.config.mjs` run every CMS image through Astro's Sharp service at build —
+  downscaled, WebP, responsive, and **baked into `dist/`**. Never hot-link a raw CMS
+  image (a 1.8 MB upload becomes ~40–70 KB). Use `CmsImage`, not a bare `<img>`.
+
+**Deployment model (three dirs on the VPS):**
+- **Live site:** `/srv/wizag/site` — Caddy serves it statically.
+- **Build workspace:** `/srv/wizag/build` — a copy of this working tree + `node_modules`
+  + `.env`. This is what actually gets built on the server.
+- **Tools:** `/srv/wizag/build-tools/{check-and-rebuild.sh, rebuild.sh}` + logs in
+  `/var/log/wizag/rebuild.log`.
+
+**CONTENT auto-publishes; CODE does not:**
+- A systemd timer **`wizag-rebuild.timer`** (every 2 min) hashes the published posts and,
+  when they change, runs `rebuild.sh` → `npm run build` in `/srv/wizag/build` → verified
+  swap into `/srv/wizag/site`. So a Publish in the CMS goes live in **~2 min, hands-off**.
+- **A code change is NOT auto-deployed.** After editing code here: build locally to verify,
+  then push the working tree to `/srv/wizag/build` (tar the source → scp → extract
+  **preserving `node_modules`, `.env`, `.content-sig`**) and run
+  `/srv/wizag/build-tools/rebuild.sh`. If you skip this, the next content-triggered rebuild
+  will **revert your code** (it rebuilds from the old `/srv/wizag/build`). A plain
+  `dist`→`/srv/wizag/site` swap deploys once but does NOT update `/srv/wizag/build`, so
+  prefer the build-dir path for code.
+
+**Caddy** `wizag.biz` block: `handle /cms/*` reverse-proxies to Payload (`127.0.0.1:3005`);
+the static `handle` carries the security + cache headers (§8). Keep both. Timestamped
+backups `Caddyfile.bak-*` sit alongside `/etc/caddy/Caddyfile`.
+
+**Verify after any deploy:** `curl` the live pages (200), grep for banned terms (§9), and
+confirm `https://signal.wizloop.app/` still returns 307 (neighbour undisturbed).

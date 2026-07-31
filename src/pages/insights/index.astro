@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import Section from '../../components/layout/Section.astro';
+import CmsImage from '../../components/ui/CmsImage.astro';
+import { getPosts, mediaUrl, formatPostDate, postExcerpt, readingMinutes } from '../../lib/payload';
+
+/**
+ * Insights — the WIZAG blog index.
+ *
+ * Content is authored in the Payload CMS (studio at /cms) and pulled at build
+ * time by getPosts() (see src/lib/payload.ts). A published post appears here
+ * the next time the site is built. When there are no posts yet, the section
+ * still renders with an honest empty state rather than a broken grid.
+ */
+const posts = await getPosts();
+const [lead, ...rest] = posts;
+---
+
+<BaseLayout
+  title="Insights"
+  description="Perspectives from WIZAG on enterprise transformation, ERP, AI and the practical business of making technology work."
+  noindex={posts.length === 0}
+>
+  <PageHero
+    title="Insights"
+    lead="Perspectives on enterprise transformation, ERP, AI and the practical business of making technology deliver — written by the WIZAG team."
+    eyebrow="WIZAG"
+    crumbs={[{ label: 'Home', href: '/' }]}
+  />
+
+  {
+    posts.length === 0 ? (
+      <Section tone="paper">
+        <div class="mx-auto max-w-[52ch] text-center" data-reveal>
+          <p class="text-[length:var(--text-xl)] leading-relaxed text-ink">
+            Our first articles are on the way. Check back shortly.
+          </p>
+        </div>
+      </Section>
+    ) : (
+      <Section tone="paper">
+        {/* Lead article — given the full width and a larger treatment. */}
+        <a href={`/insights/${lead.slug}`} class="lead-card group grid gap-8 lg:grid-cols-2 lg:gap-12" data-reveal>
+          <div class="lead-media overflow-hidden rounded-[var(--radius-lg)] bg-warm">
+            {mediaUrl(lead.heroImage) ? (
+              <CmsImage
+                media={lead.heroImage}
+                alt={lead.heroImage?.alt || lead.title}
+                maxWidth={960}
+                sizes="(min-width: 64rem) 50vw, 100vw"
+                class="h-full w-full object-cover transition-transform duration-[var(--duration-slow)] motion-safe:group-hover:scale-[1.02]"
+                loading="eager"
+                fetchpriority="high"
+              />
+            ) : (
+              <div class="aspect-[16/10] w-full" />
+            )}
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <p class="eyebrow text-orange-700">
+              {lead.category?.title ?? 'Article'}
+            </p>
+            <h2 class="mt-4 max-w-[18ch] text-[length:var(--text-4xl)] leading-[1.12] text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+              {lead.title}
+            </h2>
+            <p class="mt-5 max-w-[54ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+              {postExcerpt(lead)}
+            </p>
+            <p class="mt-6 text-sm text-ink-soft">
+              {[formatPostDate(lead), `${readingMinutes(lead)} min read`].filter(Boolean).join('  ·  ')}
+            </p>
+          </div>
+        </a>
+
+        {rest.length > 0 && (
+          <div class="mt-16 grid gap-x-10 gap-y-14 border-t border-grey-100 pt-14 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map((post, i) => (
+              <a
+                href={`/insights/${post.slug}`}
+                class="group flex flex-col"
+                data-reveal
+                data-reveal-delay={String(Math.min(i, 3) * 70)}
+              >
+                <div class="overflow-hidden rounded-[var(--radius-md)] bg-warm">
+                  {mediaUrl(post.heroImage) ? (
+                    <CmsImage
+                      media={post.heroImage}
+                      alt={post.heroImage?.alt || post.title}
+                      maxWidth={640}
+                      sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw"
+                      class="aspect-[16/10] w-full object-cover transition-transform duration-[var(--duration-slow)] motion-safe:group-hover:scale-[1.02]"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="aspect-[16/10] w-full" />
+                  )}
+                </div>
+
+                <p class="eyebrow mt-5 text-orange-700">{post.category?.title ?? 'Article'}</p>
+                <h3 class="mt-3 max-w-[26ch] text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
+                  {post.title}
+                </h3>
+                <p class="mt-3 max-w-[46ch] text-base leading-relaxed text-ink">{postExcerpt(post, 130)}</p>
+                <p class="mt-4 text-sm text-ink-soft">
+                  {[formatPostDate(post), `${readingMinutes(post)} min read`].filter(Boolean).join('  ·  ')}
+                </p>
+              </a>
+            ))}
+          </div>
+        )}
+      </Section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  /* The lead image tracks the height of the text column beside it on desktop,
+     but keeps a natural ratio when it stacks on top on narrow screens. */
+  .lead-media {
+    aspect-ratio: 16 / 10;
+  }
+  @media (min-width: 64rem) {
+    .lead-card {
+      align-items: stretch;
+    }
+    .lead-media {
+      aspect-ratio: auto;
+      min-height: 22rem;
+    }
+  }
+</style>

@@ -9,10 +9,12 @@
  *   Services              — the six service practices (brief §6)
  *   ERP                   — ERP Services first, then the platforms
  *   Business Applications — WIZAG's own product suite
- *   WETO · Industries · About WIZAG · Contact
+ *   WETO · Industries · Insights · About WIZAG · Contact
  *
- * Insights is deliberately absent: the section is built but stays switched
- * off until real articles exist (brief §8.12 forbids invented content).
+ * Insights went live 2026-07-31, once real articles existed in the Payload CMS
+ * (studio at /cms). It stayed switched off until then because brief §8.12
+ * forbids invented content — there was nothing real to show. It has no
+ * dropdown: the bar item links straight to the /insights index.
  */
 
 export interface NavLink {
@@ -220,6 +222,10 @@ export const primaryNav: NavItem[] = [
     children: businessApplications,
   },
   { label: 'Industries', href: '/industries', children: industries },
+  /* Insights — the blog, authored in the Payload CMS (/cms) and pulled in at
+     build time. No `children`: it renders as a plain link to the index, not a
+     dropdown. */
+  { label: 'Insights', href: '/insights' },
   { label: 'About WIZAG', short: 'About', href: '/about', children: about },
   { label: 'Contact', href: '/contact' },
 ];
