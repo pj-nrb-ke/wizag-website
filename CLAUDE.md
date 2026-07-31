@@ -234,7 +234,8 @@ Business Applications (index + `wizcrm`, `teamkazi`), Industries (index + 9 sect
 Manufacturing featured), About (Company Overview + Partners), **Insights blog** (index +
 articles, from Payload — §13), Contact, Privacy, Terms, 404.
 
-**Pending:**
+**Pending** (the full new-session to-do list — setup + outstanding work — is in
+**`HANDOVER.md`** at the repo root; a fresh session should read it):
 - **Leadership** (`/about/leadership`) and **Careers** (`/about/careers`) are
   `noindex` shells — they need **real** people/roles/bios and real openings from the
   client. Do **not** fake them.
