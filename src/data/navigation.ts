@@ -145,13 +145,12 @@ export const erp: NavLink[] = [
    from any blanket 301 to wizag.biz.
    ------------------------------------------------------------------------- */
 export const businessApplications: NavLink[] = [
-  /* WizCRM and TeamKazi lead — they are the two with full, written pages.
-     Omitting `stub` keeps them indexable while the rest stay noindex.
+  /* WizCRM and TeamKazi — the two products with full, written pages.
 
-     Trimmed to three on 2026-07-22 (client instruction): WizPOS, CloudHR and
-     RestPOS were removed from the menu. Three items also means the dropdown
-     renders as a single column automatically — DesktopNav switches to two
-     columns only above five children, so there is nothing to configure.
+     Menu history (client instruction): WizPOS, CloudHR and RestPOS were removed
+     2026-07-22; WizSales was removed 2026-07-31 (no longer sold). With two items
+     the dropdown renders as a single column — DesktopNav switches to two columns
+     only above five children, so there is nothing to configure.
 
      ⚠ Removing an entry here also removes its page: [slug].astro derives
      getStaticPaths from this array. Re-add the entry to bring the page back. */
@@ -167,7 +166,6 @@ export const businessApplications: NavLink[] = [
     summary: 'Project management with a live P&L on every project',
     logo: '/brand/teamkazi-logo.svg',
   },
-  { label: 'WizSales', href: '/business-applications/wizsales', stub: true },
 ];
 
 /* -------------------------------------------------------------------------
