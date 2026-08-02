@@ -1,0 +1,59 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+
+/**
+ * FeatureIcon — one icon inside an accent tile, for the heading of a feature
+ * or capability card. Place it to the LEFT of the heading by wrapping both in
+ * a flex row:
+ *
+ *   <div class="flex items-center gap-3.5">
+ *     <FeatureIcon name={x} />
+ *     <h3 …>{title}</h3>
+ *   </div>
+ *
+ * This is the ONE source of truth for the treatment across the whole site, so
+ * changing the tile colour or size is a single edit here — e.g. swapping the
+ * light tile from orange to navy is one line.
+ *
+ * `light` (default) sits on paper/warm grounds; `deep` sits on navy bands
+ * (`Section tone="deep"` / `.on-deep`). The glyph inherits its colour from the
+ * tile via `currentColor`, so no class needs to reach across the Icon boundary.
+ */
+interface Props {
+  name: IconName;
+  tone?: 'light' | 'deep';
+  /** Glyph size in px; the tile is fixed at 44px. */
+  size?: number;
+  class?: string;
+}
+const { name, tone = 'light', size = 24, class: className = '' } = Astro.props as Props;
+---
+<span class:list={['feat-icon', `feat-icon--${tone}`, className]}>
+  <Icon name={name} size={size} />
+</span>
+
+<style>
+  .feat-icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+    flex: none;
+  }
+
+  /* On light grounds — soft orange tile, deeper orange glyph (graphic use of
+     brand orange, which the contrast rule permits). */
+  .feat-icon--light {
+    background: var(--color-orange-100);
+    color: var(--color-orange-700);
+  }
+
+  /* On navy bands — a faint white tile so the orange glyph reads (orange-500
+     on navy passes at 5.8:1). */
+  .feat-icon--deep {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-orange-500);
+  }
+</style>

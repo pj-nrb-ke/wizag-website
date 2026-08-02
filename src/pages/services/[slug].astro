@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import ImageSlot from '../../components/ui/ImageSlot.astro';
 import PracticeShift from '../../components/diagrams/PracticeShift.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
@@ -276,10 +277,12 @@ const image = practiceImage[practice.slug];
         others.map((other) => (
           <li class="group border-t border-grey-300 py-6" data-reveal>
             <a href={`/services/${other.slug}`} class="block">
-              <Icon name={other.icon} size={20} class="text-orange-500" />
-              <h3 class="mt-3 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-                {other.title}
-              </h3>
+              <div class="flex items-center gap-3.5">
+                <FeatureIcon name={other.icon} />
+                <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                  {other.title}
+                </h3>
+              </div>
               {/* `audience` rather than `positioning` here. The positioning
                   lines are one-clause summaries — fine as meta descriptions,
                   but next to the copy above them they read as filler. "Who

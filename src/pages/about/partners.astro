@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import { partnersLede, sagePartnership, ownProducts, selectionNote } from '../../data/about';
 
 /**
@@ -121,7 +122,7 @@ import { partnersLede, sagePartnership, ownProducts, selectionNote } from '../..
             data-reveal-delay={String(Math.min(i, 3) * 70)}
           >
             <div class="flex items-center gap-3">
-              <Icon name={product.icon} size={22} class="text-orange-500" />
+              <FeatureIcon name={product.icon} />
               <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700 transition-colors duration-[var(--duration-fast)] group-hover:text-orange-700">
                 {product.name}
               </h3>

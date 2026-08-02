@@ -79,7 +79,7 @@ export const capabilities: { name: string; hook: string; points: string[]; icon:
       'Field-level permissions — control who can see or edit each field, at each step',
       'Live preview of exactly what staff will fill in',
     ],
-    icon: 'process-excellence',
+    icon: 'document',
   },
   {
     name: 'Custom approval chains',
@@ -123,7 +123,7 @@ export const capabilities: { name: string; hook: string; points: string[]; icon:
       'One-click Approve / Reject from a secure email link — no login required',
       'Attach supporting files and add a comment on any action',
     ],
-    icon: 'check',
+    icon: 'mail',
   },
   {
     name: 'Recurring reminders',

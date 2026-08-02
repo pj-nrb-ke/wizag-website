@@ -2,6 +2,7 @@
 import Section from '../layout/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Icon from '../ui/Icon.astro';
+import FeatureIcon from '../ui/FeatureIcon.astro';
 import { problems } from '../../data/home';
 
 /**
@@ -39,11 +40,12 @@ import { problems } from '../../data/home';
                    bg-paper p-6 transition-colors duration-[var(--duration-base)]
                    hover:border-navy-300 sm:p-7"
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-
-            <h3 class="mt-5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.problem}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.problem}
+              </h3>
+            </div>
 
             <p class="mt-3 flex-1 text-base leading-relaxed text-ink">{item.response}</p>
 

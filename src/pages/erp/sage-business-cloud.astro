@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import SagePartnerBadge from '../../components/ui/SagePartnerBadge.astro';
 import SageReportingDemo from '../../components/diagrams/SageReportingDemo.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
@@ -233,8 +234,10 @@ import {
         class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
         data-reveal
       >
-        <Icon name="erp-systems" size={22} class="text-orange-500" />
-        <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">Inventory</h3>
+        <div class="flex items-center gap-3.5">
+          <FeatureIcon name="erp-systems" />
+          <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">Inventory</h3>
+        </div>
         <p class="mt-2 text-base leading-relaxed text-ink-soft">
           What you hold, what is moving, and when to reorder.
         </p>
@@ -255,10 +258,12 @@ import {
         data-reveal
         data-reveal-delay="80"
       >
-        <Icon name="globe" size={22} class="text-orange-500" />
-        <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-          Multi-currency
-        </h3>
+        <div class="flex items-center gap-3.5">
+          <FeatureIcon name="globe" />
+          <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+            Multi-currency
+          </h3>
+        </div>
         <p class="mt-2 text-base leading-relaxed text-ink-soft">
           For anyone importing, exporting or invoicing across a border.
         </p>
@@ -367,10 +372,12 @@ import {
             data-reveal
             data-reveal-delay={i * 70}
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))

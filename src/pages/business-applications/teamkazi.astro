@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import SystemsMesh from '../../components/diagrams/SystemsMesh.astro';
 import ProjectMarginDemo from '../../components/diagrams/ProjectMarginDemo.astro';
 import CriticalPathDiagram from '../../components/diagrams/CriticalPathDiagram.astro';
@@ -157,10 +158,12 @@ import { teamkaziMesh } from '../../data/mesh';
             data-reveal
             data-reveal-delay={i * 70}
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))
@@ -304,10 +307,12 @@ import { teamkaziMesh } from '../../data/mesh';
             data-reveal
             data-reveal-delay={Math.min(i, 3) * 60}
           >
-            <Icon name={block.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {block.name}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={block.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {block.name}
+              </h3>
+            </div>
             <p class="mt-2 text-base leading-relaxed text-ink-soft">{block.hook}</p>
 
             <ul class="mt-5">

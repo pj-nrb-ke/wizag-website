@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import ImageSlot from '../../components/ui/ImageSlot.astro';
 import { story, namePoint, principles, pillars, boundary, aboutImages } from '../../data/about';
 import { about, company } from '../../data/navigation';
@@ -106,10 +107,12 @@ const office = aboutImages.office;
             data-reveal
             data-reveal-delay={String(Math.min(i, 3) * 70)}
           >
-            <Icon name={principle.icon} size={26} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {principle.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={principle.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {principle.title}
+              </h3>
+            </div>
             <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-ink">{principle.body}</p>
           </div>
         ))

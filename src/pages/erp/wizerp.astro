@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import ErpDashboard from '../../components/diagrams/ErpDashboard.astro';
 import ModuleMap from '../../components/diagrams/ModuleMap.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
@@ -198,10 +199,12 @@ import {
             data-reveal
             data-reveal-delay={Math.min(i, 5) * 50}
           >
-            <Icon name={c.icon} size={20} class="text-orange-500" />
-            <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
-              {c.name}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={c.icon} />
+              <h3 class="text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+                {c.name}
+              </h3>
+            </div>
             <p class="mt-1.5 text-base leading-relaxed text-ink">{c.body}</p>
           </li>
         ))
@@ -227,10 +230,12 @@ import {
           {
             whyWizerp.map((w) => (
               <li class="border-t border-navy-500/40 py-4">
-                <Icon name={w.icon} size={19} class="text-orange-500" />
-                <h3 class="mt-2.5 text-[length:var(--text-lg)] font-bold leading-snug text-paper">
-                  {w.title}
-                </h3>
+                <div class="flex items-center gap-3.5">
+                  <FeatureIcon name={w.icon} tone="deep" />
+                  <h3 class="text-[length:var(--text-lg)] font-bold leading-snug text-paper">
+                    {w.title}
+                  </h3>
+                </div>
                 <p class="mt-1.5 text-base leading-relaxed text-navy-100">{w.body}</p>
               </li>
             ))
@@ -242,8 +247,8 @@ import {
           exactly these, and burying them wastes everyone's time. */}
       <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="100">
         <div class="rounded-[var(--radius-md)] border border-navy-500/40 bg-navy-900/45 p-6 sm:p-7">
-          <div class="flex items-center gap-3">
-            <Icon name="cloud" size={20} class="text-orange-500" />
+          <div class="flex items-center gap-3.5">
+            <FeatureIcon name="cloud" tone="deep" />
             <h3 class="text-[length:var(--text-xl)] font-bold text-paper">Technology</h3>
           </div>
           <dl class="mt-5">
@@ -283,10 +288,12 @@ import {
             data-reveal
             data-reveal-delay={Math.min(i, 3) * 60}
           >
-            <Icon name={e.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-3.5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {e.name}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={e.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {e.name}
+              </h3>
+            </div>
             <p class="mt-2 text-base leading-relaxed text-ink">{e.body}</p>
           </li>
         ))
@@ -370,10 +377,12 @@ import {
             data-reveal
             data-reveal-delay={i * 60}
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-2 text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))

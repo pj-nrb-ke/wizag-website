@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import { practices, allCapabilities } from '../../data/services';
 
 /**
@@ -78,10 +79,12 @@ const howWeWork = [
             data-reveal
             data-reveal-delay={String(i * 90)}
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-3 max-w-[46ch] text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))
@@ -108,11 +111,12 @@ const howWeWork = [
           return (
             <li class="group border-t border-grey-300 py-8" data-reveal>
               <a href={`/services/${practice.slug}`} class="block">
-                <Icon name={practice.icon} size={24} class="text-orange-500" />
-
-                <h3 class="mt-4 text-[length:var(--text-3xl)] leading-snug text-navy-700">
-                  {practice.title}
-                </h3>
+                <div class="flex items-center gap-3.5">
+                  <FeatureIcon name={practice.icon} />
+                  <h3 class="text-[length:var(--text-3xl)] leading-snug text-navy-700">
+                    {practice.title}
+                  </h3>
+                </div>
 
                 <p class="mt-3 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
                   {practice.positioning}

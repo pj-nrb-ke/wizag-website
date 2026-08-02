@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import DivisionOfLabour from '../../components/diagrams/DivisionOfLabour.astro';
 import StepFlow from '../../components/diagrams/StepFlow.astro';
 import {
@@ -120,10 +121,12 @@ import {
       {
         whyPartner.map((item, i) => (
           <li class="border-t border-grey-300 py-6" data-reveal data-reveal-delay={Math.min(i, 3) * 60}>
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-3.5 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-2 max-w-[46ch] text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))
@@ -173,8 +176,10 @@ import {
             data-reveal
             data-reveal-delay={i * 70}
           >
-            <Icon name={m.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">{m.name}</h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={m.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">{m.name}</h3>
+            </div>
             <p class="mt-2.5 text-base leading-relaxed text-ink">{m.body}</p>
           </div>
         ))
@@ -195,8 +200,8 @@ import {
           {
             capabilities.map((c) => (
               <li class="border-t border-navy-500/40 py-4">
-                <div class="flex items-center gap-3">
-                  <Icon name={c.icon} size={19} class="text-orange-500" />
+                <div class="flex items-center gap-3.5">
+                  <FeatureIcon name={c.icon} tone="deep" />
                   <h3 class="text-[length:var(--text-lg)] font-bold leading-snug text-paper">
                     {c.name}
                   </h3>
@@ -210,8 +215,8 @@ import {
 
       <div class="lg:sticky lg:top-28 lg:self-start" data-reveal data-reveal-delay="100">
         <div class="rounded-[var(--radius-md)] border border-navy-500/40 bg-navy-900/45 p-6 sm:p-7">
-          <div class="flex items-center gap-3">
-            <Icon name="migrate" size={20} class="text-orange-500" />
+          <div class="flex items-center gap-3.5">
+            <FeatureIcon name="migrate" tone="deep" />
             <h3 class="text-[length:var(--text-xl)] font-bold text-paper">We migrate them from</h3>
           </div>
           <p class="mt-2.5 text-base leading-relaxed text-navy-100">

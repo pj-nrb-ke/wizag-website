@@ -5,6 +5,7 @@ import Section from '../../components/layout/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Button from '../../components/ui/Button.astro';
 import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
 import CapabilityHub from '../../components/diagrams/CapabilityHub.astro';
 import {
   sage200,
@@ -117,7 +118,7 @@ import {
             data-reveal-delay={i * 80}
           >
             <div class="flex items-center gap-3">
-              <Icon name={e.icon} size={22} class="text-orange-500" />
+              <FeatureIcon name={e.icon} />
               <span class="rounded-full bg-warm px-2.5 py-0.5 font-mono text-[length:var(--text-2xs)] font-bold uppercase tracking-[0.1em] text-orange-700">
                 {e.tag}
               </span>
@@ -159,10 +160,12 @@ import {
             data-reveal
             data-reveal-delay={Math.min(i, 5) * 50}
           >
-            <Icon name={m.icon} size={20} class="text-orange-500" />
-            <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
-              {m.name}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={m.icon} />
+              <h3 class="text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+                {m.name}
+              </h3>
+            </div>
             <p class="mt-1.5 text-base leading-relaxed text-ink">{m.body}</p>
             {m.note && (
               <p class="mt-2 font-mono text-[length:var(--text-2xs)] font-bold uppercase tracking-[0.08em] text-orange-700">
@@ -191,10 +194,12 @@ import {
           {
             benefits.map((b) => (
               <li class="border-t border-grey-300 pt-4">
-                <Icon name={b.icon} size={20} class="text-orange-500" />
-                <h3 class="mt-3 text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
-                  {b.title}
-                </h3>
+                <div class="flex items-center gap-3.5">
+                  <FeatureIcon name={b.icon} />
+                  <h3 class="text-[length:var(--text-xl)] font-bold leading-snug text-navy-700">
+                    {b.title}
+                  </h3>
+                </div>
                 <p class="mt-1.5 text-base leading-relaxed text-ink">{b.body}</p>
               </li>
             ))
@@ -322,10 +327,12 @@ import {
             data-reveal
             data-reveal-delay={i * 70}
           >
-            <Icon name={item.icon} size={22} class="text-orange-500" />
-            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
-              {item.title}
-            </h3>
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
             <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
           </li>
         ))
