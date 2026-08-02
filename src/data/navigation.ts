@@ -168,6 +168,16 @@ export const businessApplications: NavLink[] = [
     summary: 'Project management with a live P&L on every project',
     logo: '/brand/teamkazi-logo.svg',
   },
+  /* WizFlow — no-code workflow & approval automation. Added 2026-08-02 with a
+     full written page. The `logo` is the client-supplied flow-mark, cropped from
+     the hi-res lockup to a transparent PNG (the violet mark reads on both the
+     white menu panel and the navy page hero). */
+  {
+    label: 'WizFlow',
+    href: '/business-applications/wizflow',
+    summary: 'No-code workflow and approval automation for the whole office',
+    logo: '/brand/wizflow-logo.png',
+  },
 ];
 
 /* -------------------------------------------------------------------------

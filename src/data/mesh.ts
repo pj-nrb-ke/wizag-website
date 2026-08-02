@@ -142,3 +142,49 @@ export const teamkaziMesh: Tile[] = [
   f('Row-level data isolation'), f('Role-based access'), f('Idle session timeout'),
   b('Agrees to the shilling'), b('No flattering defaults'),
 ];
+
+/* -------------------------------------------------------------------------
+   WIZFLOW — drawn from the three WizFlow feature docs.
+
+   ⚠ Only shipped features appear here. No ERP connectors (QuickBooks/Zoho/
+   Odoo/Tally/Sage 200/SAP B1 — deferred and, for SAP B1, banned site-wide),
+   no WhatsApp send, no iOS claim. Labels kept short: this runs in a narrow
+   two-column panel, and anything past ~26 characters ellipsizes.
+   ------------------------------------------------------------------------- */
+export const wizflowMesh: Tile[] = [
+  p('Approval Inbox'), b('No more email chains'), f('Draft → Publish'),
+  f('One-click email approve'), b('Approve from your phone'),
+
+  p('No-code Form Designer'), f('Drag-and-drop fields'), f('Currency & calculated'),
+  f('Field-level permissions'), b('Built by managers'),
+
+  p('Custom approval chains'), f('2-step to 8-step'), f('Groups & claim mode'),
+  b('Any policy, modelled'), f('Separation of duties'),
+
+  p('AI Workflow Creator'), b('Describe it, get a draft'), f('Refine with follow-ups'),
+  f('Explains any workflow'), f('Works offline too'),
+
+  p('Route by amount'), b('High value → finance'), f('Skip & jump rules'),
+  f('Numeric-safe routing'),
+
+  p('Versioning & simulation'), f('Test before go-live'), f('Rollback any version'),
+  b('No surprises in prod'), f('Health checker'),
+
+  p('KPI Dashboards'), f('Executive & department'), f('User & workflow'),
+  b('See the bottleneck'), f('Drill-down analytics'),
+
+  f('Per-step SLAs'), b('Caught before it breaches'), f('Escalation engine'),
+  f('Approval heatmap'), f('Journey analytics'),
+
+  p('Recurring reminders'), f('Done · Missed · Pending'), b('Compliance you can prove'),
+  f('Scheduled reports'),
+
+  f('Reference numbers'), f('Full audit trail'), b('Who approved what, when'),
+  f('Attachments & checklist'),
+
+  p('Mobile app'), f('Push notifications'), b('Clear inbox on the go'),
+  f('Master data library'), f('User groups'), f('Templates'),
+
+  f('Webhooks & API'), b('Your domain, your brand'), f('2FA & delegation'),
+  f('Multi-tenant isolation'), f('Role-based access'),
+];

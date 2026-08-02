@@ -1,0 +1,230 @@
+---
+interface Props {
+  /** Seconds for one full pass (two cases). */
+  cycle?: number;
+}
+
+/**
+ * WizFlow conditional routing — the signature "route by amount" capability.
+ *
+ * One request, two possible paths: below the threshold it goes to a manager;
+ * above it, it skips straight to finance. The animation alternates a low and a
+ * high amount so the eye sees the same request take a different path — which
+ * says "routing is a rule, not a separate workflow" faster than a sentence.
+ *
+ * Complete and readable when static (both branches labelled with their
+ * condition); the motion only stages which path a given amount takes. Nothing
+ * animates under prefers-reduced-motion. A .sr-only caption narrates it.
+ */
+const { cycle = 7 } = Astro.props as Props;
+---
+
+<figure class="routing" style={`--cycle:${cycle}s`}>
+  <figcaption class="sr-only">
+    A purchase request is routed by amount: when the amount is at or below
+    fifty thousand shillings it goes to a manager for approval; when it is
+    above fifty thousand it skips straight to finance. The rule is applied
+    automatically, without a separate workflow.
+  </figcaption>
+
+  <!-- The request, with an amount that alternates low / high -->
+  <div class="req" aria-hidden="true">
+    <span class="req-label">Purchase request</span>
+    <span class="amount">
+      <span class="amt amt--lo">KES 4,000</span>
+      <span class="amt amt--hi">KES 120,000</span>
+    </span>
+  </div>
+
+  <span class="spine" aria-hidden="true"></span>
+
+  <!-- The rule -->
+  <div class="decision" aria-hidden="true">Over KES 50,000?</div>
+
+  <!-- The two paths -->
+  <div class="branches">
+    <div class="branch branch--manager" aria-hidden="true">
+      <span class="cond">No</span>
+      <span class="dest">Manager approves</span>
+    </div>
+    <div class="branch branch--finance" aria-hidden="true">
+      <span class="cond">Yes</span>
+      <span class="dest">Finance approves</span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .routing {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 1.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-grey-100);
+    background: var(--color-paper);
+  }
+
+  .req {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
+    width: min(20rem, 100%);
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-navy-700);
+    text-align: center;
+  }
+
+  .req-label {
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-navy-100);
+  }
+
+  /* The two amounts share one slot; the low one shows by default (and for
+     reduced-motion), the high one is layered over it and only appears mid-cycle. */
+  .amount {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 1.9rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-paper);
+  }
+
+  .amt {
+    grid-area: 1 / 1;
+  }
+
+  .amt--hi {
+    opacity: 0;
+  }
+
+  .spine {
+    width: 2px;
+    height: 1.15rem;
+    border-radius: 1px;
+    background: var(--color-grey-300);
+  }
+
+  .decision {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-orange-500);
+    background: var(--color-orange-100);
+    color: var(--color-navy-700);
+    font-size: var(--text-sm);
+    font-weight: 650;
+  }
+
+  .branches {
+    margin-top: 0.35rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 26rem;
+  }
+
+  .branch {
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    padding: 0.85rem 0.75rem;
+    text-align: center;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-grey-100);
+    background: var(--color-warm);
+    /* Base (and reduced-motion) state: both paths shown, neutral. */
+    transition: border-color 200ms var(--ease-standard);
+  }
+
+  .cond {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+  }
+
+  .dest {
+    font-size: var(--text-sm);
+    font-weight: 650;
+    color: var(--color-navy-700);
+    line-height: 1.3;
+  }
+
+  /* ---- motion: alternate the amount, and light the matching path ------
+     Everything above is complete and legible with no animation. */
+  @media (prefers-reduced-motion: no-preference) {
+    .amt--lo {
+      animation: amt-lo var(--cycle) ease-in-out infinite;
+    }
+    .amt--hi {
+      animation: amt-hi var(--cycle) ease-in-out infinite;
+    }
+    .branch--manager {
+      animation: lit-manager var(--cycle) ease-in-out infinite;
+    }
+    .branch--finance {
+      animation: lit-finance var(--cycle) ease-in-out infinite;
+    }
+  }
+
+  @keyframes amt-lo {
+    0%, 42% { opacity: 1; }
+    50%, 92% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes amt-hi {
+    0%, 42% { opacity: 0; }
+    50%, 92% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Low amount → manager lights in the first half. */
+  @keyframes lit-manager {
+    0%, 6% {
+      border-color: var(--color-grey-100);
+      background: var(--color-warm);
+    }
+    12%, 42% {
+      border-color: var(--color-orange-500);
+      background: var(--color-orange-100);
+    }
+    50%, 100% {
+      border-color: var(--color-grey-100);
+      background: var(--color-warm);
+    }
+  }
+
+  /* High amount → finance lights in the second half. */
+  @keyframes lit-finance {
+    0%, 50% {
+      border-color: var(--color-grey-100);
+      background: var(--color-warm);
+    }
+    56%, 92% {
+      border-color: var(--color-orange-500);
+      background: var(--color-orange-100);
+    }
+    98%, 100% {
+      border-color: var(--color-grey-100);
+      background: var(--color-warm);
+    }
+  }
+
+  @media (max-width: 26rem) {
+    .branches {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import SystemsMesh from '../../components/diagrams/SystemsMesh.astro';
+import StepFlow from '../../components/diagrams/StepFlow.astro';
+import RoutingDiagram from '../../components/diagrams/RoutingDiagram.astro';
+import { wizflow, problems, flowSteps, capabilities, kpis, insight, platform } from '../../data/wizflow';
+import { wizflowMesh } from '../../data/mesh';
+
+/**
+ * WizFlow product page — WIZAG's no-code workflow & approval platform.
+ *
+ * Content extracted from the three WizFlow feature docs, following their own
+ * suggested brochure order. Animation demonstrates rather than decorates: the
+ * scrolling mesh, the step-flow and the amount-routing diagram each carry a
+ * capability; everything else is the site's standard scroll reveal.
+ *
+ * ⚠ Only shipped features are marketed. No ERP connectors (deferred; SAP B1
+ * banned site-wide), no WhatsApp-send or iOS claim. Nothing appears here that
+ * is not in the source docs. The three client-supplied photographs and the
+ * flow-mark logo are placed in public/images/wizflow/ and public/brand/.
+ */
+---
+
+<BaseLayout title="WizFlow — approvals that run themselves" description={wizflow.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li>
+            <a href="/business-applications" class="py-1 transition-colors hover:text-paper">
+              Business Applications
+            </a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">WizFlow</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
+        <div>
+          {/* Product mark — the flow icon, cropped from the client-supplied
+              lockup. Decorative: "WizFlow" is the eyebrow and the page title,
+              so alt text would announce the name twice. The violet mark holds
+              up on this navy hero, same as the WizCRM tile. */}
+          <img src="/brand/wizflow-logo.png" alt="" width="48" height="48" class="mb-5 h-12 w-auto" />
+
+          <p class="eyebrow text-orange-500">WizFlow</p>
+
+          <h1 class="optical-left mt-4 max-w-[15ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {wizflow.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[52ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {wizflow.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Request a Demo</Button>
+            <a
+              href="#how-it-works"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              See how it works
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{wizflow.audience}</p>
+        </div>
+
+        {/* The scrolling systems mesh — two columns of WizFlow capability
+            tiles cycling continuously, the same component and behaviour as the
+            homepage hero, in its contained `panel` form. Parent must be
+            position:relative for the mesh to fill it. */}
+        <div class="relative h-[26rem] overflow-hidden rounded-[var(--radius-lg)] border border-navy-500/40 bg-navy-900/45 sm:h-[30rem] lg:h-[32rem]">
+          <SystemsMesh items={wizflowMesh} columns={2} variant="panel" />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE PROBLEM ------------------------------------------------------ -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="The problem"
+      lead="Approval is one of the most common things an office does, and one of the worst-served — it still runs on email chains, spreadsheets and follow-up phone calls."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Stop chasing approvals by email
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-3">
+      {
+        problems.map((item, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={i * 70}
+          >
+            <Icon name={item.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {item.title}
+            </h3>
+            <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- HOW A REQUEST FLOWS ---------------------------------------------- -->
+  <Section tone="paper" id="how-it-works">
+    <SectionHeading
+      eyebrow="How it works"
+      lead="Every request follows the same clear path — structured, tracked, and recorded end to end."
+      measure="max-w-[16ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      One path, start to finish
+    </SectionHeading>
+
+    <div class="mt-12 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      <div data-reveal>
+        <StepFlow steps={flowSteps} orientation="vertical" cycle={16} tone="light" />
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        {/* The human "submit" side, to contrast the email chaos. */}
+        <img
+          src="/images/wizflow/wizflow-submit.jpg"
+          alt="A man in a navy blazer working calmly at a laptop in a bright office, a WizFlow logo on the wall behind him and a WizFlow mug on the desk."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- ROUTE BY AMOUNT -------------------------------------------------- -->
+  <Section tone="warm">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Business rules" measure="max-w-[16ch]">
+          Route by amount, automatically
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          High-value requests should reach finance without anyone remembering to forward them. In
+          WizFlow that is a rule, not a second workflow — set a threshold and requests over it skip
+          straight to the right approver.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          The same works for any field: skip, jump, or add a step based on what was submitted.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <RoutingDiagram />
+      </div>
+    </div>
+  </Section>
+
+  <!-- CAPABILITIES ----------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="What's inside"
+      lead="A complete approval platform — design the process, run it, and let it chase the deadlines."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Everything an office approval needs
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        capabilities.map((block, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <Icon name={block.icon} size={22} class="text-orange-500" />
+            <h3 class="mt-4 text-[length:var(--text-2xl)] leading-snug text-navy-700">
+              {block.name}
+            </h3>
+            <p class="mt-2 text-base leading-relaxed text-ink-soft">{block.hook}</p>
+
+            <ul class="mt-5">
+              {block.points.map((point) => (
+                <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                  <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- KPIs & INSIGHT --------------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Reporting & analytics"
+      lead="Because every request is structured, WizFlow measures the whole operation — not just whether things got approved, but how well the office is running."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      An approval platform that measures itself
+    </SectionHeading>
+
+    <div class="mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+      <div>
+        {/* KPI infographic — what the analytics hub surfaces. Label-only:
+            no invented figures, per the site's anti-fabrication rule. */}
+        <ul class="grid gap-4 sm:grid-cols-2">
+          {
+            kpis.map((kpi, i) => (
+              <li
+                class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-5"
+                data-reveal
+                data-reveal-delay={Math.min(i, 3) * 60}
+              >
+                <Icon name={kpi.icon} size={20} class="text-orange-500" />
+                <p class="mt-3 text-[length:var(--text-lg)] font-bold leading-snug text-navy-700">
+                  {kpi.label}
+                </p>
+                <p class="mt-1 text-sm leading-relaxed text-ink-soft">{kpi.caption}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <ul class="mt-8" data-reveal>
+          {
+            insight.map((point) => (
+              <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                {point}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="lg:sticky lg:top-28" data-reveal data-reveal-delay="120">
+        {/* The oversight moment. */}
+        <img
+          src="/images/wizflow/wizflow-insight.jpg"
+          alt="Two managers reviewing a dashboard of charts on a large monitor, one pointing at a figure with a pen as the other looks on."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- APPROVE FROM ANYWHERE -------------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="On the move" measure="max-w-[16ch]">
+          Approve from anywhere
+        </SectionHeading>
+        <p class="mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Approvers do not have to be at a desk. Act from the mobile app with push notifications, or
+          approve straight from a one-click email link — no login required. The request moves on the
+          moment they tap.
+        </p>
+        <ul class="mt-6 max-w-[46ch]">
+          <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+            <Icon name="device" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+            Mobile app for approvals, submissions and notifications
+          </li>
+          <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+            <Icon name="mail" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+            Secure one-click email approval, with the link scoped to that step
+          </li>
+        </ul>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        {/* The "approve from anywhere" moment. */}
+        <img
+          src="/images/wizflow/wizflow-approve.jpg"
+          alt="A manager in a navy suit tapping his phone in a bright office corridor, two colleagues talking in the background."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- SECURITY & PLATFORM ---------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Built for IT</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Multi-tenant, audited, and yours to host
+        </h2>
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-navy-100">
+          Enterprise foundations under the friendly surface — isolation between companies,
+          fine-grained access, and a full record of every action. Runs on your own domain.
+        </p>
+      </div>
+
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          platform.map((item) => (
+            <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+              <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-navy-700">
+          See WizFlow on your own approvals
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-ink">
+          Bring a real approval process — an expense claim, a purchase, a leave request — and we
+          will build it live and show you the whole journey, from submit to audit trail.
+        </p>
+      </div>
+      <Button href="/contact" variant="primary" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>
