@@ -13,7 +13,7 @@ the versioned source of truth; the running copy lives on the VPS.
   (added after the `/cms/*` handle; a timestamped `Caddyfile.bak-*` sits alongside).
 - The Brevo API key is in **`/srv/wizag/enquiry/brevo.key`** (mode 600) — written
   only via the one-time setup page, never in git.
-- Config via the systemd unit env: `SENDER_EMAIL=no-reply@wizag.biz`,
+- Config via the systemd unit env: `SENDER_EMAIL=vsm@wizag.co.ke`,
   `RECIPIENT_EMAIL=info@wizag.biz`, `SENDER_NAME`, `PORT`.
 
 ## Routes
@@ -43,10 +43,15 @@ echo "https://wizag.biz/api/setup/$T"     # give this to PJ; delete brevo.key fi
 
 ## Deliverability note
 
-Brevo → Zoho (`info@wizag.biz`) can land in **Junk** (same as teamkazi.com). If so,
-allow-list in **Zoho Admin → Spam Control → Allowed List → Domains** (`wizag.biz` /
-the Brevo sending IPs). The domain is already Brevo-authenticated (DKIM `brevo1`/`brevo2`,
-DMARC), so `no-reply@wizag.biz` sends without per-sender verification.
+**Sender must be validated in the Brevo account whose key is installed.** As of
+2026-08-03 that account's valid senders are `info@emailnotifications.co.ke`,
+`vsm@wizag.co.ke`, `admin@teamkazi.com` — **no `@wizag.biz` sender**. Sending from
+`no-reply@wizag.biz` was **rejected** ("sender not valid / authenticate your domain"),
+so `SENDER_EMAIL` is set to the validated **`vsm@wizag.co.ke`**. Delivery to `@wizag.biz`
+(Zoho) works — a test to pj@wizag.biz `delivered` to the Inbox. To send from
+`no-reply@wizag.biz`, first authenticate the **wizag.biz** domain (or verify that sender)
+in that Brevo account, then switch `SENDER_EMAIL` back. Check delivery in Brevo →
+Transactional → Logs, or the API `GET /v3/smtp/statistics/events?email=…`. Watch Zoho Junk.
 
 ## Hardening backlog (v1 runs as root, loopback-only)
 
