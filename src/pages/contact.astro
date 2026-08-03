@@ -118,6 +118,9 @@ const inputClass =
             </div>
           </div>
 
+          {/* reCAPTCHA renders here only if the server has a site key configured. */}
+          <div id="recaptcha-slot" class="mt-6"></div>
+
           <div class="mt-7 flex flex-col items-start gap-4">
             <Button type="submit" variant="primary" size="large" arrow>Book my assessment</Button>
             <p
@@ -145,11 +148,13 @@ const inputClass =
   </Section>
 
   <script>
-    // Progressive enhancement: submit via fetch and show an inline confirmation.
-    // With no JS the form posts normally and the endpoint returns a thank-you page.
+    // Progressive enhancement: submit via fetch, show an inline confirmation, and
+    // require Google reCAPTCHA when the server has a site key configured.
     const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
     const statusEl = document.getElementById('enquiry-status');
     const submit = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    const grc = () => (window as any).grecaptcha;
+    let captchaWidgetId: number | null = null;
 
     const setStatus = (html: string) => {
       if (!statusEl) return;
@@ -160,10 +165,41 @@ const inputClass =
       'Sorry, that did not send. Please email ' +
       '<a class="underline" href="mailto:info@wizag.biz">info@wizag.biz</a>.';
 
+    // Render the reCAPTCHA widget only if the server has a site key.
+    (async () => {
+      try {
+        const cfg = await fetch('/api/config').then((r) => r.json());
+        const siteKey = cfg?.recaptcha?.siteKey;
+        if (!siteKey) return;
+        (window as any).__wizagRecaptchaLoad = () => {
+          captchaWidgetId = grc().render('recaptcha-slot', { sitekey: siteKey });
+        };
+        const s = document.createElement('script');
+        s.src = 'https://www.google.com/recaptcha/api.js?onload=__wizagRecaptchaLoad&render=explicit';
+        s.async = true;
+        s.defer = true;
+        document.head.appendChild(s);
+      } catch {
+        /* no captcha configured — the form still works */
+      }
+    })();
+
     form?.addEventListener('submit', async (event) => {
       if (!form.reportValidity()) return;
       event.preventDefault();
-      const payload = Object.fromEntries(new FormData(form).entries());
+      const payload: Record<string, string> = Object.fromEntries(
+        new FormData(form).entries() as any
+      );
+
+      if (captchaWidgetId !== null) {
+        const token = grc().getResponse(captchaWidgetId);
+        if (!token) {
+          setStatus('Please complete the “I’m not a robot” check.');
+          return;
+        }
+        payload['g-recaptcha-response'] = token;
+      }
+
       if (submit) submit.disabled = true;
       setStatus('Sending…');
       try {
@@ -173,11 +209,12 @@ const inputClass =
           body: JSON.stringify(payload),
         });
         const out = await res.json().catch(() => ({ ok: false }));
+        if (captchaWidgetId !== null) grc().reset(captchaWidgetId);
         if (res.ok && out.ok) {
           form.reset();
           setStatus('Thank you — we have it. We will be in touch, usually within one business day.');
         } else {
-          setStatus(failMsg);
+          setStatus(out.error ? out.error : failMsg);
         }
       } catch {
         setStatus(failMsg);
