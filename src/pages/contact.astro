@@ -2,16 +2,21 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/layout/PageHero.astro';
 import Section from '../components/layout/Section.astro';
+import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
 import { company } from '../data/navigation';
 
 /**
- * Contact.
+ * Contact — "Book an Assessment".
  *
- * The capture form lands in the next phase, once the endpoint exists:
- * Turnstile → edge function → Zod validation → Postgres → email → WizCRM.
- * Until then this page routes to a real mailbox rather than showing a form
- * that silently fails — a dead form costs more trust than no form.
+ * The form posts to /api/enquiry (a small Node service on the VPS, behind
+ * Caddy — see server/enquiry/), which sends the enquiry through Brevo to
+ * info@wizag.biz.
+ *   · With JS: fetch → inline "thank you" (no page change).
+ *   · Without JS: the form posts normally and the endpoint returns a
+ *     thank-you page — so it never silently fails.
+ * A honeypot field ("website") quietly drops bots. If the endpoint is ever
+ * down, the visitor is pointed at the direct mailbox.
  */
 const { address } = company;
 
@@ -21,6 +26,11 @@ const expectations = [
   'You get a plain view of where the value is — and where it is not',
   'No obligation to proceed',
 ];
+
+const enquirySubject = 'Business technology assessment';
+const inputClass =
+  'rounded-[var(--radius-md)] border border-grey-300 bg-paper px-4 py-3 text-base text-ink ' +
+  'placeholder:text-grey-500 transition-colors duration-[var(--duration-fast)] focus:border-navy-500';
 ---
 
 <BaseLayout
@@ -35,7 +45,7 @@ const expectations = [
   />
 
   <Section tone="paper">
-    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
       <div data-reveal>
         <p class="eyebrow mb-4 text-ink-soft">What to expect</p>
         <ul>
@@ -48,37 +58,132 @@ const expectations = [
             ))
           }
         </ul>
+
+        <p class="eyebrow mb-3 mt-10 text-ink-soft">Office</p>
+        <address class="space-y-1 text-base not-italic leading-relaxed text-ink">
+          <div class="font-semibold text-navy-700">{address.building}</div>
+          <div>{address.unit}</div>
+          <div>{address.street}</div>
+          <div>{address.area}, {address.city}</div>
+          <div>{address.country}</div>
+        </address>
       </div>
 
       <div data-reveal data-reveal-delay="100">
-        <div class="rounded-[var(--radius-lg)] border border-grey-100 bg-warm p-7 sm:p-9">
-          <p class="eyebrow mb-4 text-ink-soft">Get in touch</p>
-
-          <a
-            href={`mailto:${company.email}?subject=Business%20technology%20assessment`}
-            class="group inline-flex items-center gap-3 text-[length:var(--text-2xl)] font-semibold text-navy-700 transition-colors duration-[var(--duration-fast)] hover:text-orange-700"
-          >
-            <Icon name="mail" size={20} class="text-orange-500" />
-            {company.email}
-          </a>
-
-          <p class="mt-4 text-base leading-relaxed text-ink">
-            Email is the fastest route to a real answer. Tell us the systems you run and what
-            is not working, and we will come back with specifics.
+        <form
+          id="enquiry-form"
+          action="/api/enquiry"
+          method="post"
+          class="rounded-[var(--radius-lg)] border border-grey-100 bg-warm p-7 sm:p-9"
+        >
+          <p class="eyebrow mb-2 text-ink-soft">Request your assessment</p>
+          <p class="mb-6 max-w-[46ch] text-base leading-relaxed text-ink">
+            A few details and we will come back with specifics — usually within one business day.
           </p>
 
-          <hr class="my-7 border-grey-300" />
+          {/* Honeypot — hidden from people, tempting to bots. Leave it empty. */}
+          <div class="hidden" aria-hidden="true">
+            <label>Do not fill this in<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
 
-          <p class="eyebrow mb-3 text-ink-soft">Office</p>
-          <address class="space-y-1 text-base not-italic leading-relaxed text-ink">
-            <div class="font-semibold text-navy-700">{address.building}</div>
-            <div>{address.unit}</div>
-            <div>{address.street}</div>
-            <div>{address.area}, {address.city}</div>
-            <div>{address.country}</div>
-          </address>
-        </div>
+          <div class="grid gap-5">
+            <div class="grid gap-1.5">
+              <label for="f-name" class="text-sm font-semibold text-navy-700">Your name</label>
+              <input id="f-name" name="name" type="text" required autocomplete="name" class={inputClass} />
+            </div>
+
+            <div class="grid gap-1.5">
+              <label for="f-email" class="text-sm font-semibold text-navy-700">Work email</label>
+              <input id="f-email" name="email" type="email" required autocomplete="email" class={inputClass} />
+            </div>
+
+            <div class="grid gap-1.5">
+              <label for="f-company" class="text-sm font-semibold text-navy-700">
+                Company <span class="font-normal text-ink-soft">(optional)</span>
+              </label>
+              <input id="f-company" name="company" type="text" autocomplete="organization" class={inputClass} />
+            </div>
+
+            <div class="grid gap-1.5">
+              <label for="f-message" class="text-sm font-semibold text-navy-700">
+                What would you like to improve?
+              </label>
+              <textarea
+                id="f-message"
+                name="message"
+                rows="4"
+                required
+                placeholder="The systems you run and what is not working right now…"
+                class={inputClass}></textarea>
+            </div>
+          </div>
+
+          <div class="mt-7 flex flex-col items-start gap-4">
+            <Button type="submit" variant="primary" size="large" arrow>Book my assessment</Button>
+            <p
+              id="enquiry-status"
+              role="status"
+              aria-live="polite"
+              hidden
+              class="text-sm font-semibold text-orange-700"
+            >
+            </p>
+          </div>
+
+          <p class="mt-6 border-t border-grey-300 pt-5 text-sm leading-relaxed text-ink-soft">
+            We only use your details to respond to this enquiry. Prefer to write directly?{' '}
+            <a
+              href={`mailto:${company.email}?subject=${encodeURIComponent(enquirySubject)}`}
+              class="font-semibold text-navy-700 underline underline-offset-4 hover:text-orange-700"
+            >
+              {company.email}
+            </a>
+          </p>
+        </form>
       </div>
     </div>
   </Section>
+
+  <script>
+    // Progressive enhancement: submit via fetch and show an inline confirmation.
+    // With no JS the form posts normally and the endpoint returns a thank-you page.
+    const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
+    const statusEl = document.getElementById('enquiry-status');
+    const submit = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    const setStatus = (html: string) => {
+      if (!statusEl) return;
+      statusEl.hidden = false;
+      statusEl.innerHTML = html;
+    };
+    const failMsg =
+      'Sorry, that did not send. Please email ' +
+      '<a class="underline" href="mailto:info@wizag.biz">info@wizag.biz</a>.';
+
+    form?.addEventListener('submit', async (event) => {
+      if (!form.reportValidity()) return;
+      event.preventDefault();
+      const payload = Object.fromEntries(new FormData(form).entries());
+      if (submit) submit.disabled = true;
+      setStatus('Sending…');
+      try {
+        const res = await fetch('/api/enquiry', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const out = await res.json().catch(() => ({ ok: false }));
+        if (res.ok && out.ok) {
+          form.reset();
+          setStatus('Thank you — we have it. We will be in touch, usually within one business day.');
+        } else {
+          setStatus(failMsg);
+        }
+      } catch {
+        setStatus(failMsg);
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+  </script>
 </BaseLayout>
