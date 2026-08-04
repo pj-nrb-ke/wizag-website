@@ -193,11 +193,12 @@ export const wizflowMesh: Tile[] = [
    WIZLANE — transport management, drawn from the two WizLane feature docs.
 
    ⚠ Only shipped features appear here. No live GPS map tracking (the roadmap
-   marks it "not implemented"); the eTIMS, direct-Daraja and NTSA-API links are
-   stubs/planned and are NOT claimed as live. SMS/WhatsApp/Email, fuel-card
-   import and Google Maps are wired, so they may appear. No wizlane.ke, phone
-   or pricing. Labels kept short: this runs in a narrow two-column panel, and
-   anything past ~26 characters ellipsizes.
+   marks it "not implemented"); no offline ePOD/walkaround capture (client-
+   confirmed 2026-08-04 it is not live); the eTIMS, direct-Daraja and NTSA-API
+   links are stubs/planned and are NOT claimed as live. SMS/WhatsApp/Email,
+   fuel-card import and Google Maps are wired, so they may appear. No wizlane.ke,
+   phone or pricing. Labels kept short: this runs in a narrow two-column panel,
+   and anything past ~26 characters ellipsizes.
    ------------------------------------------------------------------------- */
 export const wizlaneMesh: Tile[] = [
   p('Job & Dispatch'), b('Off WhatsApp, on one screen'), f('Assign in seconds'),
@@ -216,7 +217,7 @@ export const wizlaneMesh: Tile[] = [
   f('Depot stock alerts'),
 
   p('ePOD'), b('No more paper waybills'), f('Signature & photo'),
-  f('Captures offline'), b('Invoice on delivery'),
+  f('GPS & timestamp'), b('Invoice on delivery'),
 
   p('Invoicing & Finance'), f('VAT & WHT, correct'), f('Rate cards'),
   f('PesaPal payment link'), b('Get paid faster'),
