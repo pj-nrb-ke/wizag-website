@@ -1,0 +1,434 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
+import SystemsMesh from '../../components/diagrams/SystemsMesh.astro';
+import StepFlow from '../../components/diagrams/StepFlow.astro';
+import ChannelFanout from '../../components/diagrams/ChannelFanout.astro';
+import {
+  wizlane,
+  problems,
+  audienceSegments,
+  jobSteps,
+  modules,
+  driverApp,
+  kpis,
+  reportingInsight,
+  kenyaFirst,
+  platform,
+} from '../../data/wizlane';
+import { wizlaneMesh } from '../../data/mesh';
+
+/**
+ * WizLane product page — WIZAG's transport management system.
+ *
+ * Content extracted from the two WizLane source docs, following the brochure's
+ * own order. Animation demonstrates rather than decorates: the scrolling mesh,
+ * the six-stage job StepFlow and the communications fan-out each carry a
+ * capability; everything else is the site's standard scroll reveal.
+ *
+ * ⚠ Only shipped features are marketed (see src/data/wizlane.ts for the full
+ * rationale): no live GPS map tracking, no live eTIMS/Daraja/NTSA-API claims,
+ * no placeholder testimonials, no wizlane.ke / phone / monetary amounts. The
+ * demo CTA is the site-standard /contact.
+ *
+ * Assets landed 2026-08-04: the three photographs are in public/images/wizlane/
+ * (client-generated, compressed to ~90–105 KB), and the truck mark is
+ * public/brand/wizlane-logo.png (knocked out from the supplied lockup).
+ */
+---
+
+<BaseLayout title="WizLane — run your fleet, not your paperwork" description={wizlane.positioning}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li>
+            <a href="/business-applications" class="py-1 transition-colors hover:text-paper">
+              Business Applications
+            </a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">WizLane</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
+        <div>
+          <img
+            src="/brand/wizlane-logo.png"
+            alt=""
+            width="51"
+            height="48"
+            class="mb-5 h-12 w-auto"
+          />
+
+          <p class="eyebrow text-orange-500">WizLane</p>
+
+          <h1 class="optical-left mt-4 max-w-[15ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {wizlane.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[54ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {wizlane.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-7">
+            <Button href="/contact" variant="primary" arrow>Request a Demo</Button>
+            <a
+              href="#how-it-works"
+              class="group inline-flex items-center gap-2 py-1 text-base font-semibold text-paper
+                     underline-offset-4 transition-colors duration-[var(--duration-fast)]
+                     hover:text-orange-500 hover:underline"
+            >
+              See how it works
+              <span
+                class="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-0.5"
+                aria-hidden="true">→</span
+              >
+            </a>
+          </div>
+
+          <p class="mt-8 text-sm font-medium text-navy-100/75">{wizlane.audience}</p>
+        </div>
+
+        {/* The scrolling systems mesh — two columns of WizLane capability tiles
+            cycling continuously, the same component as the homepage hero, in
+            its contained `panel` form. Parent must be position:relative. */}
+        <div class="relative h-[26rem] overflow-hidden rounded-[var(--radius-lg)] border border-navy-500/40 bg-navy-900/45 sm:h-[30rem] lg:h-[32rem]">
+          <SystemsMesh items={wizlaneMesh} columns={2} variant="panel" />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- THE PROBLEM ------------------------------------------------------ -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="The problem"
+      lead="Most operators run on spreadsheets, WhatsApp groups and gut feel. The result is lost revenue, compliance fines, grounded vehicles and customers who do not come back."
+      measure="max-w-[22ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Running a fleet in Kenya is running on chaos
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-3">
+      {
+        problems.map((item, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={i * 70}
+          >
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={item.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">
+                {item.title}
+              </h3>
+            </div>
+            <p class="mt-2.5 text-base leading-relaxed text-ink">{item.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- WHO IT'S FOR ----------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Who it's for"
+      lead="If you run the Mombasa–Nairobi corridor, the Northern Corridor to Uganda, or the LAPSSET route to Ethiopia, WizLane was built for your roads."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Built for operators like you
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        audienceSegments.map((seg, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-warm p-6"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <FeatureIcon name={seg.icon} />
+            <h3 class="mt-4 text-[length:var(--text-xl)] leading-snug text-navy-700">{seg.title}</h3>
+            <p class="mt-2 text-base leading-relaxed text-ink-soft">{seg.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- HOW A JOB FLOWS -------------------------------------------------- -->
+  <Section tone="warm" id="how-it-works">
+    <SectionHeading
+      eyebrow="How it works"
+      lead="Every shipment follows the same clear path — from the booking screen to a paid invoice — structured and recorded end to end."
+      measure="max-w-[16ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      One job, booking to invoice
+    </SectionHeading>
+
+    <div class="mt-12 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      <div data-reveal>
+        <StepFlow steps={jobSteps} orientation="vertical" cycle={20} tone="light" />
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <img
+          src="/images/wizlane/wizlane-corridor.jpg"
+          alt="A loaded long-haul truck on the Mombasa–Nairobi highway at golden hour, open savannah and acacia trees beside the road."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- CORE MODULES ----------------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Core modules"
+      lead="Everything you need to run the operation, and nothing you don't — each module built for how Kenyan road freight actually works."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      One platform, every part of the business
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        modules.map((block, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={block.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">{block.name}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-ink-soft">{block.hook}</p>
+
+            <ul class="mt-5">
+              {block.points.map((point) => (
+                <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                  <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- COMMUNICATIONS --------------------------------------------------- -->
+  <Section tone="warm">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="Communications" measure="max-w-[16ch]">
+          Every alert, every channel, automatically
+        </SectionHeading>
+        <p class="mt-5 max-w-[46ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          The right message reaches the right person at the right time — without anyone in the office
+          having to remember. A driver is assigned, a customer's cargo is delivered, a document is
+          about to expire: WizLane sends it across SMS, WhatsApp and email.
+        </p>
+        <p class="mt-4 max-w-[46ch] text-base leading-relaxed text-ink-soft">
+          Each contact has a preferred channel, and if a WhatsApp message fails to land, it falls back
+          to SMS on its own.
+        </p>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <ChannelFanout />
+      </div>
+    </div>
+  </Section>
+
+  <!-- ON THE ROAD / DRIVER APP ----------------------------------------- -->
+  <Section tone="paper">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div data-reveal>
+        <SectionHeading eyebrow="On the road" measure="max-w-[16ch]">
+          The whole job, in the driver's pocket
+        </SectionHeading>
+        <p class="mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+          Drivers do not need a special device. WizLane puts the job list, navigation, pre-trip checks
+          and proof of delivery on any Android or iOS smartphone they already carry.
+        </p>
+        <ul class="mt-6 max-w-[46ch]">
+          {
+            driverApp.map((point) => (
+              <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                {point}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div data-reveal data-reveal-delay="120">
+        <img
+          src="/images/wizlane/wizlane-driver.jpg"
+          alt="A driver in a hi-vis vest beside his truck, holding a smartphone running the WizLane app, stacked crates loaded in the cargo area behind him."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- REPORTING & ANALYTICS -------------------------------------------- -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Reporting & analytics"
+      lead="Because every job, litre and document is captured, WizLane measures the whole operation — so decisions are made on data, not gut feel."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Stop guessing. Run the fleet on numbers
+    </SectionHeading>
+
+    <div class="mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+      <div>
+        {/* KPI infographic — what the analytics module surfaces. Label-only:
+            no invented figures, per the site's anti-fabrication rule. */}
+        <ul class="grid gap-4 sm:grid-cols-2">
+          {
+            kpis.map((kpi, i) => (
+              <li
+                class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-5"
+                data-reveal
+                data-reveal-delay={Math.min(i, 3) * 60}
+              >
+                <div class="flex items-center gap-3.5">
+                  <FeatureIcon name={kpi.icon} />
+                  <p class="text-[length:var(--text-lg)] font-bold leading-snug text-navy-700">
+                    {kpi.label}
+                  </p>
+                </div>
+                <p class="mt-1 text-sm leading-relaxed text-ink-soft">{kpi.caption}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <ul class="mt-8" data-reveal>
+          {
+            reportingInsight.map((point) => (
+              <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                {point}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="lg:sticky lg:top-28" data-reveal data-reveal-delay="120">
+        <img
+          src="/images/wizlane/wizlane-reporting.jpg"
+          alt="A fleet manager in a bright Nairobi office pointing a pen at charts on a large monitor, the city skyline through the window behind him."
+          width="1080"
+          height="810"
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-[var(--radius-md)] object-cover"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- KENYA-FIRST DESIGN ----------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="Kenya-first design"
+      lead="WizLane was designed around the specific regulations, infrastructure and business practices of Kenyan road freight — not adapted from a European or American product."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Built for how Kenya actually works
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-x-10 sm:grid-cols-2" data-reveal>
+      {
+        kenyaFirst.map((item) => (
+          <li class="flex items-start gap-3 border-t border-grey-300 py-3.5 text-base leading-relaxed text-ink">
+            <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- SECURITY & PLATFORM ---------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Built for trust</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Your data is yours, and nobody else's
+        </h2>
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-navy-100">
+          Enterprise foundations under a simple surface — full isolation between companies,
+          fine-grained access, and a complete, unchangeable record of every action.
+        </p>
+      </div>
+
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          platform.map((item) => (
+            <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+              <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- CTA -------------------------------------------------------------- -->
+  <Section tone="warm" space="tight">
+    <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="max-w-[24ch] text-[length:var(--text-3xl)] leading-snug text-navy-700">
+          See WizLane on your own routes
+        </h2>
+        <p class="mt-3 max-w-[52ch] text-base leading-relaxed text-ink">
+          We will show you the platform live against your own corridors, cargo types and compliance
+          documents — booking to invoice.
+        </p>
+      </div>
+      <Button href="/contact" variant="primary" size="large" arrow>Request a Demo</Button>
+    </div>
+  </Section>
+</BaseLayout>

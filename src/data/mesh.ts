@@ -188,3 +188,54 @@ export const wizflowMesh: Tile[] = [
   f('Webhooks & API'), b('Your domain, your brand'), f('2FA & delegation'),
   f('Multi-tenant isolation'), f('Role-based access'),
 ];
+
+/* -------------------------------------------------------------------------
+   WIZLANE — transport management, drawn from the two WizLane feature docs.
+
+   ⚠ Only shipped features appear here. No live GPS map tracking (the roadmap
+   marks it "not implemented"); the eTIMS, direct-Daraja and NTSA-API links are
+   stubs/planned and are NOT claimed as live. SMS/WhatsApp/Email, fuel-card
+   import and Google Maps are wired, so they may appear. No wizlane.ke, phone
+   or pricing. Labels kept short: this runs in a narrow two-column panel, and
+   anything past ~26 characters ellipsizes.
+   ------------------------------------------------------------------------- */
+export const wizlaneMesh: Tile[] = [
+  p('Job & Dispatch'), b('Off WhatsApp, on one screen'), f('Assign in seconds'),
+  f('Pending → Delivered'), b('Every job, tracked'),
+
+  p('Driver Compliance'), f('Licence & PSV alerts'), f('10-hour limit enforced'),
+  b('Legal at the roadblock'), f('NTSA compliance pack'),
+
+  p('Fleet & Vehicles'), f('TLB & insurance alerts'), f('Service schedules'),
+  f('Defects with photos'), b('Ready before the yard'),
+
+  p('Fuel Management'), b('Siphoning, flagged'), f('km/litre per vehicle'),
+  f('EPRA price check'), f('Fuel-card import'),
+
+  p('Tyre Lifecycle'), f('Tread & rotation'), b('Cost-per-km per tyre'),
+  f('Depot stock alerts'),
+
+  p('ePOD'), b('No more paper waybills'), f('Signature & photo'),
+  f('Captures offline'), b('Invoice on delivery'),
+
+  p('Invoicing & Finance'), f('VAT & WHT, correct'), f('Rate cards'),
+  f('PesaPal payment link'), b('Get paid faster'),
+
+  p('Compliance & Legal'), f('Weighbridge log'), f('C63 · COMESA · SGR'),
+  b('Alerts before expiry'), f('Daily 07:00 digest'),
+
+  p('Load & Route Planning'), f('LIFO manifest'), b('Axle load, pre-checked'),
+  f('KENHA limits'), f('Corridor status'),
+
+  p('Driver Mobile App'), f('Jobs & navigation'), f('Walkaround checks'),
+  b('Works on any phone'), f('Push notifications'),
+
+  p('Customer Portal'), f('Self-service booking'), f('English & Kiswahili'),
+  b('Status without a call'),
+
+  p('Reports & Analytics'), f('Revenue per vehicle'), f('Empty-return ratio'),
+  b('Decisions on data'), f('Excel & PDF export'),
+
+  f('SMS · WhatsApp · Email'), b('Right person, right time'), f('Multi-tenant isolation'),
+  f('Role-based access'), f('Immutable audit log'),
+];

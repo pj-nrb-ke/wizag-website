@@ -178,6 +178,17 @@ export const businessApplications: NavLink[] = [
     summary: 'No-code workflow and approval automation for the whole office',
     logo: '/brand/wizflow-logo.png',
   },
+  /* WizLane — transport management system for Kenyan & East African road
+     freight. Added 2026-08-03 with a full written page. The `logo` is the
+     client-supplied lockup with its cream background knocked out to transparent
+     and cropped to the truck mark (reads on both the white menu panel and the
+     navy page hero). */
+  {
+    label: 'WizLane',
+    href: '/business-applications/wizlane',
+    summary: 'Transport management for Kenyan and East African road freight',
+    logo: '/brand/wizlane-logo.png',
+  },
 ];
 
 /* -------------------------------------------------------------------------
