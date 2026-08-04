@@ -183,12 +183,12 @@ import { wizlaneMesh } from '../../data/mesh';
       One job, booking to invoice
     </SectionHeading>
 
-    <div class="mt-12 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+    <div class="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
       <div data-reveal>
         <StepFlow steps={jobSteps} orientation="vertical" cycle={20} tone="light" />
       </div>
 
-      <div data-reveal data-reveal-delay="120">
+      <div class="lg:sticky lg:top-28" data-reveal data-reveal-delay="120">
         <img
           src="/images/wizlane/wizlane-corridor.jpg"
           alt="A loaded long-haul truck on the Mombasa–Nairobi highway at golden hour, open savannah and acacia trees beside the road."
@@ -268,7 +268,7 @@ import { wizlaneMesh } from '../../data/mesh';
 
   <!-- ON THE ROAD / DRIVER APP ----------------------------------------- -->
   <Section tone="paper">
-    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
       <div data-reveal>
         <SectionHeading eyebrow="On the road" measure="max-w-[16ch]">
           The whole job, in the driver's pocket
@@ -289,7 +289,7 @@ import { wizlaneMesh } from '../../data/mesh';
         </ul>
       </div>
 
-      <div data-reveal data-reveal-delay="120">
+      <div class="lg:sticky lg:top-28" data-reveal data-reveal-delay="120">
         <img
           src="/images/wizlane/wizlane-driver.jpg"
           alt="A driver in a hi-vis vest beside his truck, holding a smartphone running the WizLane app, stacked crates loaded in the cargo area behind him."
