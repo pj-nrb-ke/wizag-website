@@ -205,6 +205,38 @@ const STROKE_ICONS = {
     'M10.5 20.5V16h3v4.5',
     'M3.5 20.5h17',
   ],
+
+  /* --- developer tools (WizDBA) --------------------------------------
+     A SQL client is the first product on the site pitched to developers,
+     so the set had no database / editor / download / security marks.
+     Same 24×24, 1.5px optical weight as the rest. */
+  // Database — a stacked cylinder (a store of records).
+  database: [
+    'M5 6a7 3 0 1 0 14 0a7 3 0 1 0-14 0',
+    'M5 6v12a7 3 0 0 0 14 0V6',
+    'M5 12a7 3 0 0 0 14 0',
+  ],
+  // Download — an arrow into a tray (the downloadable build / trial).
+  download: [
+    'M12 4v10',
+    'm7.5 10 4.5 4.5 4.5-4.5',
+    'M5 16v2.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V16',
+  ],
+  // Lock — credentials and the AI key stay on your machine.
+  lock: [
+    'M6.5 10.5h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z',
+    'M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5',
+    'M12 14v2.5',
+  ],
+  // Bolt — lightweight and fast.
+  bolt: ['M12.5 3.5 5.5 13h5l-1 7.5 7-9.5h-5z'],
+  // Code — the SQL editor (angle brackets and a slash).
+  code: ['m8 8-4 4 4 4', 'm16 8 4 4-4 4', 'm13.5 6-3 12'],
+  // Sparkle — the built-in AI ("a little AI magic").
+  sparkle: [
+    'M12 3.5l1.8 4.7 4.7 1.8-4.7 1.8L12 16.5l-1.8-4.7L5.5 10l4.7-1.8z',
+    'M18 15l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z',
+  ],
 } as const;
 
 const FILL_ICONS = {

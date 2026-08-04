@@ -1,0 +1,197 @@
+---
+/**
+ * WizDBA — main application window, reproduced in HTML/CSS.
+ *
+ * Built from the client's screenshots so the interface stays accurate, but
+ * populated with invented DEMO data (a fictional "SalesDB") — no real database,
+ * client name or record ever appears on the public site. This replaces a raw
+ * screenshot: always crisp, always populated, and safe to publish.
+ *
+ * Decorative: the whole window is aria-hidden and a .sr-only caption narrates
+ * it. Scales with its container via container-query units (cqi), so it holds
+ * up from a hero column down to a phone.
+ */
+const tables = [
+  ['Customers', '1,204'],
+  ['Invoices', '8,932'],
+  ['InvoiceLines', '24,517'],
+  ['Products', '486'],
+  ['Orders', '6,210'],
+  ['Payments', '4,880'],
+  ['Suppliers', '312'],
+  ['StockItems', '1,940'],
+];
+
+const rows = [
+  ['Acme Traders Ltd', 'INV-4821', '2026-07-14', '128,400.00', 'Paid'],
+  ['Blue Ridge Supplies', 'INV-4820', '2026-07-14', '96,250.00', 'Paid'],
+  ['Continental Foods', 'INV-4816', '2026-07-13', '84,900.00', 'Pending'],
+  ['Delta Logistics', 'INV-4809', '2026-07-12', '72,500.00', 'Paid'],
+  ['Evergreen Retail', 'INV-4802', '2026-07-11', '61,300.00', 'Paid'],
+  ['Fairview Hardware', 'INV-4797', '2026-07-10', '54,120.00', 'Overdue'],
+];
+const statusClass: Record<string, string> = { Paid: 'ok', Pending: 'warn', Overdue: 'bad' };
+---
+
+<figure class="wz">
+  <figcaption class="sr-only">
+    The WizDBA window: a demo SalesDB is connected, with a SQL query joining Customers to Invoices in
+    the editor and the results shown in the grid below.
+  </figcaption>
+
+  <div class="app" aria-hidden="true">
+    <div class="titlebar">
+      <span class="tb-mark"></span>
+      <span class="tb-name">WizDBA</span>
+      <span class="tb-ctl"><i></i><i></i><i class="x"></i></span>
+    </div>
+
+    <div class="menubar"><span>File</span><span>Query</span><span>Procedures</span><span>AI</span><span>View</span></div>
+
+    <div class="body">
+      <aside class="side">
+        <div class="side-h">CONNECTIONS <span class="plus">+</span></div>
+        <div class="conn active"><span class="badge">SQL</span> SalesDB</div>
+        <div class="conn"><span class="badge">SQL</span> Warehouse</div>
+        <div class="objtabs">
+          <span class="t on">Tables</span><span class="t v">Views</span><span class="t p">Procedures</span>
+        </div>
+        <div class="search">Search tables…</div>
+        <ul class="tlist">
+          {tables.map(([name, n]) => (
+            <li><span class="ti"></span><span class="tn">{name}</span><span class="tc">{n}</span></li>
+          ))}
+        </ul>
+      </aside>
+
+      <div class="main">
+        <div class="toolbar">
+          <span class="btn run">▶ Run</span>
+          <span class="btn">Syntax</span>
+          <span class="btn">Open</span>
+          <span class="btn">Save</span>
+          <span class="sep"></span>
+          <span class="btn aiq">✦ AI Query</span>
+          <span class="stat">1,204 rows · 28 ms</span>
+        </div>
+
+        <div class="qtabs"><span class="qt on">Query 1 •</span><span class="qt">AI Query</span></div>
+
+        <div class="editor">
+          <div class="gutter"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i></div>
+          <pre class="code"><span class="k">SELECT</span> c.Name, i.InvoiceNo, i.InvoiceDate, i.Total, i.Status
+<span class="k">FROM</span> Customers c
+<span class="k">INNER JOIN</span> Invoices i <span class="k">ON</span> i.CustomerID = c.CustomerID
+<span class="k">WHERE</span> i.InvoiceDate &gt;= <span class="s">'2026-01-01'</span>
+<span class="k">ORDER BY</span> i.Total <span class="k">DESC</span>;</pre>
+        </div>
+
+        <div class="results">
+          <div class="res-bar">
+            <span class="chip">Filter…</span>
+            <span class="res-tabs"><b>Results (1,204 rows)</b><span>Messages</span></span>
+            <span class="chip export">⭱ Export…</span>
+          </div>
+          <div class="grid">
+            <div class="gr gh"><span>Name</span><span>InvoiceNo</span><span>InvoiceDate</span><span class="num">Total</span><span>Status</span></div>
+            {rows.map(([name, no, date, total, status]) => (
+              <div class="gr">
+                <span>{name}</span><span class="mono">{no}</span><span class="mono">{date}</span>
+                <span class="num mono">{total}</span>
+                <span><em class={`pill ${statusClass[status]}`}>{status}</em></span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="statusbar">Connected to <b>SalesDB</b> — 42 tables, 15 views · 1,204 rows in 28 ms</div>
+  </div>
+</figure>
+
+<style>
+  .wz { container-type: inline-size; }
+  .app {
+    font-size: clamp(7px, 2.35cqi, 12px);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    color: #1f2733;
+    border-radius: 0.9em;
+    overflow: hidden;
+    border: 1px solid #d3d8de;
+    box-shadow: var(--shadow-panel, 0 20px 45px -20px rgba(16, 32, 74, 0.35));
+    background: #fff;
+    line-height: 1.35;
+  }
+  .mono, .code, .badge, .tc, .num { font-family: 'Cascadia Code', ui-monospace, 'SFMono-Regular', Menlo, monospace; }
+
+  /* title bar — the app's olive chrome */
+  .titlebar { display: flex; align-items: center; gap: 0.6em; background: #6f6a43; color: #f4f2ea; padding: 0.5em 0.8em; }
+  .tb-mark { width: 0.95em; height: 0.95em; border-radius: 0.2em; background: linear-gradient(135deg, #2b5fb0, #1b3a78); }
+  .tb-name { font-weight: 600; font-size: 0.95em; }
+  .tb-ctl { margin-left: auto; display: flex; gap: 0.7em; opacity: 0.9; }
+  .tb-ctl i { width: 0.8em; height: 0.8em; border: 1px solid #e6e3d6; border-radius: 2px; display: block; }
+  .tb-ctl i.x { border: none; position: relative; }
+  .tb-ctl i.x::before, .tb-ctl i.x::after { content: ''; position: absolute; inset: 45% 0; height: 1px; background: #e6e3d6; }
+  .tb-ctl i.x::before { transform: rotate(45deg); } .tb-ctl i.x::after { transform: rotate(-45deg); }
+
+  /* menu bar */
+  .menubar { display: flex; gap: 1.2em; background: #eef0f2; border-bottom: 1px solid #dfe2e7; padding: 0.5em 0.9em; color: #384150; font-size: 0.92em; }
+
+  .body { display: grid; grid-template-columns: minmax(8.5em, 0.34fr) 1fr; }
+
+  /* left panel */
+  .side { background: #fafbfc; border-right: 1px solid #e2e5ea; padding: 0.7em; min-width: 0; }
+  .side-h { color: #2b5fb0; font-weight: 700; font-size: 0.72em; letter-spacing: 0.06em; display: flex; justify-content: space-between; }
+  .conn { display: flex; align-items: center; gap: 0.45em; padding: 0.35em 0.3em; border-radius: 0.35em; margin-top: 0.35em; }
+  .conn.active { background: #eaf1fb; }
+  .badge { background: #2563eb; color: #fff; font-size: 0.62em; font-weight: 700; padding: 0.15em 0.35em; border-radius: 0.3em; }
+  .objtabs { display: flex; gap: 0.3em; margin: 0.7em 0 0.5em; font-size: 0.74em; }
+  .objtabs .t { padding: 0.25em 0.5em; border-radius: 0.35em 0.35em 0 0; border: 1px solid transparent; }
+  .objtabs .t.on { background: #1f2733; color: #fff; }
+  .objtabs .t.v { color: #7c3aed; border-color: #d7c6f5; }
+  .objtabs .t.p { color: #c26a12; border-color: #f0d3a8; }
+  .search { border: 1px solid #d7dbe2; border-radius: 0.4em; padding: 0.4em 0.55em; color: #9aa3ae; font-size: 0.8em; background: #fff; }
+  .tlist { margin: 0.55em 0 0; padding: 0; list-style: none; }
+  .tlist li { display: flex; align-items: center; gap: 0.45em; padding: 0.32em 0.2em; border-top: 1px solid #eef1f4; font-size: 0.82em; }
+  .ti { width: 0.7em; height: 0.7em; border: 1.2px solid #9fb4d8; border-radius: 0.15em; flex: none; }
+  .tn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tc { margin-left: auto; color: #8a93a0; font-size: 0.9em; }
+
+  /* main */
+  .main { min-width: 0; display: flex; flex-direction: column; background: #fff; }
+  .toolbar { display: flex; align-items: center; gap: 0.4em; padding: 0.5em 0.7em; border-bottom: 1px solid #e6e9ee; background: #f7f8fa; }
+  .btn { font-size: 0.8em; padding: 0.3em 0.55em; border: 1px solid #d7dbe2; border-radius: 0.4em; background: #fff; color: #384150; white-space: nowrap; }
+  .btn.run { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+  .btn.aiq { border-color: #cabf86; color: #6f6a43; background: #f7f4e8; font-weight: 600; }
+  .sep { width: 1px; height: 1.1em; background: #d7dbe2; margin: 0 0.2em; }
+  .stat { margin-left: auto; color: #8a93a0; font-size: 0.78em; white-space: nowrap; }
+  .qtabs { display: flex; gap: 0.3em; padding: 0.45em 0.7em 0; background: #f7f8fa; border-bottom: 1px solid #e6e9ee; }
+  .qt { font-size: 0.8em; padding: 0.3em 0.6em; border: 1px solid #e6e9ee; border-bottom: none; border-radius: 0.4em 0.4em 0 0; color: #6b7480; background: #eef1f4; }
+  .qt.on { background: #fff; color: #1f2733; font-weight: 600; }
+
+  .editor { display: flex; background: #fcfcfd; }
+  .gutter { display: flex; flex-direction: column; padding: 0.7em 0.5em; color: #b3bcc7; text-align: right; font-family: 'Cascadia Code', monospace; font-size: 0.82em; border-right: 1px solid #eef1f4; }
+  .code { margin: 0; padding: 0.7em 0.8em; font-size: 0.82em; color: #24303f; white-space: pre; overflow: hidden; tab-size: 2; }
+  .code .k { color: #1e49c7; font-weight: 600; }
+  .code .s { color: #1a7f37; }
+
+  .results { border-top: 1px solid #e6e9ee; display: flex; flex-direction: column; min-height: 0; }
+  .res-bar { display: flex; align-items: center; gap: 0.6em; padding: 0.5em 0.7em; background: #f7f8fa; border-bottom: 1px solid #e6e9ee; }
+  .chip { font-size: 0.78em; padding: 0.28em 0.5em; border: 1px solid #d7dbe2; border-radius: 0.4em; background: #fff; color: #4a5563; }
+  .chip.export { margin-left: auto; }
+  .res-tabs { display: flex; gap: 0.9em; font-size: 0.82em; color: #8a93a0; }
+  .res-tabs b { color: #1f2733; border-bottom: 2px solid #2563eb; padding-bottom: 0.2em; }
+  .grid { font-size: 0.8em; overflow: hidden; }
+  .gr { display: grid; grid-template-columns: 1.5fr 1fr 1fr 0.9fr 0.8fr; gap: 0.5em; padding: 0.4em 0.7em; border-top: 1px solid #eef1f4; }
+  .gr > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gr .num { text-align: right; }
+  .gh { background: #f3f5f7; color: #5a6472; font-weight: 600; border-top: none; }
+  .pill { font-style: normal; font-size: 0.9em; padding: 0.1em 0.5em; border-radius: 1em; font-weight: 600; }
+  .pill.ok { background: #dcf3e4; color: #1a7f37; }
+  .pill.warn { background: #fdefcf; color: #9a6a00; }
+  .pill.bad { background: #fbdcdc; color: #b3261e; }
+
+  .statusbar { background: #eef1f4; border-top: 1px solid #dfe2e7; padding: 0.45em 0.8em; font-size: 0.78em; color: #4a5563; }
+  .statusbar b { color: #1f2733; }
+</style>

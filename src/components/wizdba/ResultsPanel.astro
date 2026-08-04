@@ -1,0 +1,89 @@
+---
+/**
+ * WizDBA — results grid with the Export menu open, reproduced in HTML/CSS from
+ * the client's screenshot. Invented demo rows (fictional SalesDB); no real data.
+ * Decorative (aria-hidden) with an .sr-only caption; scales via container units.
+ */
+const rows = [
+  ['Acme Traders Ltd', 'INV-4821', '2026-07-14', '128,400.00', 'Paid'],
+  ['Blue Ridge Supplies', 'INV-4820', '2026-07-14', '96,250.00', 'Paid'],
+  ['Continental Foods', 'INV-4816', '2026-07-13', '84,900.00', 'Pending'],
+  ['Delta Logistics', 'INV-4809', '2026-07-12', '72,500.00', 'Paid'],
+  ['Evergreen Retail', 'INV-4802', '2026-07-11', '61,300.00', 'Paid'],
+  ['Fairview Hardware', 'INV-4797', '2026-07-10', '54,120.00', 'Overdue'],
+  ['Greenline Wholesale', 'INV-4790', '2026-07-09', '47,880.00', 'Paid'],
+  ['Harbour Point Ltd', 'INV-4783', '2026-07-08', '41,600.00', 'Pending'],
+];
+const statusClass: Record<string, string> = { Paid: 'ok', Pending: 'warn', Overdue: 'bad' };
+---
+
+<figure class="wz">
+  <figcaption class="sr-only">
+    A WizDBA results grid of demo invoices with the Export menu open, offering Excel, CSV and Markdown.
+  </figcaption>
+
+  <div class="rp" aria-hidden="true">
+    <div class="rp-bar">
+      <span class="chip">Filter…</span>
+      <span class="tabs"><b>Results (1,204 rows)</b><span>Messages</span></span>
+      <span class="exp-wrap">
+        <span class="chip export">⭱ Export ▾</span>
+        <div class="menu">
+          <div class="mi"><span class="ic xlsx">X</span> Excel (.xlsx)</div>
+          <div class="mi"><span class="ic csv">,</span> CSV</div>
+          <div class="mi"><span class="ic md">M</span> Markdown table</div>
+        </div>
+      </span>
+    </div>
+
+    <div class="grid">
+      <div class="gr gh"><span>Name</span><span>InvoiceNo</span><span>InvoiceDate</span><span class="num">Total</span><span>Status</span></div>
+      {rows.map(([name, no, date, total, status]) => (
+        <div class="gr">
+          <span>{name}</span><span class="mono">{no}</span><span class="mono">{date}</span>
+          <span class="num mono">{total}</span>
+          <span><em class={`pill ${statusClass[status]}`}>{status}</em></span>
+        </div>
+      ))}
+    </div>
+
+    <div class="pager"><span>‹ Prev</span><b>Rows 1–1,000 of 1,204 · Page 1 of 2</b><span>Next ›</span></div>
+  </div>
+</figure>
+
+<style>
+  .wz { container-type: inline-size; }
+  .rp {
+    font-size: clamp(7px, 2.15cqi, 12.5px);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    color: #1f2733; background: #fff; line-height: 1.4;
+    border: 1px solid #d3d8de; border-radius: 0.8em; overflow: hidden;
+    box-shadow: var(--shadow-panel, 0 20px 45px -20px rgba(16, 32, 74, 0.35));
+  }
+  .mono, .num { font-family: 'Cascadia Code', ui-monospace, Menlo, monospace; }
+
+  .rp-bar { position: relative; display: flex; align-items: center; gap: 0.7em; padding: 0.6em 0.8em; background: #f7f8fa; border-bottom: 1px solid #e6e9ee; }
+  .chip { font-size: 0.82em; padding: 0.32em 0.55em; border: 1px solid #d7dbe2; border-radius: 0.4em; background: #fff; color: #4a5563; }
+  .tabs { display: flex; gap: 1em; font-size: 0.86em; color: #8a93a0; }
+  .tabs b { color: #1f2733; border-bottom: 2px solid #2563eb; padding-bottom: 0.2em; }
+  .exp-wrap { margin-left: auto; position: relative; }
+  .chip.export { color: #1f2733; font-weight: 600; border-color: #b9c0ca; }
+  .menu { position: absolute; right: 0; top: 130%; z-index: 2; background: #fff; border: 1px solid #dfe2e7; border-radius: 0.5em; box-shadow: 0 12px 28px -10px rgba(16, 32, 74, 0.4); padding: 0.3em; min-width: 10em; }
+  .mi { display: flex; align-items: center; gap: 0.55em; padding: 0.45em 0.55em; border-radius: 0.35em; font-size: 0.84em; color: #2b3440; }
+  .mi:hover { background: #f2f5f9; }
+  .ic { width: 1.3em; height: 1.3em; border-radius: 0.25em; color: #fff; font-size: 0.72em; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .ic.xlsx { background: #1a7f47; } .ic.csv { background: #5a6472; } .ic.md { background: #2563eb; }
+
+  .grid { font-size: 0.84em; }
+  .gr { display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.95fr 0.8fr; gap: 0.6em; padding: 0.45em 0.8em; border-top: 1px solid #eef1f4; }
+  .gr > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gr .num { text-align: right; }
+  .gh { background: #f3f5f7; color: #5a6472; font-weight: 600; border-top: none; }
+  .pill { font-style: normal; font-size: 0.9em; padding: 0.1em 0.55em; border-radius: 1em; font-weight: 600; }
+  .pill.ok { background: #dcf3e4; color: #1a7f37; }
+  .pill.warn { background: #fdefcf; color: #9a6a00; }
+  .pill.bad { background: #fbdcdc; color: #b3261e; }
+
+  .pager { display: flex; align-items: center; justify-content: space-between; gap: 0.6em; padding: 0.5em 0.8em; background: #f7f8fa; border-top: 1px solid #e6e9ee; font-size: 0.8em; color: #8a93a0; }
+  .pager b { color: #4a5563; font-weight: 500; }
+</style>

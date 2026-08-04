@@ -1,0 +1,98 @@
+---
+/**
+ * WizDBA — AI Query Builder window, reproduced in HTML/CSS from the client's
+ * screenshot. Invented demo request + query (fictional SalesDB); no real data.
+ * Decorative (aria-hidden) with an .sr-only caption; scales via container units.
+ */
+---
+
+<figure class="wz">
+  <figcaption class="sr-only">
+    The WizDBA AI Query Builder: a plain-English request — "show me the top 10 customers by revenue
+    this year" — and the SQL query the assistant generated in reply, ready to open in a query tab.
+  </figcaption>
+
+  <div class="ai" aria-hidden="true">
+    <div class="titlebar">
+      <span class="tb-mark"></span><span class="tb-name">AI Query Builder</span>
+      <span class="tb-ctl"><i></i><i></i><i class="x"></i></span>
+    </div>
+
+    <div class="head">
+      <span class="h-title">AI Query Builder</span>
+      <span class="chips"><span>Clear</span><span>Memory (12)</span><span>Glossary</span><span class="key">🔒 API Key</span></span>
+    </div>
+
+    <div class="thread">
+      <div class="bubble user">Show me the top 10 customers by revenue so far this year</div>
+
+      <div class="reply">Here’s a query for your highest-revenue customers in 2026:</div>
+
+      <div class="codeblock">
+        <span class="cb-lang">SQL</span>
+        <pre><span class="k">SELECT TOP</span> <span class="n">10</span>
+       c.Name              <span class="k">AS</span> <span class="a">Customer</span>,
+       <span class="f">COUNT</span>(i.InvoiceID)  <span class="k">AS</span> <span class="a">Invoices</span>,
+       <span class="f">SUM</span>(i.Total)        <span class="k">AS</span> <span class="a">Revenue</span>
+<span class="k">FROM</span>   Customers c
+<span class="k">JOIN</span>   Invoices  i <span class="k">ON</span> i.CustomerID = c.CustomerID
+<span class="k">WHERE</span>  i.Status = <span class="s">'Paid'</span>
+  <span class="k">AND</span>  i.InvoiceDate &gt;= <span class="s">'2026-01-01'</span>
+<span class="k">GROUP BY</span> c.Name
+<span class="k">ORDER BY</span> Revenue <span class="k">DESC</span>;</pre>
+        <span class="open">→ Open in Query Tab</span>
+      </div>
+
+      <div class="note">Tip: this counts <b>Paid</b> invoices only — say the word to include quotes and credit notes.</div>
+    </div>
+
+    <div class="composer">
+      <span class="ph">Describe the query or procedure you need… (Ctrl+Enter to send)</span>
+      <span class="send">Send ↵</span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .wz { container-type: inline-size; }
+  .ai {
+    font-size: clamp(7.5px, 3cqi, 13px);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    color: #1f2733; background: #fff; line-height: 1.4;
+    border: 1px solid #d3d8de; border-radius: 0.9em; overflow: hidden;
+    box-shadow: var(--shadow-panel, 0 20px 45px -20px rgba(16, 32, 74, 0.35));
+  }
+
+  .titlebar { display: flex; align-items: center; gap: 0.6em; background: #6f6a43; color: #f4f2ea; padding: 0.5em 0.8em; }
+  .tb-mark { width: 0.95em; height: 0.95em; border-radius: 0.2em; background: linear-gradient(135deg, #2b5fb0, #1b3a78); }
+  .tb-name { font-weight: 600; font-size: 0.95em; }
+  .tb-ctl { margin-left: auto; display: flex; gap: 0.7em; }
+  .tb-ctl i { width: 0.8em; height: 0.8em; border: 1px solid #e6e3d6; border-radius: 2px; display: block; }
+  .tb-ctl i.x { border: none; position: relative; }
+  .tb-ctl i.x::before, .tb-ctl i.x::after { content: ''; position: absolute; inset: 45% 0; height: 1px; background: #e6e3d6; }
+  .tb-ctl i.x::before { transform: rotate(45deg); } .tb-ctl i.x::after { transform: rotate(-45deg); }
+
+  .head { display: flex; align-items: center; gap: 0.6em; padding: 0.7em 0.9em; border-bottom: 1px solid #e6e9ee; }
+  .h-title { font-weight: 700; font-size: 1em; }
+  .chips { margin-left: auto; display: flex; gap: 0.4em; font-size: 0.76em; }
+  .chips span { border: 1px solid #d7dbe2; border-radius: 0.4em; padding: 0.28em 0.5em; color: #4a5563; background: #fff; }
+  .chips .key { color: #6f6a43; border-color: #cabf86; background: #f7f4e8; }
+
+  .thread { padding: 0.9em; background: #f7f8fa; display: flex; flex-direction: column; gap: 0.7em; }
+  .bubble.user { align-self: flex-end; max-width: 78%; background: #6f6a43; color: #f6f4ec; padding: 0.6em 0.8em; border-radius: 0.8em 0.8em 0.2em 0.8em; font-size: 0.9em; }
+  .reply { align-self: flex-start; max-width: 88%; background: #eef1f4; color: #2b3440; padding: 0.55em 0.8em; border-radius: 0.2em 0.8em 0.8em 0.8em; font-size: 0.9em; }
+
+  .codeblock { position: relative; background: #10203a; border-radius: 0.6em; padding: 0.9em 0.9em 0.8em; }
+  .cb-lang { position: absolute; top: 0.5em; left: 0.9em; color: #6f89b8; font-size: 0.68em; font-weight: 700; letter-spacing: 0.08em; }
+  .codeblock pre { margin: 1.2em 0 0; font-family: 'Cascadia Code', ui-monospace, Menlo, monospace; font-size: 0.8em; color: #d5dae3; white-space: pre; overflow: hidden; line-height: 1.5; }
+  .codeblock .k { color: #7aa2f7; } .codeblock .s { color: #9ece6a; } .codeblock .f { color: #82d2c8; }
+  .codeblock .a { color: #c0caf5; } .codeblock .n { color: #ff9e64; }
+  .open { display: inline-block; margin-top: 0.7em; background: #6f6a43; color: #f6f4ec; font-size: 0.8em; font-weight: 600; padding: 0.4em 0.7em; border-radius: 0.4em; }
+
+  .note { font-size: 0.82em; color: #5a6472; border-left: 2px solid #cabf86; padding: 0.1em 0 0.1em 0.7em; }
+  .note b { color: #6f6a43; }
+
+  .composer { display: flex; align-items: center; gap: 0.6em; padding: 0.7em 0.9em; border-top: 1px solid #e6e9ee; }
+  .ph { flex: 1; border: 1px solid #d7dbe2; border-radius: 0.5em; padding: 0.55em 0.7em; color: #9aa3ae; font-size: 0.84em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .send { background: #6f6a43; color: #f6f4ec; font-weight: 600; font-size: 0.84em; padding: 0.55em 0.9em; border-radius: 0.5em; white-space: nowrap; }
+</style>

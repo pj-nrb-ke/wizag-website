@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/layout/Container.astro';
+import Section from '../../components/layout/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import FeatureIcon from '../../components/ui/FeatureIcon.astro';
+import AppWindow from '../../components/wizdba/AppWindow.astro';
+import AiPanel from '../../components/wizdba/AiPanel.astro';
+import ResultsPanel from '../../components/wizdba/ResultsPanel.astro';
+import { wizdba, engines, aiFeatures, capabilities, trust, specs } from '../../data/wizdba';
+
+/**
+ * WizDBA product page — WIZAG's first directly-sold, downloadable product
+ * (a Windows SQL client for DBAs). Structured as a PRODUCT + PURCHASE page,
+ * not a "request a demo" page like the services-led products.
+ *
+ * ⚠ Commerce is NOT wired yet. The "Start free trial" and "Buy" buttons in the
+ * #get section are placeholders (client to supply the gateway, price and the
+ * trial + download URLs). Do not deploy this page live with dead buttons —
+ * wire them in the e-commerce phase first. Only features from the source doc
+ * are marketed; the AI is named (Anthropic Claude) and is bring-your-own-key.
+ *
+ * The WizDBA mark (client-supplied, transparent) is wired: bare in the menu,
+ * and on a white app-icon tile in the navy hero. The three UI shots are NOT
+ * screenshots — they are faithful HTML/CSS reproductions of the app
+ * (components/wizdba/*) with invented demo data, so the interface stays
+ * accurate and nothing real is ever published (the client's own screenshots
+ * carried a real client DB name). Visuals are complete; only the e-commerce
+ * checkout remains before launch.
+ */
+---
+
+<BaseLayout title="WizDBA — a fast SQL client with AI built in" description={wizdba.positioning} noindex={true}>
+  <!-- HERO ------------------------------------------------------------- -->
+  <section class="relative isolate overflow-hidden bg-navy-800 on-deep">
+    <Container class="py-12 md:py-14 lg:py-16">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-navy-100">
+          <li><a href="/" class="py-1 transition-colors hover:text-paper">Home</a></li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li>
+            <a href="/business-applications" class="py-1 transition-colors hover:text-paper">
+              Business Applications
+            </a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-down" size={13} class="-rotate-90" /></li>
+          <li aria-current="page" class="py-1 font-semibold text-paper">WizDBA</li>
+        </ol>
+      </nav>
+
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
+        <div>
+          {/* The mark is navy/blue and vanishes on the navy hero, so it sits on
+              a white app-icon tile here. In the (white) menu it is used bare. */}
+          <span class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-paper shadow-card">
+            <img src="/brand/wizdba-logo.png" alt="" width="33" height="36" class="h-9 w-auto" />
+          </span>
+
+          <p class="eyebrow text-orange-500">WizDBA</p>
+
+          <h1 class="optical-left mt-4 max-w-[16ch] text-[length:var(--text-5xl)] leading-[1.08] text-paper">
+            {wizdba.hook}
+          </h1>
+
+          <p class="mt-6 max-w-[54ch] text-[length:var(--text-lg)] leading-relaxed text-navy-100">
+            {wizdba.positioning}
+          </p>
+
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
+            <Button href="#get" variant="inverse" size="large" arrow>Start free trial</Button>
+            <a
+              href="#get"
+              class="inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-paper/30 px-7 py-3.5
+                     text-base font-semibold text-paper transition-colors duration-[var(--duration-fast)]
+                     hover:border-paper/70 hover:bg-paper/10"
+            >
+              Buy WizDBA
+            </a>
+          </div>
+
+          <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-navy-100/80">
+            <li class="flex items-center gap-2"><Icon name="device" size={16} class="text-orange-500" /> Windows 10 &amp; 11</li>
+            <li class="flex items-center gap-2"><Icon name="download" size={16} class="text-orange-500" /> Single file, no installer</li>
+            <li class="flex items-center gap-2"><Icon name="lock" size={16} class="text-orange-500" /> Your keys stay on your machine</li>
+          </ul>
+        </div>
+
+        {/* The whole app, reproduced in HTML/CSS with demo data (see the
+            component). Faithful to the real UI, always populated, no real data. */}
+        <div class="relative" data-reveal data-reveal-delay="80">
+          <AppWindow />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- FOUR ENGINES ----------------------------------------------------- -->
+  <Section tone="warm" id="features">
+    <SectionHeading
+      eyebrow="One client, every database"
+      lead="Stop keeping a different tool open for every engine. WizDBA connects to all four — and to as many databases at once as you need, switching between them without losing your place."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Four engines, one window
+    </SectionHeading>
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        engines.map((eng, i) => (
+          <li
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <FeatureIcon name="database" />
+            <h3 class="mt-4 text-[length:var(--text-xl)] leading-snug text-navy-700">{eng.name}</h3>
+            <p class="mt-1.5 text-base leading-relaxed text-ink-soft">{eng.note}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- AI, POWERED BY CLAUDE -------------------------------------------- -->
+  <Section tone="paper">
+    <SectionHeading
+      eyebrow="AI, powered by Claude"
+      lead="WizDBA has an assistant that actually knows your database. It reads your schema, speaks your business terms, and turns plain English into SQL — then explains and fixes what goes wrong."
+      measure="max-w-[18ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      An assistant that speaks SQL
+    </SectionHeading>
+
+    <div class="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+      <div class="grid gap-6" data-reveal>
+        {
+          aiFeatures.map((block) => (
+            <div class="rounded-[var(--radius-md)] border border-grey-100 bg-warm p-6 sm:p-7">
+              <div class="flex items-center gap-3.5">
+                <FeatureIcon name={block.icon} />
+                <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">{block.name}</h3>
+              </div>
+              <p class="mt-4 text-base leading-relaxed text-ink-soft">{block.hook}</p>
+              <ul class="mt-5">
+                {block.points.map((point) => (
+                  <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                    <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="lg:sticky lg:top-28" data-reveal data-reveal-delay="120">
+        <AiPanel />
+        <p class="mt-4 flex items-start gap-2.5 text-sm leading-relaxed text-ink-soft">
+          <Icon name="lock" size={16} class="mt-0.5 shrink-0 text-orange-700" />
+          The AI runs on your own Anthropic Claude API key, stored locally — bring your key, and nothing
+          is routed through us.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CORE CAPABILITIES ------------------------------------------------ -->
+  <Section tone="warm">
+    <SectionHeading
+      eyebrow="Everything else you need"
+      lead="The day-to-day work of querying and managing a database — done well, and quickly, in one focused window."
+      measure="max-w-[20ch]"
+      class="max-w-3xl"
+      data-reveal
+    >
+      Built for the everyday work
+    </SectionHeading>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      {
+        capabilities.map((block, i) => (
+          <div
+            class="rounded-[var(--radius-md)] border border-grey-100 bg-paper p-6 sm:p-7"
+            data-reveal
+            data-reveal-delay={Math.min(i, 3) * 60}
+          >
+            <div class="flex items-center gap-3.5">
+              <FeatureIcon name={block.icon} />
+              <h3 class="text-[length:var(--text-2xl)] leading-snug text-navy-700">{block.name}</h3>
+            </div>
+            <p class="mt-4 text-base leading-relaxed text-ink-soft">{block.hook}</p>
+            <ul class="mt-5">
+              {block.points.map((point) => (
+                <li class="flex items-start gap-2.5 border-t border-grey-300 py-2.5 text-base leading-relaxed text-ink">
+                  <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-700" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mx-auto mt-12 max-w-4xl" data-reveal>
+      <ResultsPanel />
+    </div>
+  </Section>
+
+  <!-- TRUST / PRIVACY -------------------------------------------------- -->
+  <Section tone="deep">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <div data-reveal>
+        <p class="eyebrow mb-4 text-orange-500">Yours, and local</p>
+        <h2 class="max-w-[16ch] text-[length:var(--text-4xl)] leading-tight text-paper">
+          Your credentials never leave your machine
+        </h2>
+        <p class="mt-5 max-w-[42ch] text-base leading-relaxed text-navy-100">
+          WizDBA is a desktop app, not a service. Connections, credentials and your AI key live on your
+          computer — there is no WIZAG server in the middle.
+        </p>
+      </div>
+
+      <ul class="grid gap-x-10 sm:grid-cols-2" data-reveal data-reveal-delay="100">
+        {
+          trust.map((item) => (
+            <li class="flex items-start gap-3 border-t border-navy-500/40 py-3.5 text-base leading-relaxed text-navy-100">
+              <Icon name="check" size={16} class="mt-1.5 shrink-0 text-orange-500" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- SPECS ------------------------------------------------------------ -->
+  <Section tone="paper" space="tight">
+    <SectionHeading eyebrow="At a glance" measure="max-w-[20ch]" class="max-w-3xl" data-reveal>
+      The technical shape
+    </SectionHeading>
+
+    <dl class="mt-8 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
+      {
+        specs.map((spec) => (
+          <div class="border-t border-grey-300 py-3.5">
+            <dt class="text-sm font-semibold uppercase tracking-wide text-ink-soft">{spec.label}</dt>
+            <dd class="mt-1 text-base leading-relaxed text-navy-700">{spec.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </Section>
+
+  <!-- GET WIZDBA (purchase) -------------------------------------------- -->
+  <Section tone="warm" id="get">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <p class="eyebrow text-orange-700">Get WizDBA</p>
+      <h2 class="mt-4 text-[length:var(--text-4xl)] leading-tight text-navy-700">
+        Try it free, then make it yours
+      </h2>
+      <p class="mx-auto mt-5 max-w-[48ch] text-[length:var(--text-lg)] leading-relaxed text-ink">
+        Download the trial and put WizDBA against your own databases. When it has earned its place, buy a
+        licence and keep going.
+      </p>
+
+      {/* Soft-launch CTAs: checkout isn't wired yet, so both route to the
+          enquiry form to register interest. Swap to the trial download + real
+          checkout in the e-commerce phase (gateway + price still to come). */}
+      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <Button href="/contact" variant="primary" size="large" arrow>Start free trial</Button>
+        <Button href="/contact" variant="secondary" size="large">Buy WizDBA</Button>
+      </div>
+
+      <p class="mt-5 text-sm text-ink-soft">
+        Pricing and the download go live shortly. Want to be told the moment it does?
+        <a href="/contact" class="font-semibold text-navy-700 underline underline-offset-4 hover:text-orange-700">Let us know</a>.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

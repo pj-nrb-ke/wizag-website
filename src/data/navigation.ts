@@ -189,6 +189,19 @@ export const businessApplications: NavLink[] = [
     summary: 'Transport management for Kenyan and East African road freight',
     logo: '/brand/wizlane-logo.png',
   },
+  /* WizDBA — a SQL client for DBAs, and the first DIRECTLY-SOLD, downloadable
+     product on the site (free trial → buy). Added 2026-08-04 with a full page,
+     but held `noindex` (a `stub`) until the e-commerce checkout is wired and
+     the client's screenshots land — so it stays out of the sitemap for now.
+     The `logo` is the client's transparent mark; it reads on the white menu
+     panel (on the navy hero the page sets it on a white tile). */
+  {
+    label: 'WizDBA',
+    href: '/business-applications/wizdba',
+    summary: 'A fast Windows SQL client for DBAs, with AI built in',
+    stub: true,
+    logo: '/brand/wizdba-logo.png',
+  },
 ];
 
 /* -------------------------------------------------------------------------

@@ -14,6 +14,9 @@ import tailwindcss from '@tailwindcss/vite';
 const NOINDEX = [
   '/about/leadership',
   '/about/careers',
+  /* WizDBA — noindex until its e-commerce checkout is wired and screenshots
+     land; drop this line when the page goes live. */
+  '/business-applications/wizdba',
   '/404',
 ];
 
